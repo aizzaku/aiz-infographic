@@ -1,0 +1,86 @@
+[
+  {
+    "query": "Make a tokenomics infographic for $AIZ. Total supply 1B, Community 40%, Ecosystem 25%, Team 20%, Investors 15%.",
+    "should_trigger": true
+  },
+  {
+    "query": "Create an ecosystem overview graphic for Abstract chain with DeFi, Gaming, NFTs, Infra, Wallets categories.",
+    "should_trigger": true
+  },
+  {
+    "query": "Build a cheatsheet for Gigaverse core strategy — 6 tips.",
+    "should_trigger": true
+  },
+  {
+    "query": "Turn this vesting schedule into a visual: 12mo cliff then linear 24mo for team, immediate unlock for community.",
+    "should_trigger": true
+  },
+  {
+    "query": "One-shot. Portrait 3:4. Token economics for $GIG, 500M supply, 5 allocation categories.",
+    "should_trigger": true
+  },
+  {
+    "query": "I have a list of 18 protocols on Abstract — visualize them grouped by category.",
+    "should_trigger": true
+  },
+  {
+    "query": "Make this data look presentable for a social post. Here's the breakdown...",
+    "should_trigger": true
+  },
+  {
+    "query": "Quick pocket guide for how the staking works — 4 steps, dark theme.",
+    "should_trigger": true
+  },
+  {
+    "query": "Generate an infographic summarizing the airdrop mechanics.",
+    "should_trigger": true
+  },
+  {
+    "query": "Create a comparison visual between Protocol A and Protocol B across 5 features.",
+    "should_trigger": true
+  },
+  {
+    "query": "Visualize the protocol's supply breakdown as a chart image.",
+    "should_trigger": true
+  },
+  {
+    "query": "What is the total supply of $AIZ token?",
+    "should_trigger": false
+  },
+  {
+    "query": "Write a Python function that validates an email address.",
+    "should_trigger": false
+  },
+  {
+    "query": "Explain how ERC-20 approvals work.",
+    "should_trigger": false
+  },
+  {
+    "query": "Refactor this React component to use hooks.",
+    "should_trigger": false
+  },
+  {
+    "query": "Summarize the vesting schedule in plain text.",
+    "should_trigger": false
+  },
+  {
+    "query": "Debug this SQL query that isn't returning the right rows.",
+    "should_trigger": false
+  },
+  {
+    "query": "Help me write a whitepaper intro paragraph.",
+    "should_trigger": false
+  },
+  {
+    "query": "Translate this message to Japanese.",
+    "should_trigger": false
+  },
+  {
+    "query": "Show me the ecosystem data as a markdown table.",
+    "should_trigger": false
+  },
+  {
+    "query": "What's a fair tokenomics structure for a new L2?",
+    "should_trigger": false
+  }
+]
