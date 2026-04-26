@@ -270,6 +270,7 @@ Implementation: the `.infographic-canvas` root gets `width: 100%; max-width: <ch
 ### Hard rules
 
 - **No emoji. Ever.** Not in headers, labels, bullets, icons, tooltips. Use Phosphor Bold or Iconify.
+- **No em dashes or en dashes in rendered text.** Em dash (`—`, U+2014) and en dash (`–`, U+2013) are AI-output tells and must never appear in the generated infographic copy — headlines, body, captions, tooltips, source citations, signal evidence, anything. Use a regular hyphen (`-`), comma, period, parentheses, or restructure the sentence. This applies to **content Claude generates**, not to this skill file's prose. Inline editing strips dashes silently the same way emoji are stripped.
 - **Exactly two fonts per infographic.** Display font for hero title only. Body font for everything else (bold/caps for headers, regular for body).
 - **One accent color pair per infographic**, unless the content genuinely needs two (e.g., comparing two brands). Use 60-30-10: 60% canvas, 30% structural neutrals, 10% accent.
 - **Never single-sided thick borders.** No `border-top: 3px solid accent`, no accent bar on one edge. Always full-perimeter or none. Use gradient borders for emphasis.

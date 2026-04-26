@@ -156,12 +156,13 @@ Same as the toolbar button above — `ctCleanDownload()` removes every `[data-cr
 
 ## 3. Inline text editing
 
-Toggle with the pencil button or `e`. Turns every text-bearing element inside `.infographic-canvas` into `contenteditable="plaintext-only"`. Headers keep their CSS `text-transform: uppercase` — users type in any case, display stays uppercase. Emoji typed/pasted into fields are silently stripped to uphold the no-emoji rule.
+Toggle with the pencil button or `e`. Turns every text-bearing element inside `.infographic-canvas` into `contenteditable="plaintext-only"`. Headers keep their CSS `text-transform: uppercase` — users type in any case, display stays uppercase. Emoji and AI-style dashes (em `—` / en `–`) typed or pasted into fields are silently sanitized: emoji removed, dashes replaced with a regular hyphen `-`. Upholds §6's no-emoji and no-AI-dashes rules.
 
 ```html
 <script data-creator-tools>
 (function() {
   const EMOJI = /[\p{Extended_Pictographic}\u200D\uFE0F]/gu;
+  const AI_DASH = /[–—]/g;
   const TEXT_SEL = '.infographic-canvas h1, .infographic-canvas h2, .infographic-canvas h3, .infographic-canvas h4, .infographic-canvas h5, .infographic-canvas h6, .infographic-canvas p, .infographic-canvas li, .infographic-canvas span, .infographic-canvas td, .infographic-canvas th, .infographic-canvas figcaption, .infographic-canvas label, .infographic-canvas dt, .infographic-canvas dd';
 
   function editableEls() {
@@ -202,7 +203,7 @@ Toggle with the pencil button or `e`. Turns every text-bearing element inside `.
     if (!el.hasAttribute('contenteditable')) return;
     if (el.closest('[data-creator-tools]')) return;
 
-    const stripped = el.textContent.replace(EMOJI, '');
+    const stripped = el.textContent.replace(EMOJI, '').replace(AI_DASH, '-');
     if (stripped !== el.textContent) {
       const sel = window.getSelection();
       const offset = sel.anchorOffset;
