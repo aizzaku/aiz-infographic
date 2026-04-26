@@ -61,6 +61,55 @@ def _start_static_server(root: Path) -> tuple[socketserver.TCPServer, int, threa
     return httpd, port, thread
 
 
+_HIDE_CREATOR_TOOLS_CSS = """
+[data-creator-tools],
+.creator-tools,
+.ct-toolbar,
+.ct-color-editor,
+.ct-png-hint,
+.ct-toast,
+.ct-restore-toast {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+[contenteditable] { outline: none !important; }
+html { scrollbar-width: none !important; }
+html::-webkit-scrollbar { display: none !important; }
+"""
+
+
+def _hide_creator_tools(page) -> None:
+    """Inject !important CSS to hide every creator-tool surface before capture.
+
+    Belt-and-suspenders: the page's own creator-tools script is supposed to
+    self-hide when [data-creator-tools] elements get display:none, but a stray
+    !important rule on the user side could win over inline styles. CSS
+    injection at the document level wins, and it applies before we measure
+    the canvas so the toolbar can't pollute the bounding box either.
+    """
+    page.add_style_tag(content=_HIDE_CREATOR_TOOLS_CSS)
+    # Also remove the elements from the DOM as a final safety net — some
+    # styles use !important on .ct-toolbar etc that could outrank ours.
+    page.evaluate(
+        """() => {
+            const sels = [
+                '[data-creator-tools]',
+                '.creator-tools',
+                '.ct-toolbar',
+                '.ct-color-editor',
+                '.ct-png-hint',
+                '.ct-toast',
+                '.ct-restore-toast',
+            ];
+            const seen = new Set();
+            sels.forEach(s => document.querySelectorAll(s).forEach(el => seen.add(el)));
+            seen.forEach(el => el.remove());
+        }"""
+    )
+
+
 def _prepare_page_state(page, selector: str) -> None:
     """Force viewer features to final state so PNG capture isn't mid-animation."""
     page.evaluate(
@@ -73,9 +122,6 @@ def _prepare_page_state(page, selector: str) -> None:
                 }
             });
             document.querySelectorAll('.section').forEach(s => s.classList.add('visible'));
-            document.querySelectorAll('[data-creator-tools]').forEach(el => {
-                el.style.display = 'none';
-            });
         }""",
         selector,
     )
@@ -114,10 +160,13 @@ def export_png(
             page.goto(url, wait_until="load")
             page.wait_for_function("document.fonts && document.fonts.ready.then(() => true)")
             page.wait_for_timeout(FONT_SETTLE_MS)
+            _hide_creator_tools(page)
             _prepare_page_state(page, selector)
+            page.wait_for_timeout(40)
             w, h = _measure_canvas(page, selector)
             page.set_viewport_size({"width": w, "height": h})
             page.wait_for_timeout(80)
+            _hide_creator_tools(page)
             el = page.query_selector(selector)
             if el is None:
                 raise RuntimeError(f"Canvas element not found: {selector}")
