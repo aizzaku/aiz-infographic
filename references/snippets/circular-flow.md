@@ -1,6 +1,6 @@
-# Circular Flow Layout
+# Circular Flow Snippet
 
-Cyclical processes where output feeds back into input. The "flywheel" visualization — endless loop, no starting point, each step amplifies the next.
+Cyclical process where output feeds back into input. The "flywheel" — endless loop, no starting point, each step amplifies the next.
 
 ## When to use
 
@@ -8,29 +8,19 @@ Cyclical processes where output feeds back into input. The "flywheel" visualizat
 - Protocol feedback loops
 - Economic cycles
 - Community growth loops
-- Habit / engagement loops
+- Engagement / habit loops
+
+## Slot fit
+
+| Canvas | Slot | Notes |
+|---|---|---|
+| poster | centerpiece | Best — rings need symmetric square space |
+| bento-box | card-tall (square) | Compact 4-node flywheel |
+| editorial | body-column | Inline radial figure |
 
 ## Required elements
 
-`connectors.md` (curved arrows), `text.md`, `layout.md`, `decorative.md`, `icons.md`, optionally `data-widgets.md`.
-
-## Section order
-
-```
-┌──────────────────────────────┐
-│ Header strip                 │
-├──────────────────────────────┤
-│ Hero section                 │
-├──────────────────────────────┤
-│      ↗  [Step 1]  ↘           │
-│     [St4]       [St2]          │
-│      ↖  [Step 3]  ↙           │
-├──────────────────────────────┤
-│ Central outcome (optional)   │
-├──────────────────────────────┤
-│ Footer                       │
-└──────────────────────────────┘
-```
+`connectors.md` (curved arrows), `text.md`, `layout.md`, `decorative.md`, `icons.md`. Optional `data-widgets.md`.
 
 ## HTML pattern (absolute-positioned nodes on a ring)
 
@@ -43,11 +33,10 @@ Cyclical processes where output feeds back into input. The "flywheel" visualizat
           <path d="M0,0 L8,4 L0,8 z" fill="color-mix(in srgb, var(--accent-1) 60%, transparent)"/>
         </marker>
       </defs>
-      <!-- curved arcs between nodes; adjust paths to ring radius -->
       <path d="M 260 80 A 140 140 0 0 1 320 200"
             stroke="color-mix(in srgb, var(--accent-1) 60%, transparent)"
             stroke-width="2" fill="none" marker-end="url(#cfarrow)"/>
-      <!-- 3 more arcs -->
+      <!-- 3 more arcs between nodes -->
     </svg>
 
     <div class="cnode" style="--x: 50%; --y: 10%;">
@@ -78,8 +67,7 @@ Cyclical processes where output feeds back into input. The "flywheel" visualizat
 .cflow { display: flex; justify-content: center; }
 .cflow-ring {
   position: relative;
-  width: 100%;
-  max-width: 520px;
+  width: 100%; max-width: 520px;
   aspect-ratio: 1 / 1;
 }
 .cflow-arrows { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; }
@@ -96,17 +84,14 @@ Cyclical processes where output feeds back into input. The "flywheel" visualizat
   border: 1px solid transparent;
   border-radius: var(--radius-card);
   display: flex; flex-direction: column; align-items: center; gap: 4px;
-  min-width: 120px;
-  z-index: 1;
+  min-width: 120px; z-index: 1;
 }
 .cnode i { color: var(--accent-1); font-size: 22px; }
 .cnode-title {
   font: 700 13px/1 'Montserrat', sans-serif;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+  text-transform: uppercase; letter-spacing: 0.04em;
   text-align: center;
 }
-
 .cflow-center {
   position: absolute;
   left: 50%; top: 50%;
@@ -121,8 +106,7 @@ Cyclical processes where output feeds back into input. The "flywheel" visualizat
 }
 .cflow-center-sub {
   font: 700 11px/1 'Montserrat', sans-serif;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
+  text-transform: uppercase; letter-spacing: 0.1em;
   color: var(--text-muted);
   margin-top: 4px;
 }
@@ -131,21 +115,23 @@ Cyclical processes where output feeds back into input. The "flywheel" visualizat
 
 ## Node count
 
-- **3 nodes**: triangle — simple cycle.
-- **4 nodes**: standard (12/3/6/9 o'clock positions).
-- **5–6 nodes**: rich cycles — evenly distributed around the ring.
-- **7+**: too many; the loop metaphor breaks down. Use `process-flow` instead.
+| Nodes | Pattern |
+|---|---|
+| 3 | Triangle — simple cycle |
+| 4 | Standard — 12/3/6/9 o'clock |
+| 5-6 | Rich cycle, evenly distributed |
+| 7+ | Loop metaphor breaks; use `process-flow` |
 
 ## Composition rules
 
-- **Arrows all go the same direction** (all clockwise or all counter-clockwise). Mixed directions destroy the cycle reading.
-- **Central element optional but powerful.** The token/product/user that benefits from the cycle lives in the center.
-- **Every node has a verb or noun.** Short labels — 1–2 words.
-- **No start / end marker.** The cycle is cyclical — no arrow origin point.
-- **Square canvas ideal.** Rings need symmetric space.
+- All arrows go the same direction (clockwise OR counter-clockwise). Mixed = destroys cycle reading.
+- Central element optional but powerful: the token/product/user that benefits.
+- Short labels (1-2 words per node).
+- No start/end marker — cycle is cyclical.
+- Square aspect.
 
 ## Anti-patterns
 
-- Don't use circular-flow for one-way processes. That's `process-flow.md`.
-- Don't break the cycle. If step 3 sometimes doesn't lead to step 4, it's not a flywheel.
-- Don't cram text inside the ring center. Keep it short — the ring is the message.
+- One-way processes → use `process-flow`.
+- Breaking the cycle (step 3 sometimes doesn't lead to step 4) — not a flywheel.
+- Long text inside ring center — keep it short, ring is the message.

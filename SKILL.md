@@ -116,7 +116,7 @@ Never load the full references tree. Read only what the current request maps to.
 |---|---|
 | A known content type preset | `references/templates/<name>.md` |
 | The page architecture | `references/canvases/<name>.md` |
-| A section / content shape | `references/layouts/<name>.md` (transitional — see note below) |
+| A section / content shape | `references/snippets/<name>.md` |
 | Visual tokens (colors, fonts, spacing) | `references/styles/<name>.md` |
 | Atomic UI building blocks | `references/elements/<name>.md` |
 | Export mechanics | `references/export/<name>.md` |
@@ -128,7 +128,7 @@ Never load the full references tree. Read only what the current request maps to.
 1. `references/templates/token-economics.md`
 2. `references/canvases/<canvas named by template>.md` (usually `bento-box`)
 3. `references/styles/aizfographics-style.md`
-4. Each snippet the template names — load from `references/layouts/<name>.md` until the snippet refactor lands. Typical for tokenomics: `statistical`, `comparison`. Donut/vesting-bar are inline `<svg>` patterns under `references/elements/charts.md` + `data-widgets.md`.
+4. Each snippet the template names — load from `references/snippets/<name>.md`. Typical for tokenomics: `statistical`, `comparison`. Donut/vesting-bar are inline `<svg>` patterns under `references/elements/charts.md` + `data-widgets.md`.
 5. Each element the template names: `charts.md`, `data-widgets.md`, `text.md`, `layout.md`, `connectors.md`, `decorative.md`
 6. **In Claude Code context**, also load `references/creator-tools.md` and `references/viewer-features.md` — these are mandatory inputs to the HTML skeleton (see §6).
 
@@ -140,11 +140,7 @@ Eight to ten files total in Claude Code, six to eight in agent contexts. Do not 
 
 **Styles** (10): `aizfographics-style` (default), `clean-minimal`, `blueprint`, `editorial`, `corporate`, `cyberpunk`, `chalkboard`, `hand-drawn`, `retro`, plus `_custom-template` scaffold for bespoke styles.
 
-**Snippets** (23): `bento-box`, `statistical`, `grid-cards`, `process-flow`, `timeline`, `comparison`, `hierarchical`, `list`, `roadmap`, `funnel`, `flowchart`, `dashboard`, `mind-map`, `journey-path`, `pyramid`, `circular-flow`, `iceberg`, `fishbone`, `venn`, `anatomical`, `geographic`, `quadrant`, `swimlane`. Each is an embeddable section that any canvas can host inside one of its slots.
-
-> **Transitional state.** Snippet files currently live in `references/layouts/<name>.md` because they were previously full-page layout templates. They still describe the *content essence* (the timeline spine, the fishbone bones, the kpi grid) — but they also contain Header/Hero/Footer scaffolding that should be ignored when embedding inside a canvas (the canvas owns those slots). When loading a snippet, **use only its content-pattern sections** (the grid recipe, the data structure, the SVG geometry, the composition rules). Skip its "Section order" / "Header strip" / "Footer" descriptions — those duplicate canvas concerns.
->
-> A future refactor will move each into `references/snippets/<name>.md` with the page chrome stripped out. The path you read from changes; the content essence does not.
+**Snippets** (22): `statistical`, `grid-cards`, `process-flow`, `timeline`, `comparison`, `hierarchical`, `list`, `roadmap`, `funnel`, `flowchart`, `dashboard`, `mind-map`, `journey-path`, `pyramid`, `circular-flow`, `iceberg`, `fishbone`, `venn`, `anatomical`, `geographic`, `quadrant`, `swimlane`. Each is an embeddable section pattern that any canvas can host in one of its slots. Each snippet declares its slot fit (which canvas slots accept it, with what dimensions). No `bento-box` snippet — bento-box is canvas-only.
 
 **Templates** (10): `token-economics`, `ecosystem-overview`, `cheatsheet`, `crypto-explainer`, `game-overview`, `airdrop-guide`, `nft-showcase`, `how-it-works`, `report`, `game-mechanics`.
 
