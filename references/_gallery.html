@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Canvas Gallery — create-infographics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700&display=swap">
+<style>
+  :root {
+    --canvas:        #0F1115;
+    --panel:         #161A20;
+    --elevated:      #1C2028;
+    --text-primary:   #E6E6E6;
+    --text-secondary: #A0A0A8;
+    --text-muted:     #606068;
+    --accent-1: #F3A950;
+    --accent-2: #F38150;
+    --radius-card: 10px;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--canvas);
+    color: var(--text-primary);
+    font: 400 14px/1.5 'Montserrat', sans-serif;
+    min-height: 100vh;
+    padding: 48px 32px;
+  }
+  .gallery-header {
+    max-width: 1200px;
+    margin: 0 auto 40px;
+    text-align: left;
+    padding-bottom: 24px;
+    border-bottom: 1px solid color-mix(in srgb, var(--text-muted) 25%, transparent);
+  }
+  .gallery-eyebrow {
+    font: 700 11px/1 'Montserrat', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--accent-1);
+  }
+  .gallery-title {
+    font: 400 56px/1 'Bebas Neue', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin: 8px 0 4px;
+    background: linear-gradient(30deg, var(--accent-1), var(--accent-2));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .gallery-sub {
+    font: 400 16px/1.5 'Montserrat', sans-serif;
+    color: var(--text-secondary);
+    margin: 0;
+    max-width: 64ch;
+  }
+
+  .gallery-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+  .canvas-card {
+    padding: 28px;
+    background:
+      linear-gradient(var(--panel), var(--panel)) padding-box,
+      linear-gradient(135deg,
+        color-mix(in srgb, var(--accent-1) 22%, transparent),
+        color-mix(in srgb, var(--accent-1) 44%, transparent)) border-box;
+    border: 1px solid transparent;
+    border-radius: var(--radius-card);
+    box-shadow: 0 0 32px color-mix(in srgb, var(--accent-1) 6%, transparent);
+    display: flex; flex-direction: column;
+    gap: 16px;
+  }
+  .canvas-name {
+    font: 400 32px/1 'Bebas Neue', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin: 0;
+    background: linear-gradient(30deg, var(--accent-1), var(--accent-2));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .canvas-pitch {
+    font: 400 13px/1.5 'Montserrat', sans-serif;
+    color: var(--text-secondary);
+    margin: 0;
+    min-height: 40px;
+  }
+  .canvas-mock {
+    background: var(--canvas);
+    border: 1px solid color-mix(in srgb, var(--text-muted) 25%, transparent);
+    border-radius: 6px;
+    padding: 14px;
+    height: 220px;
+    display: grid;
+    gap: 8px;
+  }
+  .canvas-meta {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font: 600 10px/1 'Montserrat', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+  }
+  .canvas-meta strong {
+    color: var(--accent-1);
+    font-weight: 700;
+  }
+
+  /* mock cell base */
+  .m {
+    background: color-mix(in srgb, var(--accent-1) 10%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-1) 30%, transparent);
+    border-radius: 3px;
+  }
+  .m-hero {
+    background: linear-gradient(135deg,
+      color-mix(in srgb, var(--accent-1) 24%, transparent),
+      color-mix(in srgb, var(--accent-2) 24%, transparent));
+    border-color: color-mix(in srgb, var(--accent-1) 50%, transparent);
+  }
+  .m-text {
+    background: color-mix(in srgb, var(--text-muted) 22%, transparent);
+    border-color: color-mix(in srgb, var(--text-muted) 35%, transparent);
+  }
+
+  /* === BENTO mock === */
+  .mock-bento {
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: 32px 1fr 1fr 1fr;
+  }
+  .mock-bento .b1 { grid-column: 1 / -1; grid-row: 1; }
+  .mock-bento .b2 { grid-column: 1 / 3;  grid-row: 2; }
+  .mock-bento .b3 { grid-column: 3;       grid-row: 2; }
+  .mock-bento .b4 { grid-column: 4;       grid-row: 2; }
+  .mock-bento .b5 { grid-column: 1;       grid-row: 3; }
+  .mock-bento .b6 { grid-column: 2 / 4;   grid-row: 3; }
+  .mock-bento .b7 { grid-column: 4;       grid-row: 3 / 5; }
+  .mock-bento .b8 { grid-column: 1;       grid-row: 4; }
+  .mock-bento .b9 { grid-column: 2;       grid-row: 4; }
+  .mock-bento .b10 { grid-column: 3;      grid-row: 4; }
+
+  /* === EDITORIAL mock === */
+  .mock-editorial {
+    grid-template-columns: 1fr 60px;
+    grid-template-rows: 14px 28px 18px 1fr 1fr 14px;
+    gap: 6px;
+    padding: 14px 16px;
+  }
+  .mock-editorial .e-eyebrow { grid-column: 1 / -1; grid-row: 1; height: 8px; width: 60%; }
+  .mock-editorial .e-headline { grid-column: 1 / -1; grid-row: 2; }
+  .mock-editorial .e-lede     { grid-column: 1 / 2; grid-row: 3; }
+  .mock-editorial .e-body1    { grid-column: 1 / 2; grid-row: 4; }
+  .mock-editorial .e-body2    { grid-column: 1 / 2; grid-row: 5; }
+  .mock-editorial .e-side     { grid-column: 2 / 3; grid-row: 4 / 6; }
+  .mock-editorial .e-footer   { grid-column: 1 / -1; grid-row: 6; height: 6px; width: 40%; }
+
+  /* === DASHBOARD mock === */
+  .mock-dashboard {
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: 28px repeat(2, 1fr);
+  }
+  .mock-dashboard .d-header { grid-column: 1 / -1; grid-row: 1; }
+  .mock-dashboard .d-k1 { grid-column: 1 / 4;  grid-row: 2; }
+  .mock-dashboard .d-k2 { grid-column: 4 / 7;  grid-row: 2; }
+  .mock-dashboard .d-k3 { grid-column: 7 / 10; grid-row: 2; }
+  .mock-dashboard .d-k4 { grid-column: 10 / 13; grid-row: 2; }
+  .mock-dashboard .d-p1 { grid-column: 1 / 9;  grid-row: 3; }
+  .mock-dashboard .d-p2 { grid-column: 9 / 13; grid-row: 3; }
+
+  /* === POSTER mock === */
+  .mock-poster {
+    grid-template-columns: 1fr 70px;
+    grid-template-rows: 28px 1fr 14px;
+  }
+  .mock-poster .p-header { grid-column: 1 / -1; grid-row: 1; }
+  .mock-poster .p-center {
+    grid-column: 1 / 2; grid-row: 2;
+    display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(135deg,
+      color-mix(in srgb, var(--accent-1) 16%, transparent),
+      color-mix(in srgb, var(--accent-2) 16%, transparent));
+    border: 1px solid color-mix(in srgb, var(--accent-1) 40%, transparent);
+    border-radius: 4px;
+    position: relative;
+  }
+  .mock-poster .p-center::before {
+    content: '';
+    width: 60%; height: 60%;
+    border: 2px dashed color-mix(in srgb, var(--accent-1) 60%, transparent);
+    border-radius: 50%;
+  }
+  .mock-poster .p-center::after {
+    content: '';
+    position: absolute;
+    width: 28%; height: 28%;
+    background: color-mix(in srgb, var(--accent-1) 40%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-1) 70%, transparent);
+    border-radius: 4px;
+  }
+  .mock-poster .p-supports {
+    grid-column: 2 / -1; grid-row: 2;
+    display: flex; flex-direction: column;
+    gap: 6px;
+  }
+  .mock-poster .p-supports .m { flex: 1; }
+  .mock-poster .p-legend { grid-column: 1 / -1; grid-row: 3; height: 8px; }
+
+  .gallery-footer {
+    max-width: 1200px;
+    margin: 32px auto 0;
+    text-align: center;
+    padding: 20px;
+    background: var(--elevated);
+    border: 1px dashed color-mix(in srgb, var(--accent-1) 35%, transparent);
+    border-radius: 6px;
+    color: var(--text-secondary);
+    font: 400 13px/1.4 'Montserrat', sans-serif;
+  }
+  .gallery-footer strong {
+    color: var(--accent-1);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 11px;
+  }
+</style>
+</head>
+<body>
+
+  <header class="gallery-header">
+    <span class="gallery-eyebrow">create-infographics · canvas gallery</span>
+    <h1 class="gallery-title">Pick a canvas</h1>
+    <p class="gallery-sub">The canvas is the page architecture. Snippets (timeline, fishbone, kpi-strip, etc.) plug into the canvas's slots. Pick the canvas in the chat prompt below.</p>
+  </header>
+
+  <div class="gallery-grid">
+
+    <article class="canvas-card">
+      <div class="canvas-meta"><span>Canvas</span><strong>Default</strong></div>
+      <h2 class="canvas-name">Bento-Box</h2>
+      <p class="canvas-pitch">Mixed-span grid. Hero strip + cards of varying sizes weighted to content density. Best for posters, release recaps, product overviews.</p>
+      <div class="canvas-mock mock-bento">
+        <div class="m m-hero b1"></div>
+        <div class="m b2"></div><div class="m b3"></div><div class="m b4"></div>
+        <div class="m b5"></div><div class="m b6"></div><div class="m b7"></div>
+        <div class="m b8"></div><div class="m b9"></div><div class="m b10"></div>
+      </div>
+    </article>
+
+    <article class="canvas-card">
+      <div class="canvas-meta"><span>Canvas</span><strong>Long-form</strong></div>
+      <h2 class="canvas-name">Editorial / Magazine</h2>
+      <p class="canvas-pitch">Headline + body + sidebar. Storytelling format. Snippets break up prose every few paragraphs. Best for deep-dives, "how it really works".</p>
+      <div class="canvas-mock mock-editorial">
+        <div class="m m-text e-eyebrow"></div>
+        <div class="m m-hero e-headline"></div>
+        <div class="m m-text e-lede"></div>
+        <div class="m e-body1"></div>
+        <div class="m e-body2"></div>
+        <div class="m e-side"></div>
+        <div class="m m-text e-footer"></div>
+      </div>
+    </article>
+
+    <article class="canvas-card">
+      <div class="canvas-meta"><span>Canvas</span><strong>Metrics</strong></div>
+      <h2 class="canvas-name">Dashboard</h2>
+      <p class="canvas-pitch">KPI strip on top, chart panels below. 12-col grid with mixed widget widths. Best for weekly stats, protocol health, season recaps.</p>
+      <div class="canvas-mock mock-dashboard">
+        <div class="m m-text d-header"></div>
+        <div class="m m-hero d-k1"></div>
+        <div class="m m-hero d-k2"></div>
+        <div class="m m-hero d-k3"></div>
+        <div class="m m-hero d-k4"></div>
+        <div class="m d-p1"></div>
+        <div class="m d-p2"></div>
+      </div>
+    </article>
+
+    <article class="canvas-card">
+      <div class="canvas-meta"><span>Canvas</span><strong>Single subject</strong></div>
+      <h2 class="canvas-name">Poster / Hero-led</h2>
+      <p class="canvas-pitch">One big diagram in the center, support panels around it. Best for "anatomy of X", framework explainers, mechanism breakdowns.</p>
+      <div class="canvas-mock mock-poster">
+        <div class="m m-text p-header"></div>
+        <div class="p-center"></div>
+        <div class="p-supports">
+          <div class="m"></div>
+          <div class="m"></div>
+          <div class="m"></div>
+          <div class="m"></div>
+        </div>
+        <div class="m m-text p-legend"></div>
+      </div>
+    </article>
+
+  </div>
+
+  <div class="gallery-footer">
+    <strong>Next step</strong><br>
+    Tap the canvas name in the chat prompt to apply it. The skill will continue with snippet selection in your chosen canvas.
+  </div>
+
+</body>
+</html>

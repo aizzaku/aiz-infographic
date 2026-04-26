@@ -6,9 +6,13 @@ Deep-dive on a specific game system — not the whole game (that's `game-overvie
 
 User mentions: game mechanic, mechanic breakdown, damage formula, staking mechanic, combat system, level-up system, how {specific feature} works in the game.
 
-## Base layout
+## Canvas
 
-`statistical` hero + `process-flow` for interaction sequence + `comparison.md` table for values lookup.
+`bento-box` (see `references/canvases/bento-box.md`) — hero with key stats, then mixed-span cards for the interaction flow, formula breakdown, and values lookup.
+
+## Snippets
+
+`statistical` (hero KPI strip), `process-flow` (interaction sequence), `comparison` (values lookup table), `formula-block` (when a damage/yield formula is involved).
 
 ## Default style
 

@@ -6,9 +6,13 @@ Highest-frequency infographic type. Presents a project's token supply, distribut
 
 User mentions any of: tokenomics, token economics, token distribution, vesting, supply allocation, TGE, FDV, token allocation, token breakdown, emission schedule, token launch, allocation chart.
 
-## Base layout
+## Canvas
 
-`statistical` (see `references/layouts/statistical.md`)
+`bento-box` (see `references/canvases/bento-box.md`) — hero strip with total supply + accent KPIs, then mixed-span cards for allocation, vesting, utility, and emissions.
+
+## Snippets
+
+`statistical` (KPI strip), `donut-chart` or `pie-chart` (allocation), `vesting-bar` (vesting schedule), `comparison` (utility breakdown).
 
 ## Default style
 

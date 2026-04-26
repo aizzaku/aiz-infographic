@@ -6,9 +6,9 @@ Sibling infographic that surfaces **derived insight** from the same source data 
 
 Loaded by §8.6 of `SKILL.md` after the main infographic has shipped and the user opted in. Never used as a primary template — always a sibling to a main piece.
 
-## Base layout
+## Canvas
 
-`cheatsheet` template in **signals-variant mode** (see `references/templates/cheatsheet.md` §Signals variant). Grouped 3×3 grid, fixed card schema — no bento mixed-span here, signals demand uniformity for honest comparison.
+`bento-box` (see `references/canvases/bento-box.md`) — using the `cheatsheet` template in **signals-variant mode** (see `references/templates/cheatsheet.md` §Signals variant). Grouped 3×3 grid, fixed card schema — no bento mixed-span here, signals demand uniformity for honest comparison.
 
 ## Default style
 

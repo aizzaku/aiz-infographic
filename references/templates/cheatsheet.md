@@ -6,11 +6,15 @@ Dense quick-reference guide. Every pixel earns its place. Scannable at a glance,
 
 User mentions any of: cheatsheet, quick reference, pocket guide, tips, how to X, quick guide, reference card, key rules, strategy guide, condensed how-to, TL;DR.
 
-## Base layout
+## Canvas
 
-`bento-box` (see `references/layouts/bento-box.md`) — hero strip + mixed-span tip cards. Heavier rules get wider cards; quick lookups become tall sidebar cards; reference tables become full-bleed footer cards.
+`bento-box` (see `references/canvases/bento-box.md`) — hero strip + mixed-span tip cards. Heavier rules get wider cards; quick lookups become tall sidebar cards; reference tables become full-bleed footer cards.
 
-**Layout fallback:** if the user explicitly asks for the old uniform-grid look, swap to `grid-cards` (dense variant) with the same required elements.
+## Snippets
+
+`tip-card` (per tip), `comparison` (reference table at bottom), optional `numbered-list` (when tips are ordered).
+
+**Canvas fallback:** if the user explicitly asks for the old uniform-grid look, swap to `bento-box` with `grid-cards` snippet replacing the mixed-span pattern.
 
 ## Default style
 

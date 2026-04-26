@@ -6,11 +6,15 @@ Catalogs partners, integrations, deployments, or projects within a platform's ec
 
 User mentions any of: ecosystem, integrations, partners, partnerships, deployments, built on, chain overview, protocol catalogue, projects on X, who's building on.
 
-## Base layout
+## Canvas
 
-`bento-box` (see `references/layouts/bento-box.md`) — hero strip + category cards of varied span. Each category becomes a bento card whose width reflects how many projects it holds; the most prominent category gets a wide card, smaller categories tile alongside.
+`bento-box` (see `references/canvases/bento-box.md`) — hero strip + category cards of varied span. Each category becomes a bento card whose width reflects how many projects it holds; the most prominent category gets a wide card, smaller categories tile alongside.
 
-**Layout fallback:** for very flat ecosystems with no category weighting, swap to `grid-cards` (categorized variant).
+## Snippets
+
+`grid-cards` (logo grids inside each category card), `statistical` (hero KPI strip).
+
+**Canvas fallback:** for very flat ecosystems with no category weighting, switch to `bento-box` with one large `grid-cards` snippet filling the body instead of per-category cards.
 
 ## Default style
 

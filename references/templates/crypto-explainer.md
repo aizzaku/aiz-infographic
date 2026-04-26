@@ -6,9 +6,13 @@
 
 User mentions: explain X, how does X work, what is X, walk me through X, crypto primer, protocol explainer, mechanism breakdown — AND wants a visual output.
 
-## Base layout
+## Canvas
 
-`process-flow` is primary (the mechanism flow). Augment with KPI strip (statistical fragment) for context numbers.
+`poster` (see `references/canvases/poster.md`) — the mechanism flow is the centerpiece, supports carry the KPIs and definitions.
+
+## Snippets
+
+`process-flow` (centerpiece, the mechanism), `statistical` (header KPIs), `list` (definitions / glossary in supports).
 
 ## Default style
 

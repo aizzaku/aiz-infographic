@@ -6,9 +6,13 @@ Collection overview with traits, rarity breakdown, and featured items. For NFT d
 
 User mentions: NFT collection, mint, traits, rarity chart, floor stats, NFT showcase, collection overview, trait breakdown.
 
-## Base layout
+## Canvas
 
-`grid-cards` for item gallery + `statistical` KPI strip for collection stats + optional `charts.md` breakdown for trait rarity.
+`bento-box` (see `references/canvases/bento-box.md`) — hero strip with collection KPIs, then a wide `grid-cards` snippet for the item gallery, with optional rarity-chart card alongside.
+
+## Snippets
+
+`statistical` (collection KPI strip), `grid-cards` (item gallery), `chart` (trait rarity breakdown, optional).
 
 ## Default style
 

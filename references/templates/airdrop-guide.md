@@ -6,9 +6,13 @@ Eligibility, allocation, claim steps, and deadlines for a token airdrop. High-st
 
 User mentions: airdrop, claim guide, eligibility infographic, airdrop eligibility, claim instructions, airdrop breakdown, retro rewards.
 
-## Base layout
+## Canvas
 
-Hybrid: `statistical` (KPI strip for total allocation) + `list` (eligibility criteria) + `process-flow` (claim steps) + `timeline` (deadlines).
+`bento-box` (see `references/canvases/bento-box.md`) — hero strip with allocation + KPIs, then mixed-span cards for eligibility, claim steps, and deadlines.
+
+## Snippets
+
+`statistical` (allocation KPI strip), `list` (eligibility criteria), `process-flow` (claim steps), `timeline` (deadlines).
 
 ## Default style
 

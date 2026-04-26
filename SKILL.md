@@ -5,7 +5,19 @@ description: Create professional infographics as self-contained HTML files with 
 
 # Create Infographics
 
-Produces self-contained HTML infographics following a 4-layer reference system: elements × layouts × styles × templates. Primary output is HTML. PNG is exported reliably via Playwright. For editable vectors, users run the HTML through the html.to.design Figma plugin (see §13).
+Produces self-contained HTML infographics following a 5-layer reference system: **canvases × snippets × styles × elements × templates**. Primary output is HTML. PNG is exported reliably via Playwright. For editable vectors, users run the HTML through the html.to.design Figma plugin (see §13).
+
+### Reference hierarchy
+
+| Layer | Lives in | Role |
+|---|---|---|
+| **Canvas** | `references/canvases/<name>.md` | The page architecture: how the whole infographic is composed. Defines slots that snippets plug into. (bento-box, editorial, dashboard, poster) |
+| **Snippet** | `references/snippets/<name>.md` | An embeddable section pattern: timeline spine, fishbone, kpi-strip, comparison table — the content essence with no page chrome. |
+| **Style** | `references/styles/<name>.md` | Visual identity: colors, fonts, spacing tokens. (aizfographics-style default) |
+| **Element** | `references/elements/<name>.md` | Atomic UI primitives: text, charts, icons, connectors. |
+| **Template** | `references/templates/<name>.md` | High-level preset = canvas + style + snippet picks for a content type. (token-economics, cheatsheet, etc.) |
+
+A **canvas** owns the page chrome (header, hero, footer, grid). A **snippet** is a thing on the page (a timeline, a fishbone, a kpi-strip) that plugs into a canvas slot. The user picks the canvas; the data picks the snippets.
 
 The default visual identity is **aizfographics-style** — dark background, Bebas Neue + Montserrat, one accent color pair per infographic, gradient borders, glow effects, no emoji ever.
 
@@ -33,50 +45,37 @@ Every request is either **one-shot** (generate immediately) or **guided** (ask q
 
 ### Guided override phrases:
 
-`help me`, `what layout`, `walk me through`, `I'm not sure`, `what do you recommend`
-
-### Section-by-section override phrases (force §1.5 = section):
-
-`section by section`, `one at a time`, `step by step build`, `build each section`
+`help me`, `what canvas`, `what layout`, `walk me through`, `I'm not sure`, `what do you recommend`
 
 When ambiguous, prefer guided — it's easier to skip forward than to regenerate.
 
 ---
 
-## 1.5 Build Cadence (MANDATORY first question)
+## 1.5 Canvas Pick (when no template matched)
 
-**Before anything else** — before §2 routing, before §4 intake, before any reference file is loaded — fire a single `AskUserQuestion` to let the user pick the build cadence.
+After §4 Content Intake but before §5 Step 2, fire the canvas picker — but only when no template matched in §2 and the user hasn't named a canvas explicitly.
 
-- Question: *"How do you want to build this?"*
-- Header: `Build cadence`
-- Options:
-  1. `One-shot` — *Generate the full infographic in one pass.*
-  2. `Section-by-section` — *Review and approve each section before the next is drawn.*
+### Skip this step when:
 
-Skip this question only when:
-- The user's initial message contains a one-shot override phrase (§1) → default to **one-shot**.
-- The user's initial message contains a section-by-section override phrase (§1) → default to **section-by-section**.
-- The skill is running in an agent context (§11) → default to **one-shot**.
+- A template matched in §2 routing (the template dictates its canvas).
+- The user's initial message named a canvas explicitly: `bento`, `bento-box`, `editorial`, `magazine`, `dashboard`, `poster`, `hero-led`, `single subject`.
+- Agent context (§11) → default to `bento-box`, do not open the gallery, do not fire `AskUserQuestion`.
 
-### Routing from the answer
+### Otherwise:
 
-**One-shot** → fall through to §1 one-shot/guided detection, §2 routing, §5 guided flow if applicable. Existing behavior, unchanged.
-
-**Section-by-section** → enter the section-by-section sub-flow:
-
-1. Run §4 Content Intake.
-2. Run §5 Step 2 (template/layout), Step 3 (style), Step 4 (color), Step 5 (width) — same `AskUserQuestion` calls as guided mode.
-3. **Section list confirmation:** enumerate the sections the chosen template/layout will produce (ordered list, one line each). Fire `AskUserQuestion` with options `["Looks good, start building", "Add/remove/reorder sections"]`. On the edit option, take the user's free-text changes and re-confirm.
-4. **Per-section generation loop**, for each section in order:
-   - Write or update the single `./output/<kebab-name>.html` so that all previously approved sections plus this new section are rendered. The file remains a complete, valid HTML document at every step — creator-tools and viewer-features included per §9.
-   - Report in 1–2 lines what was added (section name + any key content/style choices).
-   - Fire `AskUserQuestion`. Question: *"Section `<name>` — what's next?"* Options: `["Approve, next section", "Revise this section", "Skip this section"]`.
-     - **Revise:** accept natural-language edits (§7 iteration grammar), regenerate that section only, re-ask.
-     - **Skip:** drop the section from the HTML and the remaining plan, continue.
-     - **Approve:** move to the next section.
-5. When all sections are approved (or skipped), fall through to §8 Export Chain.
-
-Creator-tools / viewer-features inclusion (§9) during the per-section loop is unchanged — the in-progress HTML always ships with them in Claude Code context.
+1. **Open the gallery** — `references/_gallery.html` — using the same auto-open helper as §10:
+   - Windows: `start references/_gallery.html`
+   - macOS: `open references/_gallery.html`
+   - Linux: `xdg-open references/_gallery.html`
+2. **Fire `AskUserQuestion`** with each option carrying a short text preview:
+   - Question: *"Which canvas architecture? (Gallery just opened — see visual examples)"*
+   - Header: `Canvas`
+   - Options:
+     1. `Bento-box (default)` — preview: *"Mixed-span grid. Hero + cards. Posters, overviews."*
+     2. `Editorial / Magazine` — preview: *"Long-form columnar. Headlines + body + sidebar. Storytelling."*
+     3. `Dashboard` — preview: *"KPI strip + chart panels. Metrics snapshots."*
+     4. `Poster / Hero-led` — preview: *"One big diagram + supports. Single-subject deep-dive."*
+3. Load `references/canvases/<picked>.md`. Continue to §5 Step 2 (snippet selection) or to one-shot generation.
 
 ---
 
@@ -86,23 +85,24 @@ Creator-tools / viewer-features inclusion (§9) during the per-section loop is u
 Request arrives
 │
 ├─ Matches a known template? (tokenomics, ecosystem overview, cheatsheet…)
-│   └─ YES → Load template → load its layout + style + required elements
+│   └─ YES → Load template → load its canvas + style + required snippets + elements
 │
-├─ Matches a layout type? (statistical, grid-cards, process-flow…)
-│   └─ YES → Load layout → load default style (aizfographics-style) + required elements
+├─ User named a canvas explicitly? (bento, editorial, dashboard, poster)
+│   └─ YES → Load that canvas → §5 step 2 (snippet pick) → style + elements
 │
 └─ Generic request ("make an infographic about X")
-    └─ Classify content → pick best layout → load aizfographics-style
+    └─ §1.5 Canvas Pick (open gallery + AskUserQuestion) → load picked canvas → continue
 ```
 
-### Template → layout → style → elements mapping
+### Template → canvas → snippet → style → elements mapping
 
 Each template file specifies:
-- Its base layout
+- Its `canvas:` (almost always one of the 4)
+- Its `snippets:` (which section patterns to host inside the canvas)
 - Its default style (almost always `aizfographics-style`)
 - The exact element categories it requires
 
-If the template's base layout is `bento-box`, load `references/layouts/bento-box.md` and default to a 1920w canvas — bento collapses poorly below that. Templates currently defaulting to bento-box: `cheatsheet`, `ecosystem-overview`, `game-overview`, `report`.
+For bento-box / dashboard / poster canvases at 1920w, that's the default. Editorial canvas defaults to 1280w. Templates currently defaulting to `bento-box` canvas: `cheatsheet`, `ecosystem-overview`, `game-overview`, `report`, `token-economics`, `crypto-explainer`, `how-it-works`, `airdrop-guide`, `nft-showcase`, `game-mechanics`.
 
 Never load the full references tree. Read only what the current request maps to.
 
@@ -113,29 +113,38 @@ Never load the full references tree. Read only what the current request maps to.
 **Load the minimum set. Re-read nothing.**
 
 | What you need | Where to find it |
-|---------------|------------------|
+|---|---|
 | A known content type preset | `references/templates/<name>.md` |
-| A generic structural shape | `references/layouts/<name>.md` |
+| The page architecture | `references/canvases/<name>.md` |
+| A section / content shape | `references/layouts/<name>.md` (transitional — see note below) |
 | Visual tokens (colors, fonts, spacing) | `references/styles/<name>.md` |
 | Atomic UI building blocks | `references/elements/<name>.md` |
 | Export mechanics | `references/export/<name>.md` |
+| Canvas visual gallery | `references/_gallery.html` (auto-opened in §1.5 only) |
 | Signal sheet extraction (§8.6) | `references/templates/_signals.md` (loaded only when §8.6 fires) |
 
 ### Typical load order for a one-shot tokenomics request:
 
 1. `references/templates/token-economics.md`
-2. `references/styles/aizfographics-style.md`
-3. `references/layouts/statistical.md` (named by the template)
-4. Each element the template names: `charts.md`, `data-widgets.md`, `text.md`, `layout.md`, `connectors.md`, `decorative.md`
-5. **In Claude Code context**, also load `references/creator-tools.md` and `references/viewer-features.md` — these are mandatory inputs to the HTML skeleton (see §6).
+2. `references/canvases/<canvas named by template>.md` (usually `bento-box`)
+3. `references/styles/aizfographics-style.md`
+4. Each snippet the template names — load from `references/layouts/<name>.md` until the snippet refactor lands. Typical for tokenomics: `statistical`, `comparison`. Donut/vesting-bar are inline `<svg>` patterns under `references/elements/charts.md` + `data-widgets.md`.
+5. Each element the template names: `charts.md`, `data-widgets.md`, `text.md`, `layout.md`, `connectors.md`, `decorative.md`
+6. **In Claude Code context**, also load `references/creator-tools.md` and `references/viewer-features.md` — these are mandatory inputs to the HTML skeleton (see §6).
 
-Eight to nine files total in Claude Code, six to seven in agent contexts. Do not read other templates, other layouts, or other styles unless the user's request demands them.
+Eight to ten files total in Claude Code, six to eight in agent contexts. Do not read other templates, other canvases, or other styles unless the user's request demands them.
 
 ### Available references
 
+**Canvases** (4): `bento-box` (default), `editorial`, `dashboard`, `poster`.
+
 **Styles** (10): `aizfographics-style` (default), `clean-minimal`, `blueprint`, `editorial`, `corporate`, `cyberpunk`, `chalkboard`, `hand-drawn`, `retro`, plus `_custom-template` scaffold for bespoke styles.
 
-**Layouts** (23): `bento-box`, `statistical`, `grid-cards`, `process-flow`, `timeline`, `comparison`, `hierarchical`, `list`, `roadmap`, `funnel`, `flowchart`, `dashboard`, `mind-map`, `journey-path`, `pyramid`, `circular-flow`, `iceberg`, `fishbone`, `venn`, `anatomical`, `geographic`, `quadrant`, `swimlane`.
+**Snippets** (23): `bento-box`, `statistical`, `grid-cards`, `process-flow`, `timeline`, `comparison`, `hierarchical`, `list`, `roadmap`, `funnel`, `flowchart`, `dashboard`, `mind-map`, `journey-path`, `pyramid`, `circular-flow`, `iceberg`, `fishbone`, `venn`, `anatomical`, `geographic`, `quadrant`, `swimlane`. Each is an embeddable section that any canvas can host inside one of its slots.
+
+> **Transitional state.** Snippet files currently live in `references/layouts/<name>.md` because they were previously full-page layout templates. They still describe the *content essence* (the timeline spine, the fishbone bones, the kpi grid) — but they also contain Header/Hero/Footer scaffolding that should be ignored when embedding inside a canvas (the canvas owns those slots). When loading a snippet, **use only its content-pattern sections** (the grid recipe, the data structure, the SVG geometry, the composition rules). Skip its "Section order" / "Header strip" / "Footer" descriptions — those duplicate canvas concerns.
+>
+> A future refactor will move each into `references/snippets/<name>.md` with the page chrome stripped out. The path you read from changes; the content essence does not.
 
 **Templates** (10): `token-economics`, `ecosystem-overview`, `cheatsheet`, `crypto-explainer`, `game-overview`, `airdrop-guide`, `nft-showcase`, `how-it-works`, `report`, `game-mechanics`.
 
@@ -143,7 +152,7 @@ Eight to nine files total in Claude Code, six to seven in agent contexts. Do not
 
 **Viewer features** (5 optional, all drop-in): hover tooltips, animated number counters, scroll reveals, expandable sections, dark/light toggle — see `references/viewer-features.md`.
 
-If the user requests a content type that doesn't map to any template, route to the closest layout + style instead and infer the sections from content. If they want a style not listed, copy `_custom-template.md` and fill it in; note the substitution in your response.
+If the user requests a content type that doesn't map to any template, fall through to the canvas pick (§1.5) and pick snippets that match the content shape. If they want a style not listed, copy `_custom-template.md` and fill it in; note the substitution in your response.
 
 ---
 
@@ -166,7 +175,7 @@ If critical data is missing, ask before generating. Never fabricate financial nu
 
 ## 5. Guided Mode Step Flow
 
-Only use in guided mode. In one-shot, skip to the Generation step. The section-by-section cadence (§1.5) reuses Steps 2–5 from this section, then runs its own per-section loop instead of a single Step 6.
+Only use in guided mode. In one-shot, skip to the Generation step.
 
 **MANDATORY TOOL USAGE.** Every step below that offers options MUST be executed as a single `AskUserQuestion` tool call — not plain text with numbered options. The tool call is what renders the tappable UI in Claude Code. If `AskUserQuestion` is unavailable in the current host (agent contexts like OpenClaw/Hermes), fall back to numbered text options and wait for a reply.
 
@@ -176,12 +185,16 @@ Never bundle more than one question per `AskUserQuestion` call unless the questi
 
 Confirm extraction as shown in §4. No tool call; this is a plain-text recap. If critical content is missing, ask for it before proceeding.
 
-### Step 2 — Template or layout
+### Step 1.5 — Canvas pick
+
+Run §1.5 Canvas Pick (open gallery + AskUserQuestion). Skip when a template matched in §2 or the user named a canvas explicitly.
+
+### Step 2 — Template or snippet selection
 
 Fire `AskUserQuestion`:
 
-- **Template match found:** question = "Use the <name> template, customize, or pick a different layout?" — options = `["Use <name> template", "Customize sections", "Pick a different layout"]`.
-- **No template match:** question = "Which layout fits best?" — options = the 2–3 best-fit layouts (one-line descriptions) plus `"Something else (describe)"`.
+- **Template match found:** question = "Use the <name> template, customize, or pick different snippets?" — options = `["Use <name> template", "Customize sections", "Pick different snippets"]`.
+- **No template match (canvas already picked in Step 1.5):** question = "Which snippets should the <canvas> host?" — list the 3-5 snippets that best fit the content (each option's preview shows the snippet name + one-line role) plus `"Custom mix (I'll describe)"`. Multi-select is fine here. The picked snippets fill the canvas's slots per its slot rules.
 
 ### Step 3 — Style
 
@@ -213,7 +226,7 @@ Fallback behavior: if any step fails (fetch blocked, no colors found, extracted 
 
 ### Step 5 — Dimensions (width-only)
 
-Fire `AskUserQuestion`. Question = "What width do you need?" — options = `["Wide (1920w, default)", "Social (1080w)", "Blog (1080w)", "Square (1080w)", "Custom width"]`. Height is never asked — the canvas grows to fit content, no bottom padding. Default one-shot width = **1920** (Wide). Bento-box layouts always use 1920+ — never narrower.
+Fire `AskUserQuestion`. Question = "What width do you need?" — options = `["Wide (1920w, default)", "Social (1080w)", "Blog (1080w)", "Square (1080w)", "Custom width"]`. Height is never asked — the canvas grows to fit content, no bottom padding. Default one-shot width depends on the chosen canvas: bento-box / dashboard / poster default to **1920**; editorial defaults to **1280**. Bento-box never goes below 1440. Editorial never goes below 720.
 
 ### Step 6 — Generate
 
@@ -279,9 +292,9 @@ Implementation: the `.infographic-canvas` root gets `width: 100%; max-width: <ch
 - **Responsive scaling**: the canvas scales to the viewport width; height always follows content.
 - **Dark mode is default.** Light mode on explicit request only.
 - **4px grid.** All spacing tokens, font sizes, node dimensions, and SVG coords must be multiples of 4. Existing `--gap-*` / `--pad-*` / `--radius-*` variables already comply — don't override them to odd values. This applies at generation time; the viewer's responsive scaling can still produce sub-pixel values at render.
-- **Density budgets (per layout).** Enforce the cap below at generation time — past the cap, either split into a second infographic or promote detail into a secondary cheatsheet card. Infographics are allowed to be dense (unlike technical diagrams), but every layout still has a ceiling:
+- **Density budgets.** Enforce the cap below at generation time — past the cap, either split into a second infographic or promote detail into a secondary cheatsheet card. Infographics are allowed to be dense (unlike technical diagrams), but every canvas/snippet still has a ceiling:
 
-  | Layout family | Primary node / card cap | Accent emphases | Notes |
+  | Canvas or snippet | Primary node / card cap | Accent emphases | Notes |
   |---|---|---|---|
   | `bento-box` | ≤ 1 hero + 11 secondary cards (12 cells total) | ≤ 3 (hero counts) | past 12 cells → split into a second bento infographic |
   | `statistical`, `dashboard` | ≤ 12 KPI cards / panels | ≤ 2 "hero" cards with accent fill | split grid by category if over |
@@ -561,7 +574,7 @@ All creator-tool CSS uses hardcoded hex fallbacks inside `var()` calls so the to
 ### Agent context (OpenClaw, Hermes)
 
 - Default to one-shot mode
-- **Skip §1.5 Build Cadence** — default directly to one-shot, do not fire the cadence `AskUserQuestion`
+- **Skip §1.5 Canvas Pick** — default to `bento-box` canvas, do not open the gallery, do not fire the canvas `AskUserQuestion`. If the agent caller named a different canvas in the prompt, honor it.
 - **§8.5 Standalone Section Extraction** — offer only if the agent host supports follow-up turns; otherwise skip silently
 - **§8.6 Signal Sheet** — auto-generate by default (no opt-in possible). Skip the comparative-sourcing question entirely (no user prompt, no web-search latency in agent contexts). Never offer merge — always ship the twin (`<name>.html` + `<name>-signals.html` + PNGs). Thin-data fallback: skip silently.
 - The §13 Closing Tip still prints at the end of the final message
@@ -590,16 +603,18 @@ Install via `package_skill.py` when ready for auto-triggering.
 
 | Situation | What to do |
 |-----------|------------|
-| User pastes structured tokenomics data | Load `templates/token-economics.md`, one-shot |
-| User says "help me make an infographic" | Guided mode, start at intake |
-| User says "cheatsheet for X" | Load `templates/cheatsheet.md` |
-| User asks about ecosystem/partners/integrations | Load `templates/ecosystem-overview.md` |
-| User wants a style that isn't MVP | Substitute `aizfographics-style` and note |
-| User wants a layout that isn't MVP | Pick closest MVP analogue and note |
-| User wants a release recap, product overview, or dense multi-section snapshot | Load `references/layouts/bento-box.md` (1920w) |
-| User wants a positioning / 2×2 matrix | Load `references/layouts/quadrant.md` |
-| User wants a multi-actor process / handoff flow | Load `references/layouts/swimlane.md` |
+| User pastes structured tokenomics data | Load `templates/token-economics.md`, one-shot, bento-box canvas |
+| User says "help me make an infographic" | Guided mode, start at intake → §1.5 canvas pick |
+| User says "cheatsheet for X" | Load `templates/cheatsheet.md` (bento-box canvas) |
+| User asks about ecosystem/partners/integrations | Load `templates/ecosystem-overview.md` (bento-box canvas) |
+| User asks for a long-form deep-dive / "how it really works" | Pick `editorial` canvas |
+| User asks for a stats/metrics snapshot | Pick `dashboard` canvas |
+| User asks for "anatomy of X" / framework / mechanism | Pick `poster` canvas, hero centerpiece is one big snippet |
+| User wants a release recap, product overview, or dense multi-section snapshot | `bento-box` canvas (1920w) |
+| User wants a positioning / 2×2 matrix | `poster` canvas + `quadrant` snippet as centerpiece |
+| User wants a multi-actor process / handoff flow | `poster` canvas + `swimlane` snippet as centerpiece |
 | User wants a caveat or citation on a data point | Use `references/elements/annotation.md` (max 2 callouts) |
+| User wants a style that isn't MVP | Substitute `aizfographics-style` and note |
 | User asks for vector/Figma | Point to `references/export/figma-import.md` (html.to.design plugin) |
 | User hasn't given data | Ask for it — do not fabricate |
 | After export, want hidden insights surfaced | §8.6 Signal Sheet — load `references/templates/_signals.md` |
@@ -618,6 +633,6 @@ TIP: Use the html.to.design Figma plugin to get a fully editable infographic in 
 Rules:
 
 - Print it after §8 export recap AND (if run) after §8.5 standalone extraction recap — it is the last line of the skill's output.
-- Print it in both one-shot and section-by-section flows, and regardless of whether standalone extraction was run.
+- Print it regardless of whether standalone extraction or signal sheet was run.
 - Print it even in agent contexts.
 - Single line. No bullet, no heading, no emoji, no extra prose around it.

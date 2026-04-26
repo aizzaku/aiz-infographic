@@ -6,11 +6,15 @@ Periodic snapshot / recap. Weekly, monthly, quarterly, or seasonal summary of nu
 
 User mentions: weekly report, monthly report, recap, season recap, state of X, quarterly summary, update, digest, year in review.
 
-## Base layout
+## Canvas
 
-`bento-box` (see `references/layouts/bento-box.md`) — hero strip with the period + headline KPIs, then bento cards for metric details (mini charts), highlights (list), and "up next" callouts. Heavier metrics get wider cards; the highlights list becomes a tall sidebar.
+`bento-box` (see `references/canvases/bento-box.md`) — hero strip with the period + headline KPIs, then bento cards for metric details, highlights, and "up next" callouts. Heavier metrics get wider cards; the highlights list becomes a tall sidebar.
 
-**Layout fallback:** for traditional dashboard reports, use `dashboard` (metrics grid) + `list` (highlights) + optional `timeline` (period trend).
+## Snippets
+
+`statistical` (hero KPIs), `chart` (metric details, mini line/bar/area), `list` (highlights), `timeline` (period trend, optional), `callout-block` ("up next").
+
+**Canvas fallback:** for pure metrics-focused reports without narrative, use `dashboard` canvas instead with the same snippets.
 
 ## Default style
 

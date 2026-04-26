@@ -6,11 +6,15 @@ Comprehensive single-page introduction to a game. Hero visual, core loop, key me
 
 User mentions: game overview, whitepaper visual, game infographic, introduce game, game pitch visual, game summary. Often paired with gaming content (Gigaverse, Parallel, etc.).
 
-## Base layout
+## Canvas
 
-`bento-box` (see `references/layouts/bento-box.md`) — hero strip + mixed-span cards for stats, features, core loop, progression, and start-steps. Each section is its own bento card sized to weight: a feature gets a wide card, a stat gets a small one, the core loop card can be tall to accommodate a circular-flow diagram.
+`bento-box` (see `references/canvases/bento-box.md`) — hero strip + mixed-span cards for stats, features, core loop, progression, and start-steps. Each section is its own bento card sized to weight: a feature gets a wide card, a stat gets a small one, the core-loop card can be tall to accommodate a `circular-flow` snippet.
 
-**Layout fallback:** if the user wants a more traditional one-column flow, use a hybrid of `statistical` + `grid-cards` + (optionally) `circular-flow` for the loop.
+## Snippets
+
+`statistical` (hero KPIs), `grid-cards` (features), `circular-flow` (core loop), `process-flow` (start steps / progression), `list` (highlights).
+
+**Canvas fallback:** if the user wants a traditional one-column read-through, use `editorial` canvas instead with the same snippet list interleaved with prose.
 
 ## Default style
 

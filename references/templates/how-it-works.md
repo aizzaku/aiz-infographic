@@ -6,9 +6,13 @@ Mechanism walkthrough — closer cousin of `crypto-explainer` but more general. 
 
 User mentions: how does X work, walkthrough, breakdown of X, explain the mechanism, step-by-step guide, behind the scenes — AND wants a visual.
 
-## Base layout
+## Canvas
 
-`process-flow` primary. Optional header with stats, optional footer with "what's next" CTAs.
+`poster` (see `references/canvases/poster.md`) — process-flow as the centerpiece, supports carry context KPIs and "what's next" callouts.
+
+## Snippets
+
+`process-flow` (centerpiece, the mechanism), `statistical` (header KPIs), `callout-block` (footer "what's next" CTA).
 
 ## Default style
 
