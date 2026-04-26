@@ -1,6 +1,8 @@
 # Creator Tools
 
-Authoring aids that appear in the generated HTML during iteration. Automatically stripped from PNG exports. Two surfaces only: **accent color editor** and **inline text editing**, plus a floating toolbar that hosts Save / Revert / PNG / Copy HTML / Clean Download.
+Authoring aids that appear in the generated HTML during iteration. Automatically stripped from PNG exports. Two surfaces only: **accent color editor** and **inline text editing**, plus a floating toolbar that hosts Edit / Color / Save / Revert / Copy / Clean HTML.
+
+> **PNG re-export.** The toolbar deliberately does not ship an in-browser PNG button — html2canvas can't render the modern CSS this skill uses (`color-mix`, gradient-border layering) reliably. After editing in the browser, click **Save** to write the new HTML to disk, then ask Claude *"export the new HTML as PNG"* — it runs `scripts/export.py` for a pixel-perfect 2× capture.
 
 All creator-tool elements carry the attribute `data-creator-tools` so `export.py` can hide them before screenshotting. Never render these elements outside of an iteration context — clean exports should omit them entirely.
 
@@ -21,33 +23,36 @@ Wrap all creator tools in a single container and toggle with one class:
 
 ## 1. Floating toolbar
 
-Bottom-right group: Edit · Color | Save · Revert | PNG · Copy · CleanDL.
+Bottom-right group: Edit · Color | Save · Revert | Copy · Clean HTML.
+
+Every button shows its icon **and** its action name — labels are not optional. Icons alone confuse first-time users.
 
 ```html
 <div class="ct-toolbar" data-creator-tools>
   <button onclick="ctToggleEdit()" aria-label="Edit" title="Edit mode (E)">
-    <i class="ph-bold ph-pencil-simple"></i>
+    <i class="ph-bold ph-pencil-simple"></i><span class="ct-label">Edit</span>
   </button>
   <button onclick="ctToggleColorEditor()" aria-label="Color" title="Accent colors">
-    <i class="ph-bold ph-palette"></i>
+    <i class="ph-bold ph-palette"></i><span class="ct-label">Color</span>
   </button>
   <span class="ct-sep"></span>
-  <button onclick="ctSave()" aria-label="Save" title="Save to disk (Ctrl+S)">
-    <i class="ph-bold ph-floppy-disk"></i>
+  <button onclick="ctSave()" aria-label="Save" title="Save edited HTML to disk (Ctrl+S). Ask Claude to re-export the PNG after saving.">
+    <i class="ph-bold ph-floppy-disk"></i><span class="ct-label">Save</span>
   </button>
   <button onclick="ctRevert()" aria-label="Revert" title="Revert to original">
-    <i class="ph-bold ph-arrow-counter-clockwise"></i>
+    <i class="ph-bold ph-arrow-counter-clockwise"></i><span class="ct-label">Revert</span>
   </button>
   <span class="ct-sep"></span>
-  <button onclick="ctExportPNG()" aria-label="PNG" title="Export PNG">
-    <i class="ph-bold ph-image"></i>
+  <button onclick="ctCopyHTML()" aria-label="Copy" title="Copy HTML to clipboard">
+    <i class="ph-bold ph-copy"></i><span class="ct-label">Copy</span>
   </button>
-  <button onclick="ctCopyHTML()" aria-label="Copy" title="Copy HTML">
-    <i class="ph-bold ph-copy"></i>
+  <button onclick="ctCleanDownload()" aria-label="CleanHTML" title="Download HTML without creator tools">
+    <i class="ph-bold ph-download-simple"></i><span class="ct-label">Clean HTML</span>
   </button>
-  <button onclick="ctCleanDownload()" aria-label="CleanDL" title="Clean Download (no creator tools)">
-    <i class="ph-bold ph-download-simple"></i>
-  </button>
+</div>
+
+<div class="ct-png-hint" data-creator-tools>
+  After saving, ask Claude: <em>"export the new HTML as PNG"</em>
 </div>
 
 <style>
@@ -63,14 +68,26 @@ Bottom-right group: Edit · Color | Save · Revert | PNG · Copy · CleanDL.
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
 }
 .ct-toolbar button {
-  padding: 8px 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 10px;
   background: transparent;
   border: none;
   border-radius: 4px;
   color: var(--text-secondary, #cccccc);
   cursor: pointer;
-  font-size: 18px;
+  font: 700 11px/1 'Montserrat', sans-serif;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   transition: background 0.15s, color 0.15s;
+}
+.ct-toolbar button i {
+  font-size: 16px;
+  line-height: 1;
+}
+.ct-label {
+  white-space: nowrap;
 }
 .ct-toolbar button:hover {
   background: color-mix(in srgb, var(--accent-1, #F3A950) 15%, transparent);
@@ -82,7 +99,31 @@ Bottom-right group: Edit · Color | Save · Revert | PNG · Copy · CleanDL.
   margin: 2px 2px;
   background: color-mix(in srgb, var(--accent-1, #F3A950) 25%, transparent);
 }
-@keyframes ct-spin { to { transform: rotate(360deg); } }
+.ct-png-hint {
+  position: fixed;
+  bottom: 16px; right: 16px;
+  transform: translateY(-48px);
+  padding: 6px 10px;
+  background: var(--elevated, #1a1a1a);
+  border: 1px dashed color-mix(in srgb, var(--accent-1, #F3A950) 35%, transparent);
+  border-radius: 4px;
+  color: var(--text-muted, #888);
+  font: 600 10px/1.3 'Montserrat', sans-serif;
+  letter-spacing: 0.04em;
+  z-index: 9998;
+  max-width: 280px;
+  pointer-events: none;
+  opacity: 0.85;
+}
+.ct-png-hint em {
+  color: var(--accent-1, #F3A950);
+  font-style: normal;
+  font-weight: 700;
+}
+@media (max-width: 720px) {
+  .ct-png-hint { display: none; }
+  .ct-label { display: none; }
+}
 </style>
 
 <script data-creator-tools>
@@ -100,87 +141,14 @@ window.ctCleanDownload = () => {
   a.download = document.title.toLowerCase().replace(/\s+/g, '-') + '.html';
   a.click();
 };
-(function () {
-  let _h2cPromise = null;
-
-  function _loadH2C() {
-    if (window.html2canvas) return Promise.resolve(window.html2canvas);
-    if (_h2cPromise) return _h2cPromise;
-    _h2cPromise = new Promise((resolve, reject) => {
-      const s = document.createElement('script');
-      s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
-      s.setAttribute('data-creator-tools', '');
-      s.onload = () => resolve(window.html2canvas);
-      s.onerror = () => reject(new Error('html2canvas load failed'));
-      document.head.appendChild(s);
-    });
-    return _h2cPromise;
-  }
-
-  function _pngToast(msg) {
-    const t = document.createElement('div');
-    t.setAttribute('data-creator-tools', '');
-    t.className = 'ct-toast';
-    t.textContent = msg;
-    document.body.appendChild(t);
-    setTimeout(() => t.remove(), 1800);
-  }
-
-  window.ctExportPNG = async () => {
-    const btn = document.querySelector('.ct-toolbar [aria-label="PNG"]');
-    const origHTML = btn ? btn.innerHTML : '';
-    if (btn) {
-      btn.innerHTML = '<i class="ph-bold ph-circle-notch" style="display:inline-block;animation:ct-spin 1s linear infinite"></i>';
-      btn.disabled = true;
-    }
-    try {
-      const h2c = await _loadH2C();
-      const canvas_el = document.querySelector('.infographic-canvas');
-      if (!canvas_el) throw new Error('No .infographic-canvas');
-
-      // Mirror export.py _prepare_page_state
-      document.querySelectorAll('[data-counter-to]').forEach(el => {
-        const v = parseInt(el.dataset.counterTo, 10);
-        if (!isNaN(v)) el.textContent = v.toLocaleString('en-US');
-      });
-      document.querySelectorAll('.section').forEach(el => el.classList.add('visible'));
-
-      await document.fonts.ready;
-
-      const rendered = await h2c(canvas_el, {
-        scale: 2,
-        useCORS: true,
-        allowTaint: false,
-        logging: false,
-        backgroundColor: null,
-        ignoreElements: el => el.hasAttribute('data-creator-tools'),
-      });
-
-      rendered.toBlob(blob => {
-        if (!blob) { _pngToast('Export failed'); return; }
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = (document.title || 'infographic').toLowerCase().replace(/\s+/g, '-') + '.png';
-        a.click();
-        setTimeout(() => URL.revokeObjectURL(a.href), 1000);
-        _pngToast('PNG saved');
-      }, 'image/png');
-
-    } catch (err) {
-      console.error('[ctExportPNG]', err);
-      _pngToast('Export failed');
-    } finally {
-      if (btn) { btn.innerHTML = origHTML; btn.disabled = false; }
-    }
-  };
-})();
 </script>
 ```
 
 ### Robustness notes
 
 - Toolbar colors fall back to hardcoded hex values when the active style doesn't define `--elevated`, `--accent-1`, or `--text-secondary`. Tools remain visible on any style.
-- If the Phosphor Icons CDN is blocked, the toolbar buttons can still be identified by their `aria-label` / `title` attrs on hover. For a stronger fallback, gate a `::after { content: attr(aria-label); }` rule on `.ph-bold:empty` — not emitted by default.
+- Labels are visible by default. The `@media (max-width: 720px)` rule hides text labels on narrow viewports — buttons fall back to icon-only with `aria-label` / `title` for hover/AT.
+- If the Phosphor Icons CDN is blocked, the action labels still identify each button. For an even stronger fallback when both fail, gate a `::after { content: attr(aria-label); }` rule on `.ph-bold:empty` — not emitted by default.
 
 ## 2. Clean download
 
@@ -759,7 +727,15 @@ document.addEventListener('keydown', (e) => {
 
 ## Export behavior
 
-The PNG button renders `.infographic-canvas` in-browser via html2canvas (loaded lazily on first click) and downloads a 2× PNG. Creator-tool elements are excluded via `ignoreElements`. `scripts/export.py` provides an alternative pixel-perfect Playwright render when invoked by Claude in the export chain.
+PNG export is **server-side only** via `scripts/export.py` (headless Chromium / Playwright, 2× DPR, pixel-perfect). The toolbar intentionally has no PNG button — in-browser rasterizers (html2canvas et al.) cannot reliably render the modern CSS this skill relies on (`color-mix(...)`, layered `padding-box`/`border-box` gradient borders, `backdrop-filter`).
+
+**Round-trip after browser edits:**
+
+1. Edit in the browser (text + accent colors).
+2. Click **Save** in the toolbar (or `Ctrl+S`) to write the cleaned HTML over the file.
+3. Tell Claude *"export the new HTML as PNG"* — Claude runs `python scripts/export.py --png output/<name>.html` and produces the updated PNG alongside the HTML.
+
+The `.ct-png-hint` chip above the toolbar reminds users of this flow. It's a `[data-creator-tools]` element and is stripped from clean exports.
 
 ## When to include
 

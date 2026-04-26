@@ -518,7 +518,7 @@ All viewer features freeze to final state during PNG export — the exporter for
 - **Inline text editing** — `e` toggles `contenteditable`, emoji stripped silently, headers stay uppercase via CSS.
 - **Accent color editor** — two pickers for `--accent-1` / `--accent-2` plus a preset palette strip; recolors the whole infographic via CSS variables.
 - **Forgiving persistence** — localStorage autosave (survives refresh), `Ctrl+Z` / `Ctrl+Shift+Z` undo/redo, `Ctrl+S` saves via File System Access API (Chromium) or Clean Download fallback, Revert button discards all edits.
-- **Floating export toolbar** — Edit / Color / Save / Revert / PNG / Copy HTML / Clean Download.
+- **Floating toolbar** — Edit / Color / Save / Revert / Copy / Clean HTML. Every button shows its action name next to the icon. **No in-browser PNG button** — after Save, the user asks Claude to re-export the PNG via `scripts/export.py` (Playwright). A small hint chip above the toolbar reminds the user of this flow.
 - **Keyboard shortcuts** — `e` edit, `Ctrl+Z/Shift+Z` undo/redo, `Ctrl+S` save.
 
 All creator-tool elements carry `data-creator-tools`. The exporter hides them before screenshotting, so they never appear in PNG output. A "Clean Download" button produces a stripped-HTML copy for embedding. In-browser edits only land in PNG after the user hits Save (or Clean Download) — the exporter reads from disk, not from the live DOM.

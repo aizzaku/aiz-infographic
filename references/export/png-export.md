@@ -1,10 +1,12 @@
 # PNG Export
 
-## Browser export (creator tool)
+PNG export is **server-side only** via Playwright. There is no in-browser PNG button — html2canvas et al. can't render the modern CSS this skill uses (`color-mix`, layered `padding-box`/`border-box` gradient borders, `backdrop-filter`) reliably enough to ship.
 
-Click the **PNG** button (image icon) in the floating creator toolbar. html2canvas renders `.infographic-canvas` at 2× and triggers a download. No terminal needed.
+## Round-trip after browser edits
 
-Use the Python/Playwright path below when you need: pixel-perfect font rendering on the first export, batch exports, or a guaranteed clean result after complex CSS animations.
+1. Edit in the browser (text + accent colors via the creator toolbar).
+2. Click **Save** in the toolbar (or press `Ctrl+S`) — writes the cleaned HTML over the source file.
+3. Tell Claude *"export the new HTML as PNG"* — Claude runs the command below and produces the updated PNG alongside the HTML.
 
 ## Command
 
