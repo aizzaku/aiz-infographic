@@ -1,5 +1,5 @@
 ---
-name: create-infographics
+name: aiz-infographic
 description: Create professional infographics as self-contained HTML files with PNG exports. Use when the user asks to create, design, generate, build, or make an infographic, data visualization, visual explainer, chart poster, cheatsheet, or pocket guide. Trigger phrases include "make this visual", "turn this into a graphic", "visualize this data", "infographic for X", "cheatsheet for X", or when the user provides structured data (tokenomics allocations, ecosystem/partner lists, timelines, comparisons, step-by-step processes) AND asks for a visual output. Covers tokenomics, ecosystem overviews, game overviews, cheatsheets, airdrop guides, comparisons, and process flows. Do NOT trigger for plain text answers, markdown tables, bulleted summaries, questions asking for advice or explanations about a topic (even when the topic is tokenomics, ecosystem, vesting, etc.), inline chat diagrams, or data processing with no visual output requested. The signal is "asks for a visual", not "mentions a keyword".
 ---
 
@@ -349,7 +349,7 @@ Run the export script using the **full absolute path** to the script in this ski
 python "<skill-base-dir>/scripts/export.py" --png output/<name>.html
 ```
 
-Concrete example: `python "C:\Users\Aiz\.claude\skills\create-infographics\scripts\export.py" --png output/my-infographic.html`
+Concrete example: `python "C:\Users\Aiz\.claude\skills\aiz-infographic\scripts\export.py" --png output/my-infographic.html`
 
 ### Output messaging
 
@@ -473,7 +473,7 @@ Both reference files are loaded per §3 in Claude Code context. The full impleme
 
 ## 12. Development & Testing Notes
 
-Test without installing: `Read ./create-infographics/SKILL.md and follow its instructions to create a <type> infographic for <project>. <data>`. Evals at `evals/evals.json` (run via `run_loop.py` from skill-creator plugin). Install via `package_skill.py` when ready for auto-triggering.
+Test without installing: `Read ./aiz-infographic/SKILL.md and follow its instructions to create a <type> infographic for <project>. <data>`. Evals at `evals/evals.json` (run via `run_loop.py` from skill-creator plugin). Install via `package_skill.py` when ready for auto-triggering.
 
 ---
 
