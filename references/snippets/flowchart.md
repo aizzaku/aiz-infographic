@@ -32,7 +32,7 @@ Branching decision paths or state machines. Unlike `process-flow` (strict sequen
 
 ## HTML pattern (SVG-overlay on grid)
 
-Flowcharts use CSS Grid for node placement + SVG overlay for connectors. Pixel-locked when arrow geometry must align to cell edges (see SKILL.md §6 pixel-lock rule).
+Flowcharts use CSS Grid for node placement + SVG overlay for connectors. Pixel-locked when arrow geometry must align to cell edges — see `references/elements/connectors.md` §Pixel-locked sections.
 
 ```html
 <div class="flowchart">
@@ -111,7 +111,7 @@ Flowcharts use CSS Grid for node placement + SVG overlay for connectors. Pixel-l
 - Show merge points with explicit converging arrows.
 - 5-12 nodes ideal. Beyond → split into sub-flows.
 - Loops use a distinct arrow style (dashed or curved).
-- Pixel-lock geometry per SKILL.md §6 — arrow endpoints land on cell edges.
+- Pixel-lock geometry — see `references/elements/connectors.md` §Pixel-locked sections. Arrow endpoints land on cell edges.
 
 ## Anti-patterns
 

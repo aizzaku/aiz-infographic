@@ -51,6 +51,22 @@ When ambiguous, prefer guided — it's easier to skip forward than to regenerate
 
 ---
 
+## Out of Scope
+
+This skill does NOT:
+
+- Generate animated or video infographics — output is static HTML/PNG.
+- Build live-data dashboards — output is a fixed snapshot, not a connected dashboard.
+- Produce slide decks or presentations — use the `pptx` skill.
+- OCR scanned source documents — provide structured data, not images of data.
+- Create technical architecture, UML, or sequence diagrams — use a diagram tool.
+- Generate SVG / Figma files directly — vector workflow goes through html.to.design (see §13).
+- Fabricate financial numbers, dates, or partner lists when missing (see §4).
+
+If the request is one of the above, route to the appropriate skill or ask for the data shape this skill can render.
+
+---
+
 ## 1.5 Canvas Pick (when no template matched)
 
 After §4 Content Intake but before §5 Step 2, fire the canvas picker — but only when no template matched in §2 and the user hasn't named a canvas explicitly.
@@ -122,6 +138,9 @@ Never load the full references tree. Read only what the current request maps to.
 | Export mechanics | `references/export/<name>.md` |
 | Canvas visual gallery | `references/_gallery.html` (auto-opened in §1.5 only) |
 | Signal sheet extraction (§8.6) | `references/templates/_signals.md` (loaded only when §8.6 fires) |
+| Standalone section extraction (§8.5) | `references/_standalone-extraction.md` (loaded only when §8.5 fires) |
+| Brand color extraction (§5 Step 4 option 2 or 3) | `references/brand-extraction.md` (loaded only when option 2 or 3 chosen) |
+| Pixel-locked sections (cross-cell connectors) | `references/elements/connectors.md` §Pixel-locked sections — already pulled in via the `connectors` element load when any snippet using arrows/leaders is selected |
 
 ### Typical load order for a one-shot tokenomics request:
 
@@ -134,21 +153,23 @@ Never load the full references tree. Read only what the current request maps to.
 
 Eight to ten files total in Claude Code, six to eight in agent contexts. Do not read other templates, other canvases, or other styles unless the user's request demands them.
 
+**Canvas snippet routing hints:**
+- Token flows / allocation flows with value transfer → `sankey-flow` (needs D3 + d3-sankey in `<head>`)
+- Ecosystem/partner/relationship maps with 5–20 entities → `network-graph` (needs D3 in `<head>`)
+- Multi-axis protocol comparison → radar chart in `charts.md` (needs Chart.js in `<head>`)
+- Hierarchical allocation with 6+ segments → treemap chart in `charts.md` (needs D3 in `<head>`)
+- 3-variable scatter → bubble chart in `charts.md` (needs Chart.js in `<head>`)
+- Holder/allocation distribution as a grid → waffle chart in `charts.md` (raw canvas, no CDN)
+
 ### Available references
 
-**Canvases** (4): `bento-box` (default), `editorial`, `dashboard`, `poster`.
+- **Canvases (4):** `bento-box` (default), `editorial`, `dashboard`, `poster`.
+- **Styles (10):** `aizfographics-style` (default), `clean-minimal`, `blueprint`, `editorial`, `corporate`, `cyberpunk`, `chalkboard`, `hand-drawn`, `retro`, `_custom-template` (scaffold).
+- **Snippets (24):** `statistical`, `grid-cards`, `process-flow`, `timeline`, `comparison`, `hierarchical`, `list`, `roadmap`, `funnel`, `flowchart`, `dashboard`, `mind-map`, `journey-path`, `pyramid`, `circular-flow`, `iceberg`, `fishbone`, `venn`, `anatomical`, `geographic`, `quadrant`, `swimlane`, `sankey-flow`, `network-graph`. Each declares its slot fit and density cap. Bento-box is canvas-only — no `bento-box` snippet.
+- **Templates (10):** `token-economics`, `ecosystem-overview`, `cheatsheet`, `crypto-explainer`, `game-overview`, `airdrop-guide`, `nft-showcase`, `how-it-works`, `report`, `game-mechanics`.
+- **Elements (10):** `charts`, `text`, `layout`, `connectors`, `icons`, `data-widgets`, `decorative`, `maps`, `comparison`, `annotation`.
 
-**Styles** (10): `aizfographics-style` (default), `clean-minimal`, `blueprint`, `editorial`, `corporate`, `cyberpunk`, `chalkboard`, `hand-drawn`, `retro`, plus `_custom-template` scaffold for bespoke styles.
-
-**Snippets** (22): `statistical`, `grid-cards`, `process-flow`, `timeline`, `comparison`, `hierarchical`, `list`, `roadmap`, `funnel`, `flowchart`, `dashboard`, `mind-map`, `journey-path`, `pyramid`, `circular-flow`, `iceberg`, `fishbone`, `venn`, `anatomical`, `geographic`, `quadrant`, `swimlane`. Each is an embeddable section pattern that any canvas can host in one of its slots. Each snippet declares its slot fit (which canvas slots accept it, with what dimensions). No `bento-box` snippet — bento-box is canvas-only.
-
-**Templates** (10): `token-economics`, `ecosystem-overview`, `cheatsheet`, `crypto-explainer`, `game-overview`, `airdrop-guide`, `nft-showcase`, `how-it-works`, `report`, `game-mechanics`.
-
-**Elements** (10): `charts`, `text`, `layout`, `connectors`, `icons`, `data-widgets`, `decorative`, `maps`, `comparison`, `annotation`.
-
-**Viewer features** (5 optional, all drop-in): hover tooltips, animated number counters, scroll reveals, expandable sections, dark/light toggle — see `references/viewer-features.md`.
-
-If the user requests a content type that doesn't map to any template, fall through to the canvas pick (§1.5) and pick snippets that match the content shape. If they want a style not listed, copy `_custom-template.md` and fill it in; note the substitution in your response.
+Unmapped content type → §1.5 canvas pick + snippets that match the content shape. Unlisted style → copy `_custom-template.md`, fill, note the substitution.
 
 ---
 
@@ -201,24 +222,12 @@ Fire `AskUserQuestion`. Question = "Keep aizfographics-style or switch?" — opt
 Fire `AskUserQuestion`. Question = "How should the accent color be chosen?" — options:
 
 1. **Use style default** — keep the accent pair from the chosen style.
-2. **Pick brand color (auto-search)** — Claude runs a web search for "<brand name from content> brand guidelines" / "<brand name> primary color hex", extracts the primary pair, applies it as the accent. Cite the source domain in the Step 6 generation recap. If search yields nothing usable, fall back to option 1 and note the fallback.
-3. **Match a brand URL (extract)** — the user gives a site URL; Claude runs the 5-step extraction flow below.
+2. **Pick brand color (auto-search)** — Claude web-searches for the brand and extracts a primary pair.
+3. **Match a brand URL (extract)** — the user gives a site URL; Claude scrapes a primary pair.
 4. **I'll give you the hex values** — follow up with a free-text ask for the hex pair.
 5. **Surprise me** — Claude picks a pair that fits the content topic.
 
-#### Brand URL extraction flow (option 3)
-
-1. **Fetch** the URL via `WebFetch`. Keep only the `<head>` + first `<body>` screen worth of content (enough to catch brand CSS vars, logo, hero).
-2. **Extract colors.** Scan in priority order:
-   - CSS custom properties on `:root` / `html` / `body` starting with `--color-`, `--brand-`, `--primary`, `--accent`.
-   - Inline `style="background/color: #…"` on hero-level elements.
-   - Computed swatches from `<meta name="theme-color">` and SVG logo `fill=` attrs.
-   - As a last resort, run a coarse frequency count of hex colors in the returned CSS and take the two most common non-neutral, non-`#000/#fff`, non-grayscale ones.
-3. **Map to accent pair.** Pick the two strongest saturated colors as `--accent-1` (primary/brand) and `--accent-2` (complement/secondary). If only one strong color is found, auto-generate the second by rotating hue +20–40° toward warm or cool based on the first's temperature — stay within the 60-30-10 aesthetic, don't introduce a third color just because the site has one.
-4. **Diff-propose.** Before committing, show the user a one-line proposal: *"Extracted `#F3A950` / `#F38150` from acme.xyz — apply as accent pair?"* via `AskUserQuestion` with options `["Apply", "Swap primary/secondary", "Try different colors", "Cancel — use style default"]`.
-5. **Cite** the source URL in the Step 6 generation recap under an "Accent source" line.
-
-Fallback behavior: if any step fails (fetch blocked, no colors found, extracted colors fail basic contrast against `--canvas`), fall back to option 1 and note which step failed in the recap. Never silently ship a broken extraction — either the user sees the proposed pair, or they see the fallback.
+For options 2 and 3, load `references/brand-extraction.md` and follow the flow there. Cite the source in Step 6's recap. Never silently ship a broken extraction — either the user sees the proposed pair, or they see a fallback.
 
 ### Step 5 — Dimensions (width-only)
 
@@ -252,8 +261,13 @@ Every output is a single self-contained `.html` file with:
 - `<meta charset>`, `<meta viewport>`
 - Google Fonts `<link>` for the exact pair the style specifies
 - Phosphor Icons CDN `<link>` whenever icons are used **OR creator tools are included** (required so the toolbar buttons render)
+- **Canvas library `<script>` tags (conditional — add only when the output uses that element):**
+  - Chart.js v4 (`https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js`) when using `radar` or `bubble` charts
+  - D3 v7 (`https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js`) when using `treemap` chart, `sankey-flow` snippet, or `network-graph` snippet
+  - d3-sankey (`https://cdn.jsdelivr.net/npm/d3-sankey@0.12/dist/d3-sankey.min.js`) after D3, only for `sankey-flow`
+  - Never add these globally — only when the specific element type is present in the output
 - All CSS inlined in a single `<style>` block
-- All JS (if any) inlined in a single `<script>` block
+- All JS (if any) inlined in a single `<script>` block (canvas chart scripts may be multiple `<script>` blocks, one per chart element, each IIFE-wrapped)
 - No external image hosts except Iconify API and user-provided image URLs
 - A root `.infographic-canvas` element with a fixed `max-width` per the chosen width preset and **no fixed aspect-ratio or height** — height grows with content
 - **In Claude Code context (required, no exceptions):** a `<div class="creator-tools" data-creator-tools>` block injected before `</body>` containing the accent color editor, inline text editing (`e` toggle), Save / Revert, undo/redo persistence, and floating export toolbar, exactly as specified in `references/creator-tools.md`. Omit only when the user explicitly asks for a clean / embed-ready HTML.
@@ -276,50 +290,28 @@ Default: **1920 width, content-driven height.** Bento-box layouts require 1920+ 
 
 Implementation: the `.infographic-canvas` root gets `width: 100%; max-width: <chosen>px` and no `aspect-ratio` / no fixed `height`. Set `min-height: 100vh` only if you want the canvas to at least fill the viewport on short content.
 
-### Hard rules
+### Universal output rules
+
+These apply to every infographic regardless of style or canvas. They are NOT duplicated in style or canvas reference files — this is the only home.
 
 - **No emoji. Ever.** Not in headers, labels, bullets, icons, tooltips. Use Phosphor Bold or Iconify.
+- **Never wrap icons in bg or borders.** No icon badge, no bordered tile around an icon, no circular bg behind an icon — anywhere. Icons render as glyphs directly on the surface. Increase size or change color for emphasis, never give an icon its own container. Full rule + examples in `references/elements/icons.md`.
 - **No em dashes or en dashes in rendered text.** Em dash (`—`, U+2014) and en dash (`–`, U+2013) are AI-output tells and must never appear in the generated infographic copy — headlines, body, captions, tooltips, source citations, signal evidence, anything. Use a regular hyphen (`-`), comma, period, parentheses, or restructure the sentence. This applies to **content Claude generates**, not to this skill file's prose. Inline editing strips dashes silently the same way emoji are stripped.
-- **Exactly two fonts per infographic.** Display font for hero title only. Body font for everything else (bold/caps for headers, regular for body).
-- **One accent color pair per infographic**, unless the content genuinely needs two (e.g., comparing two brands). Use 60-30-10: 60% canvas, 30% structural neutrals, 10% accent.
+- **4px grid.** All spacing tokens, font sizes, node dimensions, and SVG coords must be multiples of 4. Existing `--gap-*` / `--pad-*` / `--radius-*` variables already comply — don't override them to odd values. Applies at generation time; the viewer's responsive scaling can still produce sub-pixel values at render.
 - **Never single-sided thick borders.** No `border-top: 3px solid accent`, no accent bar on one edge. Always full-perimeter or none. Use gradient borders for emphasis.
-- **Uppercase all headers and labels.** Body text stays sentence case.
-- **Gradient text is for titles and headers only.** Never for body copy.
-- **Responsive scaling**: the canvas scales to the viewport width; height always follows content.
-- **Dark mode is default.** Light mode on explicit request only.
-- **4px grid.** All spacing tokens, font sizes, node dimensions, and SVG coords must be multiples of 4. Existing `--gap-*` / `--pad-*` / `--radius-*` variables already comply — don't override them to odd values. This applies at generation time; the viewer's responsive scaling can still produce sub-pixel values at render.
-- **Density budgets.** Enforce the cap below at generation time — past the cap, either split into a second infographic or promote detail into a secondary cheatsheet card. Infographics are allowed to be dense (unlike technical diagrams), but every canvas/snippet still has a ceiling:
+- **Responsive scaling.** The canvas scales to the viewport width; height always follows content. No fixed aspect ratio, no trailing blank.
+- **Image assets.** When the user provides logo URLs or image URLs, embed them via `<img>` with appropriate `alt` text. When not provided, leave a styled placeholder (dashed border, centered label) — never invent image URLs.
 
-  | Canvas or snippet | Primary node / card cap | Accent emphases | Notes |
-  |---|---|---|---|
-  | `bento-box` | ≤ 1 hero + 11 secondary cards (12 cells total) | ≤ 3 (hero counts) | past 12 cells → split into a second bento infographic |
-  | `statistical`, `dashboard` | ≤ 12 KPI cards / panels | ≤ 2 "hero" cards with accent fill | split grid by category if over |
-  | `grid-cards`, `cheatsheet` | ≤ 16 cards per grid | ≤ 3 accented | break into sub-sections past 16 |
-  | `process-flow`, `journey-path`, `funnel` | ≤ 9 steps | 1 "primary path" accent | 10+ steps → split into phases |
-  | `flowchart`, `mind-map`, `fishbone` | ≤ 18 nodes | ≤ 2 | deeper trees → collapse leaves into groups |
-  | `timeline`, `roadmap` | ≤ 12 milestones per spine | ≤ 2 | more → split by year / phase |
-  | `ecosystem-overview`, `geographic` | ≤ 24 logos / regions | n/a | groups/categories above that |
-  | `comparison` | ≤ 4 options | 1 "recommended" | 5+ → `feature-table` variant only |
-  | `quadrant`, `venn`, `iceberg`, `pyramid`, `circular-flow`, `anatomical` | ≤ 9 labeled zones | ≤ 2 | any more → switch layouts |
-  | `list` | ≤ 14 items | ≤ 3 | or break into a 2-column list |
+### Rules that live in reference files (loaded per §3)
 
-- **Legend placement.** When a visualization needs a legend (color mapping, node-role table, chart series), render it as a horizontal strip at the bottom of the section it belongs to — never floating inside the canvas, never at the top. Pattern in `references/elements/layout.md` under "Legend strip". Separate from the content above with a hairline `color-mix(in srgb, var(--text-muted) 30%, transparent)` 1px divider. Expand the section's height to accommodate it; don't steal space from the visualization.
-- **Callout / annotation limits.** If using the `annotation` element (see `references/elements/annotation.md`), cap it at 2 callouts per infographic and keep leaders outside the primary content bounds. Callouts annotate; they never duplicate what a label already says.
-- **Bento-box uses fluid grid, not pixel lock.** Bento has no cross-cell connectors by design — the pixel-locked rule below does NOT apply. Use `display: grid` with `repeat(4, 1fr)` (or 6) and let cards reflow within their span. If a layout needs arrows between cards, it's not bento — pick a pixel-locked layout instead.
-- **Pixel-locked sections for cross-cell connectors.** Any section that draws arrows, leaders, or overlays that must align to specific cell edges (swimlane handoffs, flowchart edges, anatomical pointers, quadrant axis callouts, annotation leaders into the grid) MUST be laid out pixel-locked, not responsively. **Infographics are posters, not web pages — we do not care about fluid reflow.** The enclosing section gets a fixed `width` and `height` in px, children inside it use absolute `top/left/width/height` in px on a 4px grid, and any overlay SVG uses `viewBox="0 0 <W> <H>"` with `preserveAspectRatio="none"` and explicit `width="<W>" height="<H>"` matching the container 1:1 — so SVG user units map to container pixels directly. Arrow endpoints are hand-authored px coordinates that land on cell edges (not cell centers, not interiors), and SVG `<marker refX="<markerWidth>">` so the arrowhead tip sits exactly at the path endpoint. To fit the infographic inside smaller viewports, wrap the whole canvas (or just the pixel-locked section) in a scaler:
+- **Style rules** — uppercase headers, exactly two fonts, gradient text titles only, one accent pair, dark mode default → `references/styles/<picked>.md`.
+- **Density caps** (cards/steps/nodes/items per snippet, accent emphasis caps per canvas) → each `references/snippets/<name>.md` and `references/canvases/<name>.md` declares its own ceiling. Past the cap, split into a second infographic.
+- **Bento fluid-grid rule + no cross-card connectors** → `references/canvases/bento-box.md`.
+- **Pixel-locked sections (cross-cell connectors)** → `references/elements/connectors.md` §Pixel-locked sections (covers `flowchart`, `fishbone`, `swimlane`, `anatomical`, `quadrant`, plus annotation leaders into grids).
+- **Legend strip placement** → `references/elements/layout.md` §Legend strip.
+- **Callout / annotation limits** (max 2 per infographic, leader rules) → `references/elements/annotation.md`.
 
-  ```css
-  .poster-scale-wrap {
-    transform-origin: top left;
-    /* JS sets transform: scale(min(vw/W, vh/H, 1)) on load + resize */
-  }
-  ```
-
-  Do NOT try to make the grid itself responsive with `1fr` / `minmax` / `aspect-ratio` when connectors are involved — arrow geometry and cell geometry will desync. Fluid reflow is reserved for sections that are purely flow-of-text or unordered card grids with no overlays.
-
-### Image assets
-
-When the user provides logo URLs or image URLs, use them directly in `<img>` tags with appropriate `alt` text. When not provided, leave a styled placeholder (dashed border, centered label) — do not invent image URLs.
+When a relevant reference file is loaded per §3, treat its rules as binding — they are not optional.
 
 ---
 
@@ -351,11 +343,13 @@ Output/
 └── <name>.png    (via Playwright, 2x DPR)
 ```
 
-Run the export script:
+Run the export script using the **full absolute path** to the script in this skill's directory (the base dir is always shown at the top of your context as `Base directory for this skill:`):
 
 ```bash
-python scripts/export.py --png output/<name>.html
+python "<skill-base-dir>/scripts/export.py" --png output/<name>.html
 ```
+
+Concrete example: `python "C:\Users\Aiz\.claude\skills\create-infographics\scripts\export.py" --png output/my-infographic.html`
 
 ### Output messaging
 
@@ -373,57 +367,11 @@ See `references/export/png-export.md`, `references/export/figma-import.md` for m
 
 ## 8.5 Standalone Section Extraction
 
-After the §8 export recap prints, fire an `AskUserQuestion` to offer standalone section extraction:
+After the §8 export recap prints (and before §8.6), offer standalone extraction. Load `references/_standalone-extraction.md` and follow it.
 
-- Question: *"Extract each section as its own standalone infographic?"*
-- Header: `Extract sections`
-- Options:
-  1. `Yes — extract all sections`
-  2. `Pick specific sections`
-  3. `No, I'm done`
+The non-negotiable rule from that file, repeated here so it isn't lost: **each standalone preserves all of that section's content, full-detail. No truncation, no summarization.** Every data point, sub-element, caption, annotation, and chart label that was in the parent section is preserved. Reuse the parent's style, accent pair, width, fonts, viewer features, and creator-tools inclusion — never re-ask §5 questions.
 
-On **Pick specific**, follow up with a `multiSelect: true` `AskUserQuestion` listing every section in the final infographic (using the existing section IDs from §9 creator-tools). The user picks which to extract.
-
-### What each standalone file contains
-
-For every selected section, write a new self-contained HTML to:
-
-```
-./output/<kebab-name>-<section-id>.html
-```
-
-Each standalone file is a full, independent infographic:
-
-- Same style + accent pair + width + fonts + viewer features as the parent — reuse the exact design tokens from §6, do not re-ask any §5 questions.
-- **All of that section's content, full-detail.** No truncation, no summarization — every data point, sub-element, caption, annotation, and chart label that was in the parent section is preserved. Supporting details that lived alongside the section in the parent (legends, footnotes, axis labels) travel with it.
-- The section's own header becomes the hero title of the standalone. The parent infographic's title becomes a small uppercase eyebrow label above the hero.
-- Creator-tools included per §9 inclusion policy (Claude Code = yes, agent / clean export = no).
-- Canvas sizing rules from §6 apply — width fixed to the parent's width, height content-driven.
-
-### Export each standalone
-
-For every file written, run:
-
-```bash
-python scripts/export.py --png output/<kebab-name>-<section-id>.html
-```
-
-Same export chain as §8 — HTML always, PNG via Playwright.
-
-### Consolidated recap
-
-After every selected section has been written and exported, print one single recap listing all the produced paths, e.g.:
-
-```
-Standalone sections:
-  output/aiz-tokenomics-allocation.html       +  .png
-  output/aiz-tokenomics-vesting.html          +  .png
-  output/aiz-tokenomics-utility.html          +  .png
-```
-
-Section IDs are taken from the `data-section-id` attributes already stamped onto section elements by the creator-tools block (see `references/creator-tools.md`). Do not invent a new tagging scheme.
-
-### When to skip §8.5
+### When to skip
 
 - Agent contexts where no follow-up turn is possible (§11).
 - The user's completion signal already included `no extras`, `just the main one`, `skip extraction`, or similar.
@@ -432,39 +380,23 @@ Section IDs are taken from the `data-section-id` attributes already stamped onto
 
 ## 8.6 Signal Sheet
 
-A *signal* is the hidden derived insight a viewer would miss by reading the presented data alone — derived math, comparative weight, or second-order consequence. The signal sheet is a sibling infographic that surfaces these insights with citations and shown calculations.
+A *signal* is a hidden derived insight a viewer would miss by reading the presented data alone — derived math, comparative weight, or second-order consequence. The signal sheet is a sibling infographic that surfaces these insights with citations and shown calculations.
 
-Fire **after** §8.5 standalone extraction completes (or is skipped), **before** §13 Closing Tip. Full reference: `references/templates/_signals.md`.
+Fire **after** §8.5 (or its skip), **before** §13. Full extraction logic (two-pass draft/verify, confidence tiering, lens caps) lives in `references/templates/_signals.md` — load it when this section fires.
 
 ### Sub-flow
 
-1. **Opt-in question.** Fire `AskUserQuestion`:
-   - Question: *"Generate a signal sheet — derived insights from the same data?"*
-   - Header: `Signal sheet`
-   - Options: `["Yes — generate signal sheet", "No, I'm done"]`
-   - On **No** → skip to §13.
+1. **Opt-in.** `AskUserQuestion`: *"Generate a signal sheet — derived insights from the same data?"* — options `["Yes — generate signal sheet", "No, I'm done"]`. On No → §13.
 
-2. **Comparative sourcing decision** — only fire if the data has ≥1 point where peer benchmarks would add value (e.g., vesting cliffs, allocation %s, supply caps, growth rates). If no comparative-eligible points exist, skip this question and go straight to step 3.
-   - Question: *"Comparative signals need peer/benchmark data. How should I source it?"*
-   - Header: `Benchmarks`
-   - Options:
-     1. `I'll provide` — follow up with a free-text ask for peer data
-     2. `Web search (slower, more tokens)` — Claude runs targeted searches, cites source domains
-     3. `Skip comparative — derived + causal only`
+2. **Comparative sourcing** (only if the data has ≥1 peer-benchmarkable point). `AskUserQuestion`: *"Comparative signals need peer/benchmark data. How should I source it?"* — options `["I'll provide", "Web search (slower)", "Skip comparative — derived + causal only"]`.
 
-3. **Two-pass extraction** per `references/templates/_signals.md` — Pass 1 drafts up to ~15 candidates with source citations and confidence; Pass 2 re-reads cold against source data and rejects anything that doesn't reconcile or drops below `high` confidence. Surviving signals capped at **9 total, max 3 per lens (Derived / Comparative / Causal)**.
+3. **Generate** per `_signals.md` (two-pass, max 9 signals / 3 per lens). If <3 high-confidence signals survive Pass 2, print `Signal sheet: skipped — not enough derivable signals from the provided data.` and continue to §13.
 
-4. **Thin-data fallback.** If <3 high-confidence signals survive Pass 2:
-   ```
-   Signal sheet: skipped — not enough derivable signals from the provided data.
-   ```
-   No file written. Continue to §13.
+4. **Write** `./output/<kebab-name>-signals.html` using the cheatsheet `signals-variant`. Reuse the parent's style, accent pair, fonts, width, viewer features, creator-tools inclusion — **never re-ask §5 questions**.
 
-5. **Write `./output/<kebab-name>-signals.html`** using the cheatsheet `signals-variant` (see `references/templates/cheatsheet.md` §Signals variant). Reuse style, accent pair, fonts, width, viewer features, creator-tools inclusion from the main infographic — **never re-ask any §5 questions**.
+5. **Export**: `python "<skill-base-dir>/scripts/export.py" --png output/<kebab-name>-signals.html` (use the full absolute path to the skill's script).
 
-6. **Export PNG**: `python scripts/export.py --png output/<kebab-name>-signals.html`.
-
-7. **Recap + merge tip:**
+6. **Recap + merge tip:**
    ```
    Signal sheet:
      HTML: output/<kebab-name>-signals.html
@@ -474,66 +406,25 @@ Fire **after** §8.5 standalone extraction completes (or is skipped), **before**
         to the main infographic as a new section.
    ```
 
-8. §13 Closing Tip prints last, regardless.
+### Merge (`merge signals` / `merge them` / `merge if accurate`)
 
-### Merge behavior
+Append the signals as a final section of a **new variant file** `./output/<kebab-name>-merged.html` (the original is preserved). Export PNG. Then `AskUserQuestion`: *"Replace the main infographic with the merged variant?"* — options `["Replace main", "Keep both"]`. On Replace main, copy the merged HTML/PNG over the originals and confirm in one line.
 
-Triggered when the user says `merge signals`, `merge them`, `merge if accurate`, or similar:
+### When to skip
 
-1. Read the live `<kebab-name>.html` and the signals from `<kebab-name>-signals.html`.
-2. Append a new `Signals` section as the final section of the canvas, using the same grouped-3-column structure as the standalone sheet.
-3. Write to a **new variant file**: `./output/<kebab-name>-merged.html`. The original `<kebab-name>.html` is preserved untouched.
-4. Export PNG: `python scripts/export.py --png output/<kebab-name>-merged.html`.
-5. Recap:
-   ```
-   Merged variant:
-     HTML: output/<kebab-name>-merged.html
-     PNG:  output/<kebab-name>-merged.png
-   ```
-6. Fire `AskUserQuestion`:
-   - Question: *"Replace the main infographic with the merged variant?"*
-   - Header: `Replace main`
-   - Options: `["Replace main", "Keep both"]`
-   - On **Replace main**: copy `<kebab-name>-merged.html` over `<kebab-name>.html` and `<kebab-name>-merged.png` over `<kebab-name>.png`. Confirm in one line.
-7. §13 Closing Tip prints last.
-
-### Confidence tiers
-
-Confidence is used **only for filtering** during Pass 2 — never displayed in the rendered sheet. Low/medium-confidence candidates are dropped, not annotated.
-
-### When to skip §8.6
-
-- The user's completion signal included `no signals`, `skip signals`, or similar.
-- Thin-data fallback fires inside the flow (handled at step 4).
+- Completion signal included `no signals`, `skip signals`, or similar.
+- Thin-data fallback fires (handled at step 3).
 
 ---
 
 ## 9. Interactive HTML Features
 
-Two categories of features can be included in generated HTML: **viewer features** (stay in the final export, enhance the viewing experience) and **creator tools** (authoring aids that get stripped automatically at export time). Both are drop-in and work with the export pipeline.
+Two categories — **viewer features** (stay in PNG export, frozen to final state by the exporter) and **creator tools** (authoring aids stripped at export via `data-creator-tools`). Both are drop-in.
 
-### Viewer features — see `references/viewer-features.md`
+- Viewer features (hover tooltips, animated counters, scroll reveals, expandables, dark/light toggle, responsive scaling) → `references/viewer-features.md`
+- Creator tools (inline text editing, accent color editor, persistence, floating toolbar, shortcuts) → `references/creator-tools.md`
 
-- **Responsive scaling** — canvas scales to viewport, aspect preserved
-- **Hover tooltips** — on chart segments, timeline nodes, KPI cards
-- **Animated number counters** — KPIs count up on scroll into view
-- **Scroll-triggered section reveals** — fade/slide in per section
-- **Expandable detail sections** — for dense infographics
-- **Dark/light mode toggle** — on explicit request only
-
-All viewer features freeze to final state during PNG export — the exporter forces counters to target value, reveals to visible, expandables to open.
-
-### Creator tools — see `references/creator-tools.md`
-
-- **Inline text editing** — `e` toggles `contenteditable`, emoji stripped silently, headers stay uppercase via CSS.
-- **Accent color editor** — two pickers for `--accent-1` / `--accent-2` plus a preset palette strip; recolors the whole infographic via CSS variables.
-- **Forgiving persistence** — localStorage autosave (survives refresh), `Ctrl+Z` / `Ctrl+Shift+Z` undo/redo, `Ctrl+S` saves via File System Access API (Chromium) or Clean Download fallback, Revert button discards all edits.
-- **Floating toolbar** — Edit / Color / Save / Revert / Copy / Clean HTML. Every button shows its action name next to the icon. **No in-browser PNG button** — after Save, the user asks Claude to re-export the PNG via `scripts/export.py` (Playwright). A small hint chip above the toolbar reminds the user of this flow.
-- **Keyboard shortcuts** — `e` edit, `Ctrl+Z/Shift+Z` undo/redo, `Ctrl+S` save.
-
-All creator-tool elements carry `data-creator-tools`. The exporter hides them before screenshotting, so they never appear in PNG output. A "Clean Download" button produces a stripped-HTML copy for embedding. In-browser edits only land in PNG after the user hits Save (or Clean Download) — the exporter reads from disk, not from the live DOM.
-
-All creator-tool CSS uses hardcoded hex fallbacks inside `var()` calls so the toolbar and color editor render visibly on any style, even ones that don't define `--elevated`, `--accent-1`, or `--text-secondary`.
+Both reference files are loaded per §3 in Claude Code context. The full implementation, CSS, JS, and behavioral rules live there — emit the HTML according to those files.
 
 ### Inclusion policy
 
@@ -582,39 +473,7 @@ All creator-tool CSS uses hardcoded hex fallbacks inside `var()` calls so the to
 
 ## 12. Development & Testing Notes
 
-The skill can be tested without installing:
-
-```
-Read ./create-infographics/SKILL.md and follow its instructions
-to create a <type> infographic for <project>. <data>
-```
-
-Evals for trigger accuracy live at `evals/evals.json`. Run `run_loop.py` from the skill-creator plugin to iterate the description copy against them.
-
-Install via `package_skill.py` when ready for auto-triggering.
-
----
-
-## Quick Reference Card
-
-| Situation | What to do |
-|-----------|------------|
-| User pastes structured tokenomics data | Load `templates/token-economics.md`, one-shot, bento-box canvas |
-| User says "help me make an infographic" | Guided mode, start at intake → §1.5 canvas pick |
-| User says "cheatsheet for X" | Load `templates/cheatsheet.md` (bento-box canvas) |
-| User asks about ecosystem/partners/integrations | Load `templates/ecosystem-overview.md` (bento-box canvas) |
-| User asks for a long-form deep-dive / "how it really works" | Pick `editorial` canvas |
-| User asks for a stats/metrics snapshot | Pick `dashboard` canvas |
-| User asks for "anatomy of X" / framework / mechanism | Pick `poster` canvas, hero centerpiece is one big snippet |
-| User wants a release recap, product overview, or dense multi-section snapshot | `bento-box` canvas (1920w) |
-| User wants a positioning / 2×2 matrix | `poster` canvas + `quadrant` snippet as centerpiece |
-| User wants a multi-actor process / handoff flow | `poster` canvas + `swimlane` snippet as centerpiece |
-| User wants a caveat or citation on a data point | Use `references/elements/annotation.md` (max 2 callouts) |
-| User wants a style that isn't MVP | Substitute `aizfographics-style` and note |
-| User asks for vector/Figma | Point to `references/export/figma-import.md` (html.to.design plugin) |
-| User hasn't given data | Ask for it — do not fabricate |
-| After export, want hidden insights surfaced | §8.6 Signal Sheet — load `references/templates/_signals.md` |
-| User says "merge signals" | Run §8.6 merge flow → write `<name>-merged.html`, ask Replace/Keep |
+Test without installing: `Read ./create-infographics/SKILL.md and follow its instructions to create a <type> infographic for <project>. <data>`. Evals at `evals/evals.json` (run via `run_loop.py` from skill-creator plugin). Install via `package_skill.py` when ready for auto-triggering.
 
 ---
 

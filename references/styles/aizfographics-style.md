@@ -44,9 +44,12 @@ Light mode (apply when user explicitly requests):
 
 ```css
 :root[data-theme="light"] {
-  --canvas:        #F5F5F5;
-  --panel:         #EBEBEB;
-  --elevated:      #E0E0E0;
+  --canvas:        #F8F8F8;
+  /* sub-boxes are tinted from --accent-1, NOT greyscale.
+     Greyscale panels look dull and corporate in light mode —
+     a faint accent wash keeps the surface feeling alive and on-brand. */
+  --panel:         color-mix(in srgb, var(--accent-1) 8%,  #FFFFFF);
+  --elevated:      color-mix(in srgb, var(--accent-1) 14%, #FFFFFF);
   --text-primary:   #1A1A1A;
   --text-secondary: #4A4A4A;
   --text-muted:     #808080;
@@ -54,6 +57,8 @@ Light mode (apply when user explicitly requests):
   /* accents darken slightly for contrast; apply per pair */
 }
 ```
+
+**Light-mode sub-box rule.** `--panel` and `--elevated` MUST be derived from `--accent-1` via `color-mix`, never flat greyscale. The canvas itself stays near-white, but every card / sub-box / nested container picks up a faint accent tint so the page reads as alive and on-brand. If a section's accent role (per the colored-roles table) already mixes accent into its bg, that mix layers on top of the already-tinted `--panel` — which is the intent.
 
 ## Typography
 
@@ -163,7 +168,7 @@ Used by `data-widgets`, `comparison`, `quadrant`, `swimlane`, `flowchart`, and a
 Rules:
 
 - **Max one `focal` per section**, max 2 per infographic. If everything is focal, nothing is.
-- `primary` + `focal` combined should stay ≤ the density budget for the layout (see `SKILL.md §6`).
+- `primary` + `focal` combined should stay ≤ the density cap declared by the canvas / snippet being used (see the relevant `references/canvases/<name>.md` or `references/snippets/<name>.md`).
 - `external` must always be dashed; never a hex color change alone — viewers rely on the stroke style to read "out of scope".
 - Do NOT introduce new roles at generation time (no `warning`, `experimental`, etc.). If content needs a distinction not on this table, use `primary` + a badge label.
 - When the role is color-mixed with `--positive` / `--negative`, those are fixed semantic colors from this style — they do not rotate with the accent pair.

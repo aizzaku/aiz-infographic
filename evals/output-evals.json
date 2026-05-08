@@ -1,0 +1,59 @@
+{
+  "skill_name": "create-infographics",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "Make a tokenomics infographic for $AIZ. Total supply 1B tokens. Allocations: Community 40%, Ecosystem 25%, Team 20% (24mo vest, 6mo cliff), Investors 15% (18mo vest, 3mo cliff). Dark theme.",
+      "expected_output": "A self-contained HTML file showing tokenomics allocation breakdown with percentages, vesting schedule details, dark background, no emoji, exactly 2 font families.",
+      "files": [],
+      "assertions": [
+        "HTML file is created and non-empty",
+        "Contains percentage allocations: 40%, 25%, 20%, 15%",
+        "References vesting/cliff terms in the content",
+        "No emoji characters anywhere in the HTML",
+        "Uses exactly 2 font families (Bebas Neue + Montserrat or equivalent)",
+        "Background is dark (body or wrapper uses dark color)"
+      ]
+    },
+    {
+      "id": 1,
+      "prompt": "Create an ecosystem overview for Abstract chain. Categories: DeFi (Uniswap, Curve, AAVE), Gaming (Gigaverse, Gods Unchained), NFTs (OpenSea, Blur), Infrastructure (Alchemy, Infura), Wallets (MetaMask, Rainbow). Bento-box layout.",
+      "expected_output": "A bento-box HTML infographic with 5 category sections, each containing its listed protocols. CSS grid layout. No emoji.",
+      "files": [],
+      "assertions": [
+        "HTML file is created and non-empty",
+        "Contains all 5 category names: DeFi, Gaming, NFTs, Infrastructure, Wallets",
+        "Contains protocol names: Uniswap, Gigaverse, OpenSea, Alchemy, MetaMask",
+        "Uses CSS grid for bento layout",
+        "No emoji characters anywhere in the HTML"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Build a 5-step staking guide for $GIG token: 1) Connect wallet, 2) Approve token, 3) Choose lockup period (7/30/90 days), 4) Stake, 5) Claim rewards. Include APY rates: 8% / 15% / 25%. Dark cyberpunk style.",
+      "expected_output": "An HTML process-flow infographic with 5 numbered steps, APY rates for each lockup tier, cyberpunk visual style (neon colors, dark bg). No emoji.",
+      "files": [],
+      "assertions": [
+        "HTML file is created and non-empty",
+        "Contains all 5 steps (connect wallet, approve, choose lockup, stake, claim)",
+        "Contains APY rates: 8%, 15%, 25%",
+        "References lockup periods: 7, 30, 90",
+        "No emoji characters anywhere in the HTML"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Comparison infographic: Protocol A vs Protocol B. Criteria: TPS (A:50k, B:8k), Fees (A:$0.001, B:$0.02), TVL (A:$2.1B, B:$800M), Decentralization (A:Medium, B:High), EVM Compatible (A:Yes, B:Yes). One-shot.",
+      "expected_output": "A side-by-side comparison HTML infographic generated immediately without asking clarifying questions. Contains all 5 criteria with both values. No emoji.",
+      "files": [],
+      "assertions": [
+        "HTML file is created and non-empty",
+        "Generated without asking clarifying questions (one-shot respected)",
+        "Contains both protocol names: Protocol A, Protocol B",
+        "Contains all 5 criteria: TPS, Fees, TVL, Decentralization, EVM",
+        "Contains the actual data values: 50k, 8k, $0.001, $0.02, $2.1B, $800M",
+        "No emoji characters anywhere in the HTML"
+      ]
+    }
+  ]
+}

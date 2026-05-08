@@ -69,6 +69,36 @@ Always `currentColor` or an explicit CSS variable. Never hard-coded hex in the i
 | hand-drawn (phase 2) | duotone |
 | cyberpunk (phase 2) | fill |
 
+## Hard rule: never wrap icons in bg or borders
+
+Icons render as glyphs, not as buttons. **No background fill, no border, no chip, no circular badge wrapper around any icon — anywhere.** Not on hero feature icons, not on inline-with-text icons, not on KPI card icons, not on legend swatches, not on toolbar icons, not on social-link icons. The icon is the mark; it sits directly on the panel/canvas.
+
+Forbidden:
+
+```html
+<!-- WRONG: badge wrapper -->
+<span class="icon-badge"><i class="ph-bold ph-coins"></i></span>
+
+<!-- WRONG: bordered tile -->
+<div style="border: 1px solid var(--accent-1); padding: 8px;">
+  <i class="ph-bold ph-rocket-launch"></i>
+</div>
+
+<!-- WRONG: circular bg -->
+<i class="ph-bold ph-users-three"
+   style="background: var(--panel); border-radius: 50%; padding: 8px;"></i>
+```
+
+Correct:
+
+```html
+<i class="ph-bold ph-coins" style="color: var(--accent-1); font-size: 32px;"></i>
+```
+
+If an icon needs more visual weight, increase its size or change its color — never give it a container. The `--panel` of the card it sits inside is its container.
+
+Exception: a card / KPI tile that *happens to contain* an icon plus text is not an icon wrapper — the icon is one child of a card, not a wrapped icon. The rule forbids wrapping the icon itself in its own dedicated bg/border element.
+
 ## Consistency rules
 
 - All icons in a row or grid must be from the same library and same weight.

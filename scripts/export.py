@@ -114,6 +114,7 @@ def _prepare_page_state(page, selector: str) -> None:
     """Force viewer features to final state so PNG capture isn't mid-animation."""
     page.evaluate(
         """(sel) => {
+            // data-counter-to (spec attribute)
             document.querySelectorAll('[data-counter-to]').forEach(el => {
                 const to = Number(el.dataset.counterTo);
                 if (!Number.isNaN(to)) {
@@ -121,7 +122,17 @@ def _prepare_page_state(page, selector: str) -> None:
                     el.dataset.counted = '1';
                 }
             });
-            document.querySelectorAll('.section').forEach(s => s.classList.add('visible'));
+            // data-count + data-suffix (legacy / inline-generated attribute)
+            document.querySelectorAll('[data-count]').forEach(el => {
+                const raw = el.dataset.count;
+                const suffix = el.dataset.suffix || '';
+                const n = parseFloat(raw);
+                if (!isNaN(n)) {
+                    el.textContent = (raw.includes('.') ? n.toFixed(1) : n.toLocaleString('en-US')) + suffix;
+                }
+            });
+            // force scroll-reveal visibility for both class conventions
+            document.querySelectorAll('.section, .bento-card').forEach(s => s.classList.add('visible'));
         }""",
         selector,
     )

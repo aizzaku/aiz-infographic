@@ -206,6 +206,30 @@ Use on labels that overlap a `.step-connector`, timeline spine, or flow path.
 
 Only when the label is clearly off the stroke — e.g. a timeline `.tlabel` that sits below the dot with 8+px clearance from the spine. If in doubt, mask it.
 
+## Pixel-locked sections (cross-cell connectors)
+
+Any section that draws arrows, leaders, or overlays that must align to specific cell edges (swimlane handoffs, flowchart edges, anatomical pointers, quadrant axis callouts, annotation leaders into the grid) MUST be laid out pixel-locked, not responsively. **Infographics are posters, not web pages — we do not care about fluid reflow.**
+
+Rules:
+
+- The enclosing section gets a fixed `width` and `height` in px.
+- Children inside it use absolute `top/left/width/height` in px on a 4px grid.
+- Any overlay SVG uses `viewBox="0 0 <W> <H>"` with `preserveAspectRatio="none"` and explicit `width="<W>" height="<H>"` matching the container 1:1 — so SVG user units map to container pixels directly.
+- Arrow endpoints are hand-authored px coordinates that land on cell **edges** (not cell centers, not interiors).
+- SVG `<marker refX="<markerWidth>">` so the arrowhead tip sits exactly at the path endpoint.
+- Do NOT try to make the grid itself responsive with `1fr` / `minmax` / `aspect-ratio` when connectors are involved — arrow geometry and cell geometry will desync. Fluid reflow is reserved for sections that are purely flow-of-text or unordered card grids with no overlays.
+
+To fit the infographic inside smaller viewports, wrap the whole canvas (or just the pixel-locked section) in a scaler:
+
+```css
+.poster-scale-wrap {
+  transform-origin: top left;
+  /* JS sets transform: scale(min(vw/W, vh/H, 1)) on load + resize */
+}
+```
+
+Snippets that trigger pixel-lock: `flowchart`, `fishbone`, `swimlane`, `anatomical`, `quadrant`, plus `annotation` leaders pointing into a pixel-locked grid. Bento-box is **not** pixel-locked (fluid grid by design — see `canvases/bento-box.md`); poster canvases host pixel-locked centerpieces inside otherwise-fluid wrapping.
+
 ## Rules
 
 - Connector color is 60% opacity accent OR `var(--text-secondary)`. Never full-opacity accent — it competes with content.
