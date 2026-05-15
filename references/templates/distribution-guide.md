@@ -1,10 +1,10 @@
-# Airdrop Guide Template
+# Distribution Guide Template
 
-Eligibility, allocation, claim steps, and deadlines for a token airdrop. High-stakes informational content — clarity beats style.
+Eligibility, allocation, claim steps, and deadlines for any distribution event: airdrops, giveaways, reward campaigns, grants, or public launches. High-stakes informational content — clarity beats style.
 
 ## When to use
 
-User mentions: airdrop, claim guide, eligibility infographic, airdrop eligibility, claim instructions, airdrop breakdown, retro rewards.
+User mentions: airdrop, claim guide, eligibility infographic, airdrop eligibility, claim instructions, airdrop breakdown, retro rewards, giveaway guide, reward campaign, distribution event, grant guide.
 
 ## Canvas
 
@@ -27,7 +27,7 @@ User mentions: airdrop, claim guide, eligibility infographic, airdrop eligibilit
 
 ## Section order
 
-1. **Header strip** — project logo + "AIRDROP GUIDE" badge + status tag (Live / Ending Soon / Closed)
+1. **Header strip** — project logo + "DISTRIBUTION GUIDE" badge + status tag (Live / Ending Soon / Closed)
 2. **Hero** — "$TOKEN Airdrop" title + one-line summary
 3. **Allocation stats** — Total tokens + % of supply + recipient count
 4. **Eligibility criteria** — numbered list of requirements (must hold X / staked Y / used Z)
@@ -91,7 +91,7 @@ Strongly recommended:
 </style>
 ```
 
-The warnings section is **mandatory** in every airdrop infographic. Airdrops are high-phishing-risk; the infographic shares partial responsibility for user safety.
+The warnings section is **mandatory** in every distribution infographic involving a claim flow. Distribution events are high-phishing-risk; the infographic shares partial responsibility for user safety.
 
 ## Content rules
 

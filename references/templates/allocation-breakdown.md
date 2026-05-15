@@ -1,6 +1,6 @@
-# Token Economics Template
+# Allocation Breakdown Template
 
-Highest-frequency infographic type. Presents a project's token supply, distribution, vesting, and key economic parameters.
+Presents any allocation, distribution, or split: tokenomics, budget breakdowns, ownership splits, resource allocation, or any percentage-based division with supporting detail.
 
 ## When to use
 

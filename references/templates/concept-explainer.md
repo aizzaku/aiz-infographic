@@ -1,10 +1,10 @@
-# Crypto Explainer Template
+# Concept Explainer Template
 
-"How does X work?" content for a crypto / protocol / mechanism. Linear narrative with context, core flow, and implications.
+"How does X work?" content for any concept, protocol, system, or mechanism. Linear narrative with context, core flow, and implications.
 
 ## When to use
 
-User mentions: explain X, how does X work, what is X, walk me through X, crypto primer, protocol explainer, mechanism breakdown — AND wants a visual output.
+User mentions: explain X, how does X work, what is X, walk me through X, explainer, concept breakdown, mechanism breakdown, protocol explainer, primer — AND wants a visual output.
 
 ## Canvas
 
@@ -89,7 +89,7 @@ Strongly recommended:
 - **Each step is one sentence.** If a step needs more, split it into two steps.
 - **Numbers should be checkable.** "Fast" means nothing; "~2s finality" is a claim the reader can verify.
 - **No jargon without introduction.** If you use "L2" or "MEV", define it on first mention in the hero or TL;DR.
-- **Linear flow only.** If the mechanism has branches, use the flowchart template instead — crypto-explainer is for "step 1 → step 2 → step 3".
+- **Linear flow only.** If the mechanism has branches, use the flowchart template instead — concept-explainer is for "step 1 → step 2 → step 3".
 
 ## Accent pair selection
 

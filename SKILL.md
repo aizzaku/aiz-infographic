@@ -15,7 +15,7 @@ Produces self-contained HTML infographics following a 5-layer reference system: 
 | **Snippet** | `references/snippets/<name>.md` | An embeddable section pattern: timeline spine, fishbone, kpi-strip, comparison table — the content essence with no page chrome. |
 | **Style** | `references/styles/<name>.md` | Visual identity: colors, fonts, spacing tokens. (aizfographics-style default) |
 | **Element** | `references/elements/<name>.md` | Atomic UI primitives: text, charts, icons, connectors. |
-| **Template** | `references/templates/<name>.md` | High-level preset = canvas + style + snippet picks for a content type. (token-economics, cheatsheet, etc.) |
+| **Template** | `references/templates/<name>.md` | High-level preset = canvas + style + snippet picks for a content type. (allocation-breakdown, cheatsheet, etc.) |
 
 A **canvas** owns the page chrome (header, hero, footer, grid). A **snippet** is a thing on the page (a timeline, a fishbone, a kpi-strip) that plugs into a canvas slot. The user picks the canvas; the data picks the snippets.
 
@@ -100,7 +100,7 @@ After §4 Content Intake but before §5 Step 2, fire the canvas picker — but o
 ```
 Request arrives
 │
-├─ Matches a known template? (tokenomics, ecosystem overview, cheatsheet…)
+├─ Matches a known template? (allocation-breakdown, ecosystem-overview, cheatsheet…)
 │   └─ YES → Load template → load its canvas + style + required snippets + elements
 │
 ├─ User named a canvas explicitly? (bento, editorial, dashboard, poster)
@@ -118,7 +118,7 @@ Each template file specifies:
 - Its default style (almost always `aizfographics-style`)
 - The exact element categories it requires
 
-For bento-box / dashboard / poster canvases at 1920w, that's the default. Editorial canvas defaults to 1280w. Templates currently defaulting to `bento-box` canvas: `cheatsheet`, `ecosystem-overview`, `game-overview`, `report`, `token-economics`, `crypto-explainer`, `how-it-works`, `airdrop-guide`, `nft-showcase`, `game-mechanics`.
+For bento-box / dashboard / poster canvases at 1920w, that's the default. Editorial canvas defaults to 1280w. Templates currently defaulting to `bento-box` canvas: `cheatsheet`, `ecosystem-overview`, `game-overview`, `report`, `allocation-breakdown`, `concept-explainer`, `how-it-works`, `distribution-guide`, `collection-showcase`, `game-mechanics`.
 
 Never load the full references tree. Read only what the current request maps to.
 
@@ -144,7 +144,7 @@ Never load the full references tree. Read only what the current request maps to.
 
 ### Typical load order for a one-shot tokenomics request:
 
-1. `references/templates/token-economics.md`
+1. `references/templates/allocation-breakdown.md`
 2. `references/canvases/<canvas named by template>.md` (usually `bento-box`)
 3. `references/styles/aizfographics-style.md`
 4. Each snippet the template names — load from `references/snippets/<name>.md`. Typical for tokenomics: `statistical`, `comparison`. Donut/vesting-bar are inline `<svg>` patterns under `references/elements/charts.md` + `data-widgets.md`.
@@ -166,7 +166,7 @@ Eight to ten files total in Claude Code, six to eight in agent contexts. Do not 
 - **Canvases (4):** `bento-box` (default), `editorial`, `dashboard`, `poster`.
 - **Styles (10):** `aizfographics-style` (default), `clean-minimal`, `blueprint`, `editorial`, `corporate`, `cyberpunk`, `chalkboard`, `hand-drawn`, `retro`, `_custom-template` (scaffold).
 - **Snippets (24):** `statistical`, `grid-cards`, `process-flow`, `timeline`, `comparison`, `hierarchical`, `list`, `roadmap`, `funnel`, `flowchart`, `dashboard`, `mind-map`, `journey-path`, `pyramid`, `circular-flow`, `iceberg`, `fishbone`, `venn`, `anatomical`, `geographic`, `quadrant`, `swimlane`, `sankey-flow`, `network-graph`. Each declares its slot fit and density cap. Bento-box is canvas-only — no `bento-box` snippet.
-- **Templates (10):** `token-economics`, `ecosystem-overview`, `cheatsheet`, `crypto-explainer`, `game-overview`, `airdrop-guide`, `nft-showcase`, `how-it-works`, `report`, `game-mechanics`.
+- **Templates (10):** `allocation-breakdown`, `ecosystem-overview`, `cheatsheet`, `concept-explainer`, `game-overview`, `distribution-guide`, `collection-showcase`, `how-it-works`, `report`, `game-mechanics`.
 - **Elements (10):** `charts`, `text`, `layout`, `connectors`, `icons`, `data-widgets`, `decorative`, `maps`, `comparison`, `annotation`.
 
 Unmapped content type → §1.5 canvas pick + snippets that match the content shape. Unlisted style → copy `_custom-template.md`, fill, note the substitution.
@@ -479,15 +479,18 @@ Test without installing: `Read ./aiz-infographic/SKILL.md and follow its instruc
 
 ## 13. Closing Tip (always printed last)
 
-The final message of every completed skill run MUST end with this single line, verbatim:
+The final message of every completed skill run MUST end with these two lines, verbatim and in order:
 
 ```
 TIP: Use the html.to.design Figma plugin to get a fully editable infographic in Figma.
+
+NOTE: If you liked this skill and it helped, I would appreciate a star on aiz-infographic Github. Thank you.
 ```
 
 Rules:
 
-- Print it after §8 export recap AND (if run) after §8.5 standalone extraction recap — it is the last line of the skill's output.
-- Print it regardless of whether standalone extraction or signal sheet was run.
-- Print it even in agent contexts.
-- Single line. No bullet, no heading, no emoji, no extra prose around it.
+- Print both lines after §8 export recap AND (if run) after §8.5 standalone extraction recap — they are the last lines of the skill's output.
+- Print both regardless of whether standalone extraction or signal sheet was run.
+- Print both even in agent contexts.
+- Each is a single line. No bullet, no heading, no emoji, no extra prose around either line.
+- Always TIP first, then a blank line, then NOTE.

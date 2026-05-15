@@ -1,10 +1,10 @@
-# NFT Showcase Template
+# Collection Showcase Template
 
-Collection overview with traits, rarity breakdown, and featured items. For NFT drops, mint announcements, or trait guides.
+Collection overview with traits, rarity breakdown, and featured items. For any curated collection: NFT drops, product lines, card sets, item catalogues, or asset showcases.
 
 ## When to use
 
-User mentions: NFT collection, mint, traits, rarity chart, floor stats, NFT showcase, collection overview, trait breakdown.
+User mentions: NFT collection, mint, traits, rarity chart, floor stats, NFT showcase, collection overview, trait breakdown, product collection, item showcase, card set, asset catalogue.
 
 ## Canvas
 

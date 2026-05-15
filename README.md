@@ -4,7 +4,7 @@ A Claude Code skill that turns structured data into self-contained HTML infograp
 
 ## Key Features
 
-- **4 canvases × 10 styles × 24 snippets**, plus **10 ready-made templates** for common content types (tokenomics, ecosystem overview, cheatsheet, crypto explainer, game overview, airdrop guide, NFT showcase, how-it-works, report, game mechanics).
+- **4 canvases × 10 styles × 24 snippets**, plus **10 ready-made templates** for common content types (allocation breakdown, ecosystem overview, cheatsheet, concept explainer, game overview, distribution guide, collection showcase, how-it-works, report, game mechanics).
 - **One-shot and guided modes.** Tappable `AskUserQuestion` selection in Claude Code; auto-defaults in agent contexts (OpenClaw, Hermes).
 - **Brand-color extraction** from a URL or web search. Or hand it the hex pair directly.
 - **In-browser creator tools** (inline text edit, accent color editor, undo/redo, save/revert) injected into every Claude Code output and stripped automatically at PNG export.
@@ -15,15 +15,25 @@ A Claude Code skill that turns structured data into self-contained HTML infograp
 
 ## Installation
 
-```
-$ npx skills add https://github.com/aizzaku/aiz-infographic
+### Full install — skill + PNG export dependencies
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/aizzaku/aiz-infographic/main/install.sh | bash
 ```
 
-PNG export uses Playwright. Install once:
+Installs the skill via `npx skills`, then installs the Python Playwright package and downloads the Chromium browser used for PNG export. Requires Node.js and Python 3.9+ on your PATH.
 
+### Skill only
+
+```bash
+npx skills add https://github.com/aizzaku/aiz-infographic
 ```
-$ pip install "playwright>=1.40.0"
-$ playwright install chromium
+
+### PNG export (separate, if you skipped the full install)
+
+```bash
+pip install "playwright>=1.40.0"
+playwright install chromium
 ```
 
 ## Quick Usage
@@ -76,3 +86,5 @@ Defaults and routing rules live in [aiz-infographic/SKILL.md](aiz-infographic/SK
 - Distributed via [skills.sh](https://skills.sh).
 
 TIP: Use the html.to.design Figma plugin to get a fully editable infographic in Figma.
+
+NOTE: If you liked this skill and it helped, I would appreciate a star on aiz-infographic Github. Thank you.
