@@ -122,6 +122,21 @@ For bento-box / dashboard / poster canvases at 1920w, that's the default. Editor
 
 Never load the full references tree. Read only what the current request maps to.
 
+### Brand style auto-selection
+
+When no style is explicitly named, check whether the content is about a brand that has a matching style file. If it is, load that brand style instead of `aizfographics-style`. The user can override with any style name.
+
+| Content signal | Auto-select style |
+|---|---|
+| OpenClaw release, changelog, OpenClaw features | `openclaw` |
+| Hermes model, Nous Research, Hermes agent | `hermes` |
+| OpenAI model/product (GPT, Sora, o-series, OpenAI research) | `openai-dark` |
+| Grok model, xAI product or research | `grok-dark` |
+| Vercel, Next.js deployment, Vercel infrastructure metrics | `vercel-dark` |
+| Claude model, Anthropic research, Claude ecosystem | `claude-light` |
+
+Brand auto-selection applies only when: (a) the infographic is **about** that brand as its primary subject, and (b) no style was named. If the user is comparing multiple brands or just referencing a brand in passing, default to `aizfographics-style` and note the available brand styles in the intake recap.
+
 ---
 
 ## 3. Reference Loading Rules
@@ -172,7 +187,7 @@ Eight to ten files total in Claude Code, six to eight in agent contexts. Do not 
 ### Available references
 
 - **Canvases (4):** `bento-box` (default), `editorial`, `dashboard`, `poster`.
-- **Styles (18):** `aizfographics-style` (default), `clean-minimal`, `blueprint` (engineering schematic), `editorial`, `corporate`, `cyberpunk`, `chalkboard`, `hand-drawn`, `retro`, `terminal` (shell output, monospace), `glasspaper` (frosted opacity panels), `scrapbook` (physical evidence, warm), `signal` (ops monitoring, alert feed), `forge` (industrial batch, dense), `ash` (monochrome editorial), `obsidian-ledger` (antique accounting), `_custom-template` (scaffold).
+- **Styles (24):** `aizfographics-style` (default), `clean-minimal`, `blueprint` (engineering schematic), `editorial`, `corporate`, `cyberpunk`, `chalkboard`, `hand-drawn`, `retro`, `terminal` (shell output, monospace), `glasspaper` (frosted opacity panels), `scrapbook` (physical evidence, warm), `signal` (ops monitoring, alert feed), `forge` (industrial batch, dense), `ash` (monochrome editorial), `obsidian-ledger` (antique accounting), `openclaw` (blue-black, hot-red accent, OpenClaw brand), `hermes` (green-black, gold+sage gradient borders, Hermes/Nous brand), `openai-dark` (neutral near-black, weight-300 numerals, OpenAI brand), `grok-dark` (true black, weight-900 ALL CAPS, zero radius, xAI/Grok brand), `vercel-dark` (pure black, square markers, slug copy, Vercel brand), `claude-light` (warm cream, terracotta, Lora serif body, Anthropic/Claude brand), `_custom-template` (scaffold).
 - **Snippets (27):** `statistical`, `grid-cards`, `process-flow`, `timeline`, `comparison`, `hierarchical`, `list`, `roadmap`, `funnel`, `flowchart`, `dashboard`, `mind-map`, `journey-path`, `pyramid`, `circular-flow`, `iceberg`, `fishbone`, `venn`, `anatomical`, `geographic`, `quadrant`, `swimlane`, `sankey-flow`, `network-graph`, `callout-grid` (icon+headline+body grid), `stat-spotlight` (single hero metric + sparkline + delta), `step-connector` (numbered linear sequence with connector emphasis). Each declares its slot fit and density cap. Bento-box is canvas-only — no `bento-box` snippet.
 - **Templates (10):** `allocation-breakdown`, `ecosystem-overview`, `cheatsheet`, `concept-explainer`, `game-overview`, `distribution-guide`, `collection-showcase`, `how-it-works`, `report`, `game-mechanics`.
 - **Elements (13):** `charts`, `text`, `layout`, `connectors`, `icons`, `data-widgets`, `decorative`, `maps`, `comparison`, `annotation`, `badges` (status pills and state tags), `progress-bars` (flat fills for forge/terminal, no Chart.js), `sparklines` (inline SVG KPI sparklines, no Chart.js).
