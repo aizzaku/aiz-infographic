@@ -153,6 +153,11 @@ Never load the full references tree. Read only what the current request maps to.
 
 Eight to ten files total in Claude Code, six to eight in agent contexts. Do not read other templates, other canvases, or other styles unless the user's request demands them.
 
+**New element conditional loads:**
+- `references/elements/sparklines.md` — load when: `stat-spotlight` snippet selected, OR `statistical` snippet is used with a trend/delta requirement.
+- `references/elements/progress-bars.md` — load when: `forge`, `terminal`, or `signal` theme is selected.
+- `references/elements/badges.md` — load when: any of forge, terminal, signal, obsidian-ledger, glasspaper, or ash themes are selected; OR when `step-connector` snippet is used.
+
 **Canvas snippet routing hints:**
 - Token flows / allocation flows with value transfer → `sankey-flow` (needs D3 + d3-sankey in `<head>`)
 - Ecosystem/partner/relationship maps with 5–20 entities → `network-graph` (needs D3 in `<head>`)
@@ -160,14 +165,17 @@ Eight to ten files total in Claude Code, six to eight in agent contexts. Do not 
 - Hierarchical allocation with 6+ segments → treemap chart in `charts.md` (needs D3 in `<head>`)
 - 3-variable scatter → bubble chart in `charts.md` (needs Chart.js in `<head>`)
 - Holder/allocation distribution as a grid → waffle chart in `charts.md` (raw canvas, no CDN)
+- Feature list with icons / benefit cards / callout cards / icon grid → `callout-grid` (3-9 cards, icon+headline+body)
+- Single hero metric / spotlight KPI / one number with trend context → `stat-spotlight` (needs `sparklines.md`)
+- Numbered steps / sequential process without decisions or branching → `step-connector` (needs `badges.md`)
 
 ### Available references
 
 - **Canvases (4):** `bento-box` (default), `editorial`, `dashboard`, `poster`.
-- **Styles (10):** `aizfographics-style` (default), `clean-minimal`, `blueprint`, `editorial`, `corporate`, `cyberpunk`, `chalkboard`, `hand-drawn`, `retro`, `_custom-template` (scaffold).
-- **Snippets (24):** `statistical`, `grid-cards`, `process-flow`, `timeline`, `comparison`, `hierarchical`, `list`, `roadmap`, `funnel`, `flowchart`, `dashboard`, `mind-map`, `journey-path`, `pyramid`, `circular-flow`, `iceberg`, `fishbone`, `venn`, `anatomical`, `geographic`, `quadrant`, `swimlane`, `sankey-flow`, `network-graph`. Each declares its slot fit and density cap. Bento-box is canvas-only — no `bento-box` snippet.
+- **Styles (18):** `aizfographics-style` (default), `clean-minimal`, `blueprint` (engineering schematic), `editorial`, `corporate`, `cyberpunk`, `chalkboard`, `hand-drawn`, `retro`, `terminal` (shell output, monospace), `glasspaper` (frosted opacity panels), `scrapbook` (physical evidence, warm), `signal` (ops monitoring, alert feed), `forge` (industrial batch, dense), `ash` (monochrome editorial), `obsidian-ledger` (antique accounting), `_custom-template` (scaffold).
+- **Snippets (27):** `statistical`, `grid-cards`, `process-flow`, `timeline`, `comparison`, `hierarchical`, `list`, `roadmap`, `funnel`, `flowchart`, `dashboard`, `mind-map`, `journey-path`, `pyramid`, `circular-flow`, `iceberg`, `fishbone`, `venn`, `anatomical`, `geographic`, `quadrant`, `swimlane`, `sankey-flow`, `network-graph`, `callout-grid` (icon+headline+body grid), `stat-spotlight` (single hero metric + sparkline + delta), `step-connector` (numbered linear sequence with connector emphasis). Each declares its slot fit and density cap. Bento-box is canvas-only — no `bento-box` snippet.
 - **Templates (10):** `allocation-breakdown`, `ecosystem-overview`, `cheatsheet`, `concept-explainer`, `game-overview`, `distribution-guide`, `collection-showcase`, `how-it-works`, `report`, `game-mechanics`.
-- **Elements (10):** `charts`, `text`, `layout`, `connectors`, `icons`, `data-widgets`, `decorative`, `maps`, `comparison`, `annotation`.
+- **Elements (13):** `charts`, `text`, `layout`, `connectors`, `icons`, `data-widgets`, `decorative`, `maps`, `comparison`, `annotation`, `badges` (status pills and state tags), `progress-bars` (flat fills for forge/terminal, no Chart.js), `sparklines` (inline SVG KPI sparklines, no Chart.js).
 
 Unmapped content type → §1.5 canvas pick + snippets that match the content shape. Unlisted style → copy `_custom-template.md`, fill, note the substitution.
 
@@ -301,6 +309,14 @@ These apply to every infographic regardless of style or canvas. They are NOT dup
 - **Never single-sided thick borders.** No `border-top: 3px solid accent`, no accent bar on one edge. Always full-perimeter or none. Use gradient borders for emphasis.
 - **Responsive scaling.** The canvas scales to the viewport width; height always follows content. No fixed aspect ratio, no trailing blank.
 - **Image assets.** When the user provides logo URLs or image URLs, embed them via `<img>` with appropriate `alt` text. When not provided, leave a styled placeholder (dashed border, centered label) — never invent image URLs.
+
+### Theme-specific exceptions to universal rules
+
+The following overrides are permitted only when the named theme is active:
+
+- **scrapbook theme:** `transform: rotate(Xdeg)` is permitted on cards (±1-3deg); mixed serif + cursive typography is correct; `box-shadow` on polaroid and sticky-note cards is permitted. All other universal rules still apply.
+- **signal theme:** `box-shadow: 0 0 4px #FF4500` glow is permitted on active status dots only (see `references/elements/badges.md` dot-label variant).
+- **terminal / forge / ash themes:** `border-radius: 0` is mandatory everywhere, overriding `--radius-card`. No gradient fills — solid `var(--accent-1)` only on progress bars.
 
 ### Rules that live in reference files (loaded per §3)
 
