@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Humanoid Robots Race 2025</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;500;600;700&display=swap">
+<style>
+/* BLUEPRINT STYLE — engineering schematic */
+:root {
+  --canvas: #0A0F1A;
+  --panel: #0D1422;
+  --elevated: #111928;
+  --grid-line: rgba(100,160,255,0.05);
+  --border: rgba(100,160,255,0.12);
+  --text-primary: #C8D8F0;
+  --text-secondary: #7090B8;
+  --text-muted: #3C5070;
+  --a1: #60A5FA;
+  --a2: #38BDF8;
+  --a3: #34D399;
+  --warn: #F97316;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#070C14;font-family:'Montserrat',sans-serif;color:var(--text-primary)}
+.canvas{width:1920px;background:var(--canvas);padding:48px 56px 56px;position:relative;overflow:hidden}
+
+/* blueprint grid */
+.canvas::before{
+  content:'';position:absolute;inset:0;
+  background-image:
+    linear-gradient(var(--grid-line) 1px,transparent 1px),
+    linear-gradient(90deg,var(--grid-line) 1px,transparent 1px);
+  background-size:40px 40px;
+  pointer-events:none;
+}
+.canvas::after{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 800px 500px at 10% 0%,color-mix(in srgb,var(--a1) 7%,transparent),transparent),
+    radial-gradient(ellipse 600px 400px at 90% 100%,color-mix(in srgb,var(--a2) 5%,transparent),transparent);
+  pointer-events:none;
+}
+
+.hdr{display:flex;align-items:center;justify-content:space-between;padding-bottom:20px;border-bottom:1px solid var(--border);margin-bottom:44px;position:relative;z-index:1}
+.hdr-brand{font:700 11px/1 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.2em;color:var(--text-muted)}.hdr-brand span{color:var(--a1)}
+.hdr-tags{display:flex;gap:8px}
+.pill{padding:4px 12px;border-radius:0;font:600 10px/1 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.1em;background:transparent;border:1px solid var(--a1);color:var(--a1)}
+.pill-b{border-color:var(--a2);color:var(--a2)}
+.hdr-meta{font:400 11px/1 'Montserrat',sans-serif;color:var(--text-muted);letter-spacing:.1em}
+
+.hero{display:grid;grid-template-columns:1fr auto;gap:48px;align-items:center;margin-bottom:52px;position:relative;z-index:1}
+.hero-eyebrow{font:700 11px/1 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.2em;color:var(--a2);margin-bottom:12px}
+.hero-title{font:400 96px/.88 'Bebas Neue',sans-serif;letter-spacing:.05em;color:var(--text-primary);margin-bottom:16px;text-shadow:0 0 40px color-mix(in srgb,var(--a1) 20%,transparent)}
+.hero-title span{color:var(--a1)}
+.hero-sub{font:400 15px/1.7 'Montserrat',sans-serif;color:var(--text-secondary);max-width:700px}
+.kpi-row{display:flex;gap:16px}
+.kpi{border:1px solid var(--border);border-radius:0;padding:20px 28px;min-width:180px;background:var(--panel);position:relative}
+.kpi::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:var(--a1)}
+.kpi-lbl{font:600 9px/1 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.18em;color:var(--text-muted);margin-bottom:10px}
+.kpi-val{font:400 38px/1 'Bebas Neue',sans-serif;letter-spacing:.04em;color:var(--a1)}
+.kpi-note{font:400 11px/1 'Montserrat',sans-serif;color:var(--text-muted);margin-top:6px}
+
+.sec{font:700 9px/1 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.22em;color:var(--text-muted);display:flex;align-items:center;gap:12px;margin-bottom:20px;position:relative;z-index:1}
+.sec::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* COMPARISON TABLE */
+.compare-wrap{background:var(--panel);border:1px solid var(--border);border-radius:0;margin-bottom:24px;position:relative;z-index:1;overflow:hidden}
+.compare-head{display:grid;grid-template-columns:200px repeat(5,1fr);border-bottom:1px solid var(--border)}
+.ch-blank{padding:20px 24px;border-right:1px solid var(--border)}
+.ch-robot{padding:20px 24px;border-right:1px solid var(--border);text-align:center}
+.ch-robot:last-child{border-right:none}
+.ch-maker{font:600 9px/1 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.12em;color:var(--text-muted);margin-bottom:6px}
+.ch-name{font:400 22px/1 'Bebas Neue',sans-serif;letter-spacing:.06em;color:var(--text-primary)}
+.ch-accent{color:var(--rcolor,var(--a1))}
+
+.compare-row{display:grid;grid-template-columns:200px repeat(5,1fr);border-bottom:1px solid var(--border)}
+.compare-row:last-child{border-bottom:none}
+.cr-label{padding:14px 24px;border-right:1px solid var(--border);font:600 10px/1 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.12em;color:var(--text-muted);display:flex;align-items:center}
+.cr-cell{padding:14px 24px;border-right:1px solid var(--border);text-align:center;display:flex;align-items:center;justify-content:center;font:500 13px/1.3 'Montserrat',sans-serif;color:var(--text-secondary)}
+.cr-cell:last-child{border-right:none}
+.cr-cell b{font-weight:700;color:var(--text-primary)}
+.cr-cell.best b{color:var(--a3)}
+.cr-cell.warn b{color:var(--warn)}
+.cr-cell.mid b{color:var(--a1)}
+
+/* FUNDING STRIP */
+.fund-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-bottom:24px;position:relative;z-index:1}
+.fund{border:1px solid var(--border);border-radius:0;padding:20px 20px;background:var(--panel);position:relative}
+.fund::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--fc,var(--a1))}
+.fund-company{font:700 12px/1 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.1em;color:var(--text-secondary);margin-bottom:6px}
+.fund-amount{font:400 36px/1 'Bebas Neue',sans-serif;letter-spacing:.04em;color:var(--fc,var(--a1))}
+.fund-round{font:500 10px/1 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-top:4px}
+.fund-investors{font:400 11px/1.4 'Montserrat',sans-serif;color:var(--text-secondary);margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
+
+/* USE CASE ROW */
+.use-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:48px;position:relative;z-index:1}
+.use{border:1px solid var(--border);border-radius:0;padding:20px 20px;background:var(--panel)}
+.use-sector{font:700 9px/1 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.16em;color:var(--text-muted);margin-bottom:8px}
+.use-title{font:400 22px/1 'Bebas Neue',sans-serif;letter-spacing:.06em;color:var(--text-primary);margin-bottom:10px}
+.use-list{list-style:none;display:flex;flex-direction:column;gap:6px}
+.use-list li{font:400 12px/1.4 'Montserrat',sans-serif;color:var(--text-secondary);padding-left:14px;position:relative}
+.use-list li::before{content:'_';position:absolute;left:0;color:var(--a1);font-weight:700}
+
+.footer{display:flex;justify-content:space-between;align-items:center;padding-top:24px;border-top:1px solid var(--border);position:relative;z-index:1}
+.ftr{font:400 11px/1 'Montserrat',sans-serif;color:var(--text-muted);letter-spacing:.08em}
+</style>
+</head>
+<body>
+<div class="canvas">
+
+<div class="hdr">
+  <div class="hdr-brand"><span>AIZFOGRAPHICS</span> · Robotics</div>
+  <div class="hdr-tags"><div class="pill">Comparison</div><div class="pill pill-b">Blueprint</div></div>
+  <div class="hdr-meta">Q2 2025 · SPEC SHEET</div>
+</div>
+
+<div class="hero">
+  <div>
+    <div class="hero-eyebrow">Technical Deep Dive</div>
+    <div class="hero-title"><span>HUMANOID</span><br>ROBOTS RACE</div>
+    <div class="hero-sub">Five leading humanoid platforms compared by capability, funding, and deployment readiness. The race from research prototype to factory floor is happening faster than most predicted — and the specs gap is closing fast.</div>
+  </div>
+  <div class="kpi-row">
+    <div class="kpi"><div class="kpi-lbl">Global Funding</div><div class="kpi-val">$7.4B</div><div class="kpi-note">Raised 2023-2025</div></div>
+    <div class="kpi"><div class="kpi-lbl">Units Deployed</div><div class="kpi-val">12,400</div><div class="kpi-note">In production environments</div></div>
+    <div class="kpi"><div class="kpi-lbl">Target Price</div><div class="kpi-val">$30K</div><div class="kpi-note">Industry 2026 target</div></div>
+  </div>
+</div>
+
+<div class="sec">Platform Comparison</div>
+<div class="compare-wrap">
+  <div class="compare-head">
+    <div class="ch-blank"></div>
+    <div class="ch-robot"><div class="ch-maker">Tesla</div><div class="ch-name ch-accent" style="--rcolor:#F97316">OPTIMUS</div></div>
+    <div class="ch-robot"><div class="ch-maker">Boston Dynamics</div><div class="ch-name ch-accent" style="--rcolor:#22D3EE">ATLAS</div></div>
+    <div class="ch-robot"><div class="ch-maker">Figure AI</div><div class="ch-name ch-accent" style="--rcolor:#A855F7">FIGURE 02</div></div>
+    <div class="ch-robot"><div class="ch-maker">Agility</div><div class="ch-name ch-accent" style="--rcolor:#34D399">DIGIT</div></div>
+    <div class="ch-robot"><div class="ch-maker">1X Technologies</div><div class="ch-name ch-accent" style="--rcolor:#60A5FA">NEO</div></div>
+  </div>
+  <div class="compare-row">
+    <div class="cr-label">Height</div>
+    <div class="cr-cell mid"><b>173 cm</b></div>
+    <div class="cr-cell mid"><b>150 cm</b></div>
+    <div class="cr-cell best"><b>167 cm</b></div>
+    <div class="cr-cell mid"><b>175 cm</b></div>
+    <div class="cr-cell mid"><b>165 cm</b></div>
+  </div>
+  <div class="compare-row">
+    <div class="cr-label">Weight</div>
+    <div class="cr-cell mid"><b>57 kg</b></div>
+    <div class="cr-cell warn"><b>89 kg</b></div>
+    <div class="cr-cell best"><b>60 kg</b></div>
+    <div class="cr-cell best"><b>65 kg</b></div>
+    <div class="cr-cell best"><b>30 kg</b></div>
+  </div>
+  <div class="compare-row">
+    <div class="cr-label">Walking Speed</div>
+    <div class="cr-cell mid"><b>2.0 m/s</b></div>
+    <div class="cr-cell best"><b>2.5 m/s</b></div>
+    <div class="cr-cell mid"><b>1.2 m/s</b></div>
+    <div class="cr-cell mid"><b>1.5 m/s</b></div>
+    <div class="cr-cell warn"><b>1.0 m/s</b></div>
+  </div>
+  <div class="compare-row">
+    <div class="cr-label">Payload Capacity</div>
+    <div class="cr-cell best"><b>20 kg</b></div>
+    <div class="cr-cell best"><b>25 kg</b></div>
+    <div class="cr-cell mid"><b>20 kg</b></div>
+    <div class="cr-cell mid"><b>16 kg</b></div>
+    <div class="cr-cell warn"><b>10 kg</b></div>
+  </div>
+  <div class="compare-row">
+    <div class="cr-label">Battery Life</div>
+    <div class="cr-cell mid"><b>8 hrs</b></div>
+    <div class="cr-cell warn"><b>2 hrs</b></div>
+    <div class="cr-cell best"><b>10 hrs</b></div>
+    <div class="cr-cell best"><b>16 hrs</b></div>
+    <div class="cr-cell best"><b>Tethered</b></div>
+  </div>
+  <div class="compare-row">
+    <div class="cr-label">AI Brain</div>
+    <div class="cr-cell mid"><b>Tesla FSD SoC</b></div>
+    <div class="cr-cell mid"><b>Custom + ROS</b></div>
+    <div class="cr-cell best"><b>OpenAI VLA</b></div>
+    <div class="cr-cell mid"><b>Custom ML</b></div>
+    <div class="cr-cell mid"><b>GPT-4o + ROS</b></div>
+  </div>
+  <div class="compare-row">
+    <div class="cr-label">Production Status</div>
+    <div class="cr-cell mid"><b>Pilot factories</b></div>
+    <div class="cr-cell best"><b>Commercial</b></div>
+    <div class="cr-cell mid"><b>BMW pilot</b></div>
+    <div class="cr-cell best"><b>Amazon DCs</b></div>
+    <div class="cr-cell warn"><b>Lab only</b></div>
+  </div>
+  <div class="compare-row">
+    <div class="cr-label">Est. Unit Cost</div>
+    <div class="cr-cell best"><b>$20K target</b></div>
+    <div class="cr-cell warn"><b>$150K+</b></div>
+    <div class="cr-cell mid"><b>Undisclosed</b></div>
+    <div class="cr-cell mid"><b>$60K est.</b></div>
+    <div class="cr-cell mid"><b>$30K target</b></div>
+  </div>
+</div>
+
+<div class="sec">Recent Funding Rounds</div>
+<div class="fund-grid">
+  <div class="fund" style="--fc:#F97316"><div class="fund-company">Tesla Optimus</div><div class="fund-amount">Internal</div><div class="fund-round">Vertical integration</div><div class="fund-investors">Funded via Tesla R&amp;D budget. Elon Musk has cited billions in annual investment. First units deployed in Tesla Fremont factory Q1 2025.</div></div>
+  <div class="fund" style="--fc:#22D3EE"><div class="fund-company">Figure AI</div><div class="fund-amount">$675M</div><div class="fund-round">Series B — 2024</div><div class="fund-investors">Microsoft, OpenAI, Amazon, Intel. Signed multi-year BMW partnership for factory deployment. Valuation: $2.6B.</div></div>
+  <div class="fund" style="--fc:#A855F7"><div class="fund-company">1X Technologies</div><div class="fund-amount">$100M</div><div class="fund-round">Series B — 2024</div><div class="fund-investors">EQT Ventures, OpenAI. Norwegian humanoid startup focused on soft-bodied design and caregiver applications. 8 hrs battery life.</div></div>
+  <div class="fund" style="--fc:#34D399"><div class="fund-company">Agility Robotics</div><div class="fund-amount">$150M</div><div class="fund-round">Series B — 2023</div><div class="fund-investors">Amazon Alexa Fund lead. 10 Digit units deployed in Amazon fulfillment centers. Proven at commercial scale in warehouse logistics.</div></div>
+  <div class="fund" style="--fc:#60A5FA"><div class="fund-company">Apptronik</div><div class="fund-amount">$350M</div><div class="fund-round">Series A — 2024</div><div class="fund-investors">Google lead. 7-DOF arms, 55 kg payload. UT Austin spinout. NASA and GE Aviation partnerships confirmed for 2025 pilots.</div></div>
+</div>
+
+<div class="sec">Deployment Sectors</div>
+<div class="use-grid">
+  <div class="use"><div class="use-sector">Manufacturing</div><div class="use-title">FACTORY FLOOR</div><div class="use-list"><li>Assembly line pick-and-place</li><li>Quality inspection and defect sorting</li><li>Materials handling and logistics</li><li>Welding and surface finishing assist</li></div></div>
+  <div class="use"><div class="use-sector">Logistics</div><div class="use-title">WAREHOUSING</div><div class="use-list"><li>Order fulfillment and shelf picking</li><li>Pallet loading and unloading</li><li>Inventory counting and auditing</li><li>Returns processing and sorting</li></div></div>
+  <div class="use"><div class="use-sector">Healthcare</div><div class="use-title">CLINICAL ASSIST</div><div class="use-list"><li>Patient room supply restocking</li><li>Lab sample transport and handling</li><li>Mobility assist and rehabilitation</li><li>Sterile environment maintenance</li></div></div>
+  <div class="use"><div class="use-sector">Construction</div><div class="use-title">FIELD WORK</div><div class="use-list"><li>Rebar tying and concrete formwork</li><li>Masonry and drywall installation</li><li>Site inspection and surveying</li><li>Hazardous environment access</li></div></div>
+</div>
+
+<div class="footer">
+  <div class="ftr">AIZFOGRAPHICS · HUMANOID ROBOTS RACE · BLUEPRINT EDITION 2025</div>
+  <div class="ftr">Specs compiled from company disclosures and technical papers. Subject to revision as products evolve.</div>
+</div>
+
+</div>
+</body>
+</html>

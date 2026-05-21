@@ -1,27 +1,50 @@
 # aiz-infographic
 
-A Claude Code skill that turns structured data into self-contained HTML infographics with reliable PNG export. Built on a 5-layer reference system: **canvases × snippets × styles × elements × templates**.
+A Claude Code skill that turns data and text into polished, self-contained HTML infographics — with reliable PNG export.
 
-## Key Features
+<br>
 
-- **4 canvases × 10 styles × 24 snippets**, plus **10 ready-made templates** for common content types (allocation breakdown, ecosystem overview, cheatsheet, concept explainer, game overview, distribution guide, collection showcase, how-it-works, report, game mechanics).
-- **One-shot and guided modes.** Tappable `AskUserQuestion` selection in Claude Code; auto-defaults in agent contexts (OpenClaw, Hermes).
-- **Brand-color extraction** from a URL or web search. Or hand it the hex pair directly.
-- **In-browser creator tools** (inline text edit, accent color editor, undo/redo, save/revert) injected into every Claude Code output and stripped automatically at PNG export.
-- **Viewer features** (hover tooltips, animated counters, scroll-triggered reveals, expandable sections) preserved in the PNG snapshot.
-- **Optional signal sheet** that surfaces derived insights (math, comparisons, second-order consequences) from the same source data, plus standalone-section extraction for any single panel.
-- **html.to.design Figma round-trip** for fully editable vector files.
-- **Width-only sizing.** The canvas grows to fit content. No trailing blank space.
+<p align="center">
+  <img src="examples/ai-agents-2025.png" width="49%" alt="State of AI Agents 2025 — aizfographics style">
+  <img src="examples/humanoid-robots-race.png" width="49%" alt="Humanoid Robots Race — blueprint style">
+</p>
 
-## Installation
+<p align="center">
+  <img src="examples/how-crispr-works.png" width="49%" alt="How CRISPR-Cas9 Works — clean minimal style">
+  <img src="examples/ai-funding-2025.png" width="49%" alt="AI Funding Landscape 2025 — terminal style">
+</p>
 
-### Full install — skill + PNG export dependencies
+<p align="center">
+  <img src="examples/longevity-science-map.png" width="49%" alt="Longevity Science Map — glassmorphism style">
+  <img src="examples/industrial-robotics-rise.png" width="49%" alt="Rise of Industrial Robotics — cyberpunk style">
+</p>
+
+<br>
+
+---
+
+## What you get
+
+Paste in your data or describe what you want. The skill designs, codes, and exports a production-quality infographic in one conversation.
+
+- **HTML output** — fully self-contained, opens in any browser
+- **PNG export** — 2x DPR via Playwright, ready to share or publish
+- **In-browser editing** — click any text to edit it, adjust accent colors, undo/redo — no code required
+- **Signal sheet** — optional companion that surfaces derived insights and second-order implications from the same data
+- **Social copy** — optional X/LinkedIn/Instagram post copy generated alongside the visual
+- **Figma round-trip** — run the HTML through [html.to.design](https://www.figma.com/community/plugin/842128343887514257) for a fully editable vector file
+
+---
+
+## Install
+
+### Full install (skill + PNG export)
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/aizzaku/aiz-infographic/main/install.sh | bash
 ```
 
-Installs the skill via `npx skills`, then installs the Python Playwright package and downloads the Chromium browser used for PNG export. Requires Node.js and Python 3.9+ on your PATH.
+Requires Node.js and Python 3.9+ on your PATH. Installs the skill, Playwright, and Chromium for PNG export.
 
 ### Skill only
 
@@ -29,61 +52,122 @@ Installs the skill via `npx skills`, then installs the Python Playwright package
 npx skills add https://github.com/aizzaku/aiz-infographic
 ```
 
-### PNG export (separate, if you skipped the full install)
+### PNG export only (if you skipped it above)
 
 ```bash
-pip install "playwright>=1.40.0"
-playwright install chromium
+pip install "playwright>=1.40.0" && playwright install chromium
 ```
 
-## Quick Usage
+---
 
-Once installed, trigger the skill in Claude Code with any of:
+## Usage
+
+Once installed, trigger it in Claude Code with any natural language request:
 
 ```
-make an infographic for this tokenomics: <paste data>
-cheatsheet for the Solana validator economy
-visualize this ecosystem: <paste partner list>
-turn this roadmap into a visual
+state of AI agents infographic
+how does CRISPR work — turn it into a visual
+ecosystem overview for the longevity science space
+AI funding landscape 2025 cheatsheet
+comparison of humanoid robots — blueprint style
+case study infographic: how Notion grew to 30M users
 ```
 
-The skill auto-detects one-shot vs guided mode based on whether you provided enough data and named a clear type. Force one-shot with phrases like `just make it`, `here's everything`, or `quick`. Force guided with `help me`, `walk me through`, or `what canvas`.
+### One-shot vs guided
 
-When done iterating, say `done`, `export`, `looks good`, or `ship it` to trigger the export chain.
+The skill auto-detects which mode fits:
 
-## Output Structure
+- **One-shot** — if you provide the data and the type is clear, it generates immediately
+- **Guided** — if the request is open-ended, it walks you through canvas, sections, style, and color with tappable menus
+
+Force one-shot: `just make it`, `here's everything`, `quick`  
+Force guided: `help me choose`, `walk me through`, `what layout`
+
+### Finishing and exporting
+
+When you're happy with the result, say `done`, `export`, `looks good`, or `ship it`. The skill runs the PNG export automatically.
+
+---
+
+## Templates
+
+| Template | What it's for |
+|---|---|
+| `ecosystem-overview` | Landscape maps — players, categories, relationships |
+| `cheatsheet` | Dense reference grids — commands, shortcuts, comparisons |
+| `how-it-works` | Step-by-step process explainers |
+| `concept-explainer` | Abstract ideas made visual — frameworks, mental models |
+| `case-study` | Growth stories with outcome + mechanism + how-to-apply steps |
+| `report` | Data-heavy multi-section briefings with KPIs |
+| `allocation-breakdown` | Supply splits, budget breakdowns, vesting schedules |
+| `distribution-guide` | Eligibility, tiers, claim steps |
+| `game-overview` | Game mechanics, economy, faction comparisons |
+| `game-mechanics` | Loop diagrams, reward structures, progression trees |
+| `collection-showcase` | Item galleries with rarity and trait breakdowns |
+
+Unmapped content types still work — the skill picks the best canvas and section patterns for what you provide.
+
+---
+
+## Styles
+
+26 visual identities built in. Each example above uses a different style to show the range.
+
+| Style | Look | Used in example above |
+|---|---|---|
+| `aizfographics-style` | Dark, bold, gradient glow. The default. | AI Agents |
+| `blueprint` | Engineering schematic, grid lines, technical | Humanoid Robots |
+| `clean-minimal` | Light background, generous whitespace | CRISPR explainer |
+| `terminal` | Monospace, green-on-black, scanlines | AI Funding |
+| `glassmorphism` | Frosted glass panels on dark gradient | Longevity Science |
+| `cyberpunk` | Neon cyan + pink on deep black | Industrial Robotics |
+| `editorial` | Magazine layout, large type, long-form | — |
+| `scrapbook` | Physical evidence aesthetic, warm tones | — |
+| `ash` | Monochrome editorial, clean | — |
+| `obsidian-ledger` | Antique accounting, serif | — |
+| `openclaw` | Blue-black, hot-red — OpenClaw brand | — |
+| `claude-light` | Warm cream + terracotta — Anthropic brand | — |
+| `grok-dark` | True black, weight-900 ALL CAPS — xAI brand | — |
+
+Brand styles (`openclaw`, `hermes`, `openai-dark`, `grok-dark`, `vercel-dark`, `claude-light`) activate automatically when the infographic subject matches the brand.
+
+---
+
+## How it works
+
+The skill uses a 5-layer reference system to compose infographics. You never need to understand this to use it.
+
+| Layer | Role |
+|---|---|
+| **Canvas** | Page architecture — header, hero, footer, grid slots. Options: `bento-box`, `editorial`, `dashboard`, `poster` |
+| **Snippet** | Section pattern plugged into a canvas slot — timeline, process-flow, comparison, network-graph, sankey, kpi-strip, and 21 more |
+| **Style** | Visual identity — colors, fonts, spacing tokens. 26 available |
+| **Element** | Atomic UI primitives — charts, icons, connectors, badges, sparklines. 14 element files |
+| **Template** | Preset combining canvas + style + snippet picks for a content type. 12 templates |
+
+---
+
+## Output structure
 
 ```
 output/
-├── <kebab-name>.html           # canonical, self-contained
-├── <kebab-name>.png            # 2x DPR via Playwright
-├── <kebab-name>-signals.html   # optional signal sheet
-├── <kebab-name>-signals.png
-└── <kebab-name>-merged.html    # optional: signals appended to main
+├── <name>.html             # canonical source — edit this
+├── <name>.png              # 2x DPR PNG via Playwright
+├── <name>-signals.html     # optional: derived insight sheet
+├── <name>-signals.png
+└── <name>-posts.md         # optional: X/LinkedIn/Instagram copy
 ```
 
-The HTML is the canonical source of truth. PNG is a render of it. SVG is produced by running the HTML through the html.to.design Figma plugin.
+The HTML is always the canonical file. The PNG is a snapshot of it. The signal sheet is a separate infographic surfacing math, comparisons, and second-order consequences the main visual doesn't show.
 
-## Reference Layers
-
-| Layer | Lives in | Role |
-|---|---|---|
-| **Canvas** | `references/canvases/<name>.md` | Page architecture: header, hero, footer, slot grid. (`bento-box`, `editorial`, `dashboard`, `poster`) |
-| **Snippet** | `references/snippets/<name>.md` | Embeddable section pattern: timeline spine, fishbone, kpi-strip, sankey-flow, network-graph, etc. |
-| **Style** | `references/styles/<name>.md` | Visual identity: colors, fonts, spacing tokens. (`aizfographics-style` default) |
-| **Element** | `references/elements/<name>.md` | Atomic UI primitives: text, charts, icons, connectors. |
-| **Template** | `references/templates/<name>.md` | High-level preset = canvas + style + snippet picks for a content type. |
-
-Defaults: canvas `bento-box`, style `aizfographics-style`, width `1920`. Editorial canvas defaults to `1280`.
-
-## Configuration
-
-Defaults and routing rules live in [aiz-infographic/SKILL.md](aiz-infographic/SKILL.md). To add a new visual style, copy `references/styles/_custom-template.md`, fill in the tokens, and reference it by name in your request.
+---
 
 ## Credits
 
-- Install pattern modeled after [baoyu-skills](https://github.com/jimliu/baoyu-skills) by Jim Liu.
-- Distributed via [skills.sh](https://skills.sh).
+- Install pattern modeled after [baoyu-skills](https://github.com/jimliu/baoyu-skills) by Jim Liu
+- Distributed via [skills.sh](https://skills.sh)
+
+---
 
 TIP: Use the html.to.design Figma plugin to get a fully editable infographic in Figma.
 

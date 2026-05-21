@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Longevity Science Map 2025</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;500;600;700&display=swap">
+<style>
+/* GLASSMORPHISM STYLE — frosted panels on dark gradient */
+:root {
+  --canvas-from: #0A0618;
+  --canvas-to: #060C18;
+  --glass: rgba(255,255,255,0.04);
+  --glass-border: rgba(255,255,255,0.10);
+  --glass-hover: rgba(255,255,255,0.07);
+  --text-primary: #F0EEFF;
+  --text-secondary: #9890C0;
+  --text-muted: #5850A0;
+  --a1: #A78BFA;
+  --a2: #60A5FA;
+  --a3: #34D399;
+  --a4: #F472B6;
+  --a5: #FBBF24;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#060412;font-family:'Montserrat',sans-serif;color:var(--text-primary)}
+.canvas{
+  width:1920px;
+  background:linear-gradient(135deg,var(--canvas-from) 0%,var(--canvas-to) 100%);
+  padding:48px 56px 56px;
+  position:relative;overflow:hidden
+}
+/* glow orbs */
+.canvas::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 700px 600px at 5% 15%,color-mix(in srgb,var(--a1) 14%,transparent),transparent),
+    radial-gradient(ellipse 500px 400px at 95% 5%,color-mix(in srgb,var(--a2) 10%,transparent),transparent),
+    radial-gradient(ellipse 600px 500px at 80% 90%,color-mix(in srgb,var(--a4) 10%,transparent),transparent),
+    radial-gradient(ellipse 400px 300px at 30% 85%,color-mix(in srgb,var(--a3) 8%,transparent),transparent);
+  pointer-events:none
+}
+.canvas::after{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(circle 1px at 15% 25%,rgba(167,139,250,0.6),transparent),
+    radial-gradient(circle 1px at 85% 15%,rgba(96,165,250,0.5),transparent),
+    radial-gradient(circle 1px at 60% 70%,rgba(52,211,153,0.5),transparent),
+    radial-gradient(circle 1px at 40% 55%,rgba(244,114,182,0.4),transparent);
+  pointer-events:none
+}
+.canvas>*{position:relative;z-index:1}
+
+/* glass mixin */
+.glass{
+  background:var(--glass);
+  border:1px solid var(--glass-border);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+}
+
+.hdr{display:flex;align-items:center;justify-content:space-between;padding-bottom:20px;border-bottom:1px solid var(--glass-border);margin-bottom:44px}
+.hdr-brand{font:700 11px/1 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.2em;color:var(--text-muted)}.hdr-brand span{color:var(--a1)}
+.hdr-tags{display:flex;gap:8px}
+.pill{padding:4px 14px;border-radius:20px;font:600 10px/1 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.1em;background:rgba(167,139,250,0.15);border:1px solid rgba(167,139,250,0.3);color:var(--a1)}
+.pill-b{background:rgba(96,165,250,0.12);border-color:rgba(96,165,250,0.25);color:var(--a2)}
+.hdr-meta{font:400 11px/1 'Montserrat',sans-serif;color:var(--text-muted);letter-spacing:.08em}
+
+.hero{display:grid;grid-template-columns:1fr auto;gap:52px;align-items:center;margin-bottom:52px}
+.hero-eyebrow{font:600 11px/1 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.2em;color:var(--a1);margin-bottom:12px}
+.hero-title{font:400 104px/.88 'Bebas Neue',sans-serif;letter-spacing:.04em;background:linear-gradient(110deg,var(--text-primary) 0%,var(--a1) 40%,var(--a2) 75%,var(--a3) 100%);-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:16px}
+.hero-sub{font:400 15px/1.75 'Montserrat',sans-serif;color:var(--text-secondary);max-width:760px}
+.kpi-row{display:flex;flex-direction:column;gap:12px}
+.kpi{border-radius:16px;padding:20px 28px;min-width:200px}
+.kpi-lbl{font:600 10px/1 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.14em;color:var(--text-muted);margin-bottom:10px}
+.kpi-val{font:400 40px/1 'Bebas Neue',sans-serif;letter-spacing:.04em}
+.kpi-note{font:400 11px/1 'Montserrat',sans-serif;color:var(--text-muted);margin-top:6px}
+
+.sec{font:700 10px/1 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.2em;color:var(--text-muted);display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.sec::after{content:'';flex:1;height:1px;background:var(--glass-border)}
+
+/* INTERVENTION CARDS */
+.int-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-bottom:24px}
+.int{border-radius:20px;padding:28px 24px}
+.int-icon-row{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.int-icon{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font:400 20px/1 'Bebas Neue',sans-serif;flex-shrink:0}
+.int-category{font:700 9px/1 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.16em;margin-bottom:4px}
+.int-title{font:400 26px/1 'Bebas Neue',sans-serif;letter-spacing:.05em;color:var(--text-primary);margin-bottom:16px}
+.int-list{display:flex;flex-direction:column;gap:0}
+.int-item{padding:8px 0;border-bottom:1px solid var(--glass-border)}
+.int-item:last-child{border-bottom:none}
+.int-name{font:600 12px/1 'Montserrat',sans-serif;color:var(--text-primary);margin-bottom:3px}
+.int-desc{font:400 11px/1.4 'Montserrat',sans-serif;color:var(--text-secondary)}
+
+/* COMPANY ECOSYSTEM */
+.eco-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:24px}
+.eco{border-radius:16px;padding:24px 24px}
+.eco-title{font:400 24px/1 'Bebas Neue',sans-serif;letter-spacing:.06em;color:var(--text-primary);margin-bottom:4px}
+.eco-sub{font:500 10px/1 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);margin-bottom:18px}
+.eco-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--glass-border);font:400 12px/1 'Montserrat',sans-serif}
+.eco-row:last-child{border-bottom:none}
+.eco-co{color:var(--text-secondary)}
+.eco-focus{font-weight:600;color:var(--text-primary)}
+
+/* TIMELINE STRIP */
+.tl-row{display:grid;grid-template-columns:repeat(6,1fr);gap:16px;margin-bottom:48px}
+.tl{border-radius:14px;padding:20px 18px}
+.tl-year{font:400 32px/1 'Bebas Neue',sans-serif;letter-spacing:.05em;margin-bottom:6px}
+.tl-title{font:700 11px/1.3 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.06em;color:var(--text-primary);margin-bottom:6px}
+.tl-body{font:400 11px/1.5 'Montserrat',sans-serif;color:var(--text-secondary)}
+
+.footer{display:flex;justify-content:space-between;align-items:center;padding-top:24px;border-top:1px solid var(--glass-border)}
+.ftr{font:400 11px/1 'Montserrat',sans-serif;color:var(--text-muted);letter-spacing:.08em}
+</style>
+</head>
+<body>
+<div class="canvas">
+
+<div class="hdr">
+  <div class="hdr-brand"><span>AIZFOGRAPHICS</span> · Longevity Science</div>
+  <div class="hdr-tags"><div class="pill">Ecosystem Overview</div><div class="pill pill-b">Glassmorphism</div></div>
+  <div class="hdr-meta">2025 RESEARCH EDITION</div>
+</div>
+
+<div class="hero">
+  <div>
+    <div class="hero-eyebrow">The Science of Living Longer</div>
+    <div class="hero-title">LONGEVITY<br>SCIENCE MAP</div>
+    <div class="hero-sub">Aging is no longer considered an inevitable fate. The longevity field has shifted from observational gerontology to interventional biology — identifying the molecular mechanisms of aging and engineering ways to slow, halt, or reverse them. This is where the science stands in 2025.</div>
+  </div>
+  <div class="kpi-row">
+    <div class="kpi glass" style="border-radius:16px"><div class="kpi-lbl">Global Longevity Funding</div><div class="kpi-val" style="color:var(--a1)">$5.2B</div><div class="kpi-note">VC + philanthropy 2024-25</div></div>
+    <div class="kpi glass" style="border-radius:16px"><div class="kpi-lbl">Active Longevity Trials</div><div class="kpi-val" style="color:var(--a2)">700+</div><div class="kpi-note">Clinical studies worldwide</div></div>
+    <div class="kpi glass" style="border-radius:16px"><div class="kpi-lbl">Max Verified Lifespan</div><div class="kpi-val" style="color:var(--a3)">122yrs</div><div class="kpi-note">Jeanne Calment, 1997</div></div>
+  </div>
+</div>
+
+<div class="sec">Intervention Categories</div>
+<div class="int-grid">
+  <div class="int glass" style="border-radius:20px">
+    <div class="int-icon-row">
+      <div class="int-icon" style="background:rgba(167,139,250,0.15);color:var(--a1)">Rx</div>
+      <div><div class="int-category" style="color:var(--a1)">Pharmacological</div></div>
+    </div>
+    <div class="int-title">SENOLYTICS &amp; DRUGS</div>
+    <div class="int-list">
+      <div class="int-item"><div class="int-name">Rapamycin (mTOR inhibitor)</div><div class="int-desc">Most consistent lifespan extension in mammals. Extends median lifespan 10-15% in mice. Human trials ongoing.</div></div>
+      <div class="int-item"><div class="int-name">Dasatinib + Quercetin</div><div class="int-desc">First senolytic combo. Clears senescent cells. Mayo Clinic trials show improved physical function in IPF patients.</div></div>
+      <div class="int-item"><div class="int-name">Metformin (TAME trial)</div><div class="int-desc">Largest aging trial in history. Testing if the diabetes drug delays age-related diseases across 3,000 subjects.</div></div>
+      <div class="int-item"><div class="int-name">NAD+ precursors (NMN/NR)</div><div class="int-desc">Restore declining NAD+ levels. David Sinclair's group shows reversal of vascular aging in mice.</div></div>
+    </div>
+  </div>
+  <div class="int glass" style="border-radius:20px">
+    <div class="int-icon-row">
+      <div class="int-icon" style="background:rgba(96,165,250,0.15);color:var(--a2)">Ge</div>
+      <div><div class="int-category" style="color:var(--a2)">Genetic</div></div>
+    </div>
+    <div class="int-title">GENE THERAPY</div>
+    <div class="int-list">
+      <div class="int-item"><div class="int-name">Yamanaka factor reprogramming</div><div class="int-desc">Partial reprogramming with OSKM factors resets epigenetic age without de-differentiation. Altos Labs focus area.</div></div>
+      <div class="int-item"><div class="int-name">Telomere extension (TERT)</div><div class="int-desc">BioViva's AAV-delivered TERT therapy extended telomeres in Elizabeth Parrish. Early-stage, no peer-reviewed data.</div></div>
+      <div class="int-item"><div class="int-name">p16 clearance</div><div class="int-desc">Targeted removal of p16Ink4a+ senescent cells restores tissue function in mouse aging models. Unity Biotechnology.</div></div>
+      <div class="int-item"><div class="int-name">Klotho gene delivery</div><div class="int-desc">Klotho protein declines with age. AAV-delivered Klotho improves cognition and kidney function in aged mice.</div></div>
+    </div>
+  </div>
+  <div class="int glass" style="border-radius:20px">
+    <div class="int-icon-row">
+      <div class="int-icon" style="background:rgba(52,211,153,0.15);color:var(--a3)">Bio</div>
+      <div><div class="int-category" style="color:var(--a3)">Biomarkers</div></div>
+    </div>
+    <div class="int-title">AGING CLOCKS</div>
+    <div class="int-list">
+      <div class="int-item"><div class="int-name">Horvath DNA methylation clock</div><div class="int-desc">Measures biological age from methylation patterns. 353 CpG sites predict age within 3.6 years across tissue types.</div></div>
+      <div class="int-item"><div class="int-name">GrimAge / PhenoAge</div><div class="int-desc">Mortality-predictive clocks. GrimAge outperforms chronological age for predicting time-to-death. Used in interventional trials.</div></div>
+      <div class="int-item"><div class="int-name">Proteomics clocks (SomaScan)</div><div class="int-desc">Plasma protein panels that track organ-specific aging. 2023 Stanford study found organs age asynchronously.</div></div>
+      <div class="int-item"><div class="int-name">Transcriptomic age</div><div class="int-desc">RNA expression patterns as aging biomarkers. Less stable than methylation but captures dynamic regulatory changes.</div></div>
+    </div>
+  </div>
+  <div class="int glass" style="border-radius:20px">
+    <div class="int-icon-row">
+      <div class="int-icon" style="background:rgba(244,114,182,0.15);color:var(--a4)">AI</div>
+      <div><div class="int-category" style="color:var(--a4)">AI-Assisted</div></div>
+    </div>
+    <div class="int-title">COMPUTATIONAL</div>
+    <div class="int-list">
+      <div class="int-item"><div class="int-name">AlphaFold for aging targets</div><div class="int-desc">Protein structure prediction accelerates drug discovery for aging-related pathways — mTOR, sirtuins, senescence.</div></div>
+      <div class="int-item"><div class="int-name">Foundation models for longevity</div><div class="int-desc">Insilico Medicine used generative AI to design a senolytic drug candidate in 18 months. Now in Phase II trial.</div></div>
+      <div class="int-item"><div class="int-name">Multi-omic aging prediction</div><div class="int-desc">ML models integrating methylomics, proteomics, metabolomics for composite biological age scores.</div></div>
+      <div class="int-item"><div class="int-name">Digital twins for aging</div><div class="int-desc">Personalized organ-level simulations predict intervention outcomes. Paradigm still early but well-funded.</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="eco-grid">
+  <div class="eco glass" style="border-radius:16px">
+    <div class="eco-title">LEADING COMPANIES</div>
+    <div class="eco-sub">By funding + scientific output</div>
+    <div class="eco-row"><span class="eco-co">Altos Labs (Google)</span><span class="eco-focus" style="color:var(--a1)">Cellular reprogramming</span></div>
+    <div class="eco-row"><span class="eco-co">Calico (Google/AbbVie)</span><span class="eco-focus" style="color:var(--a2)">Basic aging biology</span></div>
+    <div class="eco-row"><span class="eco-co">Retro Biosciences (OpenAI)</span><span class="eco-focus" style="color:var(--a1)">Autophagy + yamanaka</span></div>
+    <div class="eco-row"><span class="eco-co">Insilico Medicine</span><span class="eco-focus" style="color:var(--a4)">AI drug discovery</span></div>
+    <div class="eco-row"><span class="eco-co">Unity Biotechnology</span><span class="eco-focus" style="color:var(--a3)">Senolytics — eye disease</span></div>
+    <div class="eco-row"><span class="eco-co">Ora Biomedical</span><span class="eco-focus" style="color:var(--a5)">C. elegans drug screens</span></div>
+  </div>
+  <div class="eco glass" style="border-radius:16px">
+    <div class="eco-title">HALLMARKS OF AGING</div>
+    <div class="eco-sub">Lopez-Otin framework (2023, 12 hallmarks)</div>
+    <div class="eco-row"><span class="eco-co">Genomic instability</span><span class="eco-focus">DNA damage accumulation</span></div>
+    <div class="eco-row"><span class="eco-co">Telomere attrition</span><span class="eco-focus">Chromosome end shortening</span></div>
+    <div class="eco-row"><span class="eco-co">Epigenetic alterations</span><span class="eco-focus">Methylation drift</span></div>
+    <div class="eco-row"><span class="eco-co">Loss of proteostasis</span><span class="eco-focus">Protein aggregation</span></div>
+    <div class="eco-row"><span class="eco-co">Cellular senescence</span><span class="eco-focus">Zombie cell accumulation</span></div>
+    <div class="eco-row"><span class="eco-co">Dysbiosis</span><span class="eco-focus">Microbiome disruption (new)</span></div>
+  </div>
+  <div class="eco glass" style="border-radius:16px">
+    <div class="eco-title">NEAR-TERM MILESTONES</div>
+    <div class="eco-sub">Expected clinical readouts 2025-2027</div>
+    <div class="eco-row"><span class="eco-co">TAME trial readout</span><span class="eco-focus" style="color:var(--a5)">2026 expected</span></div>
+    <div class="eco-row"><span class="eco-co">Insilico ISM001-055 Ph.II</span><span class="eco-focus" style="color:var(--a3)">2025 data</span></div>
+    <div class="eco-row"><span class="eco-co">Unity UBX1325 (eye)</span><span class="eco-focus" style="color:var(--a2)">Phase II complete</span></div>
+    <div class="eco-row"><span class="eco-co">Partial reprogramming Ph.I</span><span class="eco-focus" style="color:var(--a1)">Altos 2026-27</span></div>
+    <div class="eco-row"><span class="eco-co">GDF11 protein trial</span><span class="eco-focus" style="color:var(--a4)">Elevian 2025</span></div>
+    <div class="eco-row"><span class="eco-co">Senolytics cancer prevention</span><span class="eco-focus" style="color:var(--a5)">Mayo 2026</span></div>
+  </div>
+</div>
+
+<div class="sec">Key Research Milestones</div>
+<div class="tl-row">
+  <div class="tl glass" style="border-radius:14px"><div class="tl-year" style="color:var(--a1)">2013</div><div class="tl-title">Hallmarks Published</div><div class="tl-body">Lopez-Otin et al. define 9 hallmarks of aging in Cell. Becomes the field's organizing framework.</div></div>
+  <div class="tl glass" style="border-radius:14px"><div class="tl-year" style="color:var(--a2)">2016</div><div class="tl-title">Yamanaka Reprogramming</div><div class="tl-body">Salk Institute shows partial OSKM reprogramming reverses aging markers in mice without tumor formation.</div></div>
+  <div class="tl glass" style="border-radius:14px"><div class="tl-year" style="color:var(--a3)">2019</div><div class="tl-title">Thymus Regeneration</div><div class="tl-body">Volunteers in TRIIM trial show 2.5-year epigenetic age reversal using GH, DHEA, and metformin combination.</div></div>
+  <div class="tl glass" style="border-radius:14px"><div class="tl-year" style="color:var(--a4)">2021</div><div class="tl-title">Altos Labs Founded</div><div class="tl-body">$3B raised from Jeff Bezos and others to fund reprogramming biology. Recruits Shinya Yamanaka as advisor.</div></div>
+  <div class="tl glass" style="border-radius:14px"><div class="tl-year" style="color:var(--a5)">2023</div><div class="tl-title">Organ Aging Clocks</div><div class="tl-body">Stanford proteomics study shows organs age at different rates. "Brain ager" vs "heart ager" as distinct risk profiles.</div></div>
+  <div class="tl glass" style="border-radius:14px"><div class="tl-year" style="color:var(--a1)">2025</div><div class="tl-title">First AI Drug in Ph.II</div><div class="tl-body">Insilico Medicine's AI-designed anti-fibrosis drug enters Phase II — first AI-discovered longevity-adjacent compound in humans.</div></div>
+</div>
+
+<div class="footer">
+  <div class="ftr">AIZFOGRAPHICS · LONGEVITY SCIENCE MAP · 2025 RESEARCH EDITION</div>
+  <div class="ftr">Based on published literature and company disclosures. For informational purposes only.</div>
+</div>
+
+</div>
+</body>
+</html>

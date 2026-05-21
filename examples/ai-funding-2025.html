@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AI Funding Landscape 2025</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Bebas+Neue&display=swap">
+<style>
+/* TERMINAL STYLE — monospace, green on black */
+:root {
+  --canvas: #050805;
+  --panel: #080E08;
+  --elevated: #0C140C;
+  --border: rgba(0,255,80,0.1);
+  --border-dim: rgba(0,255,80,0.05);
+  --text-primary: #C8F0C8;
+  --text-secondary: #6AAA6A;
+  --text-muted: #3A6A3A;
+  --a1: #00FF50;
+  --a2: #00CC40;
+  --a3: #CCFF00;
+  --warn: #FF6B00;
+  --danger: #FF3030;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#030503;font-family:'JetBrains Mono',monospace;color:var(--text-primary)}
+.canvas{width:1920px;background:var(--canvas);padding:48px 56px 56px;position:relative;overflow:hidden}
+
+/* scan lines */
+.canvas::before{
+  content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.15) 2px,rgba(0,0,0,0.15) 4px);
+  pointer-events:none;z-index:0
+}
+.canvas::after{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 900px 600px at 50% 50%,color-mix(in srgb,var(--a1) 4%,transparent),transparent);
+  pointer-events:none;z-index:0
+}
+.canvas > *{position:relative;z-index:1}
+
+.hdr{display:flex;align-items:center;justify-content:space-between;padding-bottom:16px;border-bottom:1px solid var(--border);margin-bottom:40px;font:500 12px/1 'JetBrains Mono',monospace}
+.prompt{color:var(--a1)}.prompt span{color:var(--text-muted)}
+.hdr-tags{display:flex;gap:8px}
+.pill{padding:4px 12px;border:1px solid var(--a2);color:var(--a2);font:500 10px/1 'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.08em;border-radius:0}
+.pill-b{border-color:var(--a3);color:var(--a3)}
+.ts{color:var(--text-muted);font:400 11px/1 'JetBrains Mono',monospace}
+
+.hero{display:grid;grid-template-columns:1fr auto;gap:48px;align-items:flex-start;margin-bottom:48px}
+.hero-cmd{font:400 13px/1 'JetBrains Mono',monospace;color:var(--text-muted);margin-bottom:12px}
+.hero-cmd span{color:var(--a1)}
+.hero-title{font:400 96px/.88 'Bebas Neue',sans-serif;letter-spacing:.06em;color:var(--a1);text-shadow:0 0 30px color-mix(in srgb,var(--a1) 30%,transparent);margin-bottom:16px}
+.hero-sub{font:400 14px/1.8 'JetBrains Mono',monospace;color:var(--text-secondary);max-width:760px}
+.kpi-block{border:1px solid var(--border);padding:24px;background:var(--panel);min-width:320px}
+.kpi-header{font:500 10px/1 'JetBrains Mono',monospace;color:var(--text-muted);margin-bottom:16px;text-transform:uppercase;letter-spacing:.1em}
+.kpi-header span{color:var(--a1)}
+.kpi-row{display:flex;align-items:baseline;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border-dim)}
+.kpi-row:last-child{border-bottom:none}
+.kpi-key{font:400 12px/1 'JetBrains Mono',monospace;color:var(--text-secondary)}
+.kpi-val{font:700 16px/1 'JetBrains Mono',monospace;color:var(--a1)}
+.kpi-val.warn{color:var(--warn)}
+.kpi-val.dim{color:var(--text-secondary)}
+
+.sec{font:500 10px/1 'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.15em;color:var(--text-muted);display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.sec::before{content:'#';color:var(--a1)}
+.sec::after{content:'';flex:1;height:1px;background:var(--border-dim)}
+
+/* BAR CHART */
+.bar-chart{background:var(--panel);border:1px solid var(--border);padding:28px;margin-bottom:20px}
+.bar-title{font:500 10px/1 'JetBrains Mono',monospace;color:var(--text-muted);margin-bottom:24px;text-transform:uppercase;letter-spacing:.1em}
+.bar-title span{color:var(--a1)}
+.bars{display:flex;flex-direction:column;gap:12px}
+.bar-row{display:grid;grid-template-columns:180px 1fr 100px;gap:16px;align-items:center}
+.bar-label{font:500 12px/1 'JetBrains Mono',monospace;color:var(--text-secondary)}
+.bar-track{height:20px;background:var(--elevated);border:1px solid var(--border-dim);position:relative;overflow:hidden}
+.bar-fill{height:100%;background:var(--bcolor,var(--a1));position:relative;display:flex;align-items:center}
+.bar-fill::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.08))}
+.bar-amount{font:700 12px/1 'JetBrains Mono',monospace;color:var(--a1);text-align:right}
+.bar-amount.warn{color:var(--warn)}
+
+/* DEAL TABLE */
+.deal-table{width:100%;border-collapse:collapse;margin-bottom:20px;font:400 12px/1 'JetBrains Mono',monospace}
+.deal-table thead th{color:var(--text-muted);font:500 10px/1 'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.1em;padding:8px 16px 12px;text-align:left;border-bottom:1px solid var(--border)}
+.deal-table tbody tr{border-bottom:1px solid var(--border-dim)}
+.deal-table tbody tr:last-child{border-bottom:none}
+.deal-table tbody tr:hover{background:var(--panel)}
+.deal-table td{padding:12px 16px;color:var(--text-secondary);vertical-align:middle}
+.deal-table td:first-child{color:var(--text-primary);font-weight:500}
+.amount-cell{color:var(--a1)!important;font-weight:700!important}
+.amount-cell.big{color:var(--a3)!important}
+.stage-pill{display:inline-block;padding:2px 8px;border:1px solid;font:500 9px/1 'JetBrains Mono',monospace;text-transform:uppercase;border-radius:0}
+.stage-seed{border-color:var(--text-muted);color:var(--text-muted)}
+.stage-a{border-color:var(--a2);color:var(--a2)}
+.stage-b{border-color:var(--a1);color:var(--a1)}
+.stage-c{border-color:var(--a3);color:var(--a3)}
+.stage-corp{border-color:var(--warn);color:var(--warn)}
+
+/* CATEGORY GRID */
+.cat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:48px}
+.cat{border:1px solid var(--border);padding:22px 20px;background:var(--panel)}
+.cat-name{font:700 10px/1 'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.12em;color:var(--a1);margin-bottom:4px}
+.cat-total{font:400 36px/1 'Bebas Neue',sans-serif;letter-spacing:.06em;color:var(--text-primary);margin-bottom:8px}
+.cat-delta{font:500 11px/1 'JetBrains Mono',monospace;margin-bottom:12px}
+.delta-up{color:var(--a1)}
+.delta-warn{color:var(--warn)}
+.cat-desc{font:400 11px/1.6 'JetBrains Mono',monospace;color:var(--text-secondary)}
+
+.footer{display:flex;justify-content:space-between;align-items:center;padding-top:20px;border-top:1px solid var(--border)}
+.ftr{font:400 10px/1 'JetBrains Mono',monospace;color:var(--text-muted)}
+.ftr span{color:var(--a1)}
+.cursor{display:inline-block;width:8px;height:14px;background:var(--a1);animation:blink 1s step-end infinite;vertical-align:text-bottom;margin-left:2px}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+</style>
+</head>
+<body>
+<div class="canvas">
+
+<div class="hdr">
+  <div class="prompt"><span>aizfographics@terminal</span>:~$ run report --topic="AI Funding 2025" --format=infographic</div>
+  <div class="hdr-tags"><div class="pill">Statistical</div><div class="pill pill-b">Terminal</div></div>
+  <div class="ts">2025-05-21 Q2 REPORT</div>
+</div>
+
+<div class="hero">
+  <div>
+    <div class="hero-cmd"><span>$</span> fetch --source=crunchbase,pitchbook --year=2025 --sector=AI</div>
+    <div class="hero-title">AI FUNDING<br>LANDSCAPE</div>
+    <div class="hero-sub">Full-year projection based on H1 2025 data. Artificial intelligence investment is on pace for a third consecutive record year. Frontier model labs continue to dominate by cheque size while infrastructure and application layers drive deal volume.</div>
+  </div>
+  <div class="kpi-block">
+    <div class="kpi-header">// <span>KEY METRICS</span> — Q2 2025</div>
+    <div class="kpi-row"><span class="kpi-key">Total AI investment (2025E)</span><span class="kpi-val">$320B</span></div>
+    <div class="kpi-row"><span class="kpi-key">vs 2024 YoY growth</span><span class="kpi-val">+68%</span></div>
+    <div class="kpi-row"><span class="kpi-key">Largest single round</span><span class="kpi-val">$40B</span></div>
+    <div class="kpi-row"><span class="kpi-key">Median Series A size</span><span class="kpi-val">$18M</span></div>
+    <div class="kpi-row"><span class="kpi-key">Active AI unicorns</span><span class="kpi-val">320</span></div>
+    <div class="kpi-row"><span class="kpi-key">Acquisition activity</span><span class="kpi-val warn">+140%</span></div>
+    <div class="kpi-row"><span class="kpi-key">IPO pipeline (2025-26)</span><span class="kpi-val dim">14 companies</span></div>
+  </div>
+</div>
+
+<div class="sec">Investment by Sector — 2025 Projected</div>
+<div class="bar-chart">
+  <div class="bar-title">// <span>DEAL VALUE</span> $B · bubble size = deal count</div>
+  <div class="bars">
+    <div class="bar-row">
+      <div class="bar-label">Foundation Models</div>
+      <div class="bar-track"><div class="bar-fill" style="width:88%;--bcolor:#00FF50"></div></div>
+      <div class="bar-amount">$140B</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">AI Infrastructure</div>
+      <div class="bar-track"><div class="bar-fill" style="width:52%;--bcolor:#00CC40"></div></div>
+      <div class="bar-amount">$72B</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">Enterprise SaaS + AI</div>
+      <div class="bar-track"><div class="bar-fill" style="width:32%;--bcolor:#CCFF00"></div></div>
+      <div class="bar-amount">$44B</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">AI Agents &amp; Automation</div>
+      <div class="bar-track"><div class="bar-fill" style="width:24%;--bcolor:#80FF40"></div></div>
+      <div class="bar-amount">$28B</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">AI Hardware / Chips</div>
+      <div class="bar-track"><div class="bar-fill" style="width:20%;--bcolor:#40CC80"></div></div>
+      <div class="bar-amount">$22B</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">Robotics + Embodied AI</div>
+      <div class="bar-track"><div class="bar-fill" style="width:12%;--bcolor:#FF6B00"></div></div>
+      <div class="bar-amount warn">$14B</div>
+    </div>
+  </div>
+</div>
+
+<div class="sec">Largest Rounds — H1 2025</div>
+<table class="deal-table">
+  <thead>
+    <tr>
+      <th>Company</th>
+      <th>Category</th>
+      <th>Amount</th>
+      <th>Stage</th>
+      <th>Lead Investors</th>
+      <th>Valuation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>OpenAI</td>
+      <td>Foundation Model</td>
+      <td class="amount-cell big">$40B</td>
+      <td><span class="stage-pill stage-corp">Corp</span></td>
+      <td>SoftBank, Microsoft, UAE sovereign funds</td>
+      <td>$300B</td>
+    </tr>
+    <tr>
+      <td>Anthropic</td>
+      <td>Foundation Model</td>
+      <td class="amount-cell big">$3.5B</td>
+      <td><span class="stage-pill stage-c">Series E</span></td>
+      <td>Google, Spark Capital, General Catalyst</td>
+      <td>$61B</td>
+    </tr>
+    <tr>
+      <td>xAI (Grok)</td>
+      <td>Foundation Model</td>
+      <td class="amount-cell">$6B</td>
+      <td><span class="stage-pill stage-b">Series B</span></td>
+      <td>Andreessen Horowitz, Sequoia, Saudi PIF</td>
+      <td>$50B</td>
+    </tr>
+    <tr>
+      <td>CoreWeave</td>
+      <td>GPU Cloud Infrastructure</td>
+      <td class="amount-cell">$1.5B</td>
+      <td><span class="stage-pill stage-corp">IPO</span></td>
+      <td>Public — NYSE: CRWV</td>
+      <td>$23B</td>
+    </tr>
+    <tr>
+      <td>Figure AI</td>
+      <td>Humanoid Robotics</td>
+      <td class="amount-cell">$675M</td>
+      <td><span class="stage-pill stage-b">Series B</span></td>
+      <td>Microsoft, OpenAI, Amazon, Intel Capital</td>
+      <td>$2.6B</td>
+    </tr>
+    <tr>
+      <td>Mistral AI</td>
+      <td>Open Foundation Model</td>
+      <td class="amount-cell">$1.1B</td>
+      <td><span class="stage-pill stage-b">Series B</span></td>
+      <td>General Catalyst, Andreessen Horowitz</td>
+      <td>$6B</td>
+    </tr>
+    <tr>
+      <td>Harvey AI</td>
+      <td>Legal AI</td>
+      <td class="amount-cell">$300M</td>
+      <td><span class="stage-pill stage-c">Series C</span></td>
+      <td>Google, Sequoia, Kleiner Perkins</td>
+      <td>$1.5B</td>
+    </tr>
+    <tr>
+      <td>Perplexity AI</td>
+      <td>AI Search</td>
+      <td class="amount-cell">$500M</td>
+      <td><span class="stage-pill stage-c">Series C</span></td>
+      <td>SoftBank, NEA, IVP</td>
+      <td>$9B</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="sec">By Vertical</div>
+<div class="cat-grid">
+  <div class="cat">
+    <div class="cat-name">Foundation Models</div>
+    <div class="cat-total">$140B</div>
+    <div class="cat-delta delta-up">+120% YoY</div>
+    <div class="cat-desc">OpenAI, Anthropic, xAI, Mistral, Cohere dominate. Concentration risk: top 3 companies capture 82% of this category's capital.</div>
+  </div>
+  <div class="cat">
+    <div class="cat-name">AI Infrastructure</div>
+    <div class="cat-total">$72B</div>
+    <div class="cat-delta delta-up">+85% YoY</div>
+    <div class="cat-desc">GPU cloud (CoreWeave, Lambda), MLOps platforms, data pipelines, and vector databases. Nvidia ecosystem dominates hardware.</div>
+  </div>
+  <div class="cat">
+    <div class="cat-name">Enterprise AI Apps</div>
+    <div class="cat-total">$44B</div>
+    <div class="cat-delta delta-up">+42% YoY</div>
+    <div class="cat-desc">Vertical SaaS with AI core: legal, medical, finance, HR, code. Harvey, Glean, Writer, Cohere for Enterprise leading deals.</div>
+  </div>
+  <div class="cat">
+    <div class="cat-name">Robotics</div>
+    <div class="cat-total">$14B</div>
+    <div class="cat-delta delta-warn">+200% YoY</div>
+    <div class="cat-desc">Fastest growing category by growth rate. Figure, Apptronik, Physical Intelligence drawing VC and strategic capital. Still pre-scale.</div>
+  </div>
+</div>
+
+<div class="footer">
+  <div class="ftr">AIZFOGRAPHICS · AI FUNDING LANDSCAPE 2025 · TERMINAL EDITION<span class="cursor"></span></div>
+  <div class="ftr">Data: Crunchbase, PitchBook, public disclosures. H1 2025 actuals, H2 projected. Figures approximate.</div>
+</div>
+
+</div>
+</body>
+</html>
