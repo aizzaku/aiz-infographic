@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AI Models Quadrant 2025</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Merriweather:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@400;500;600;700&display=swap">
+<style>
+/* EDITORIAL STYLE — magazine, large type */
+:root {
+  --canvas:#0E0E0E;--panel:#161616;--elevated:#1E1E1E;
+  --border:rgba(255,255,255,0.07);
+  --text-primary:#F0F0F0;--text-secondary:#888;--text-muted:#444;
+  --a1:#F0F0F0;--accent:#E8C547;
+  --q-tl:#818CF8;--q-tr:#34D399;--q-bl:#F97316;--q-br:#EF4444;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#090909;font-family:'Montserrat',sans-serif;color:var(--text-primary)}
+.canvas{width:1920px;height:1080px;background:var(--canvas);padding:36px 56px 32px;position:relative;overflow:hidden;display:grid;grid-template-rows:auto auto 1fr auto}
+
+.hdr{display:flex;align-items:center;justify-content:space-between;padding-bottom:14px;border-bottom:1px solid var(--border);margin-bottom:20px}
+.hdr-brand{font:700 11px/1 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.2em;color:var(--text-muted)}.hdr-brand span{color:var(--accent)}
+.hdr-tags{display:flex;gap:8px}
+.pill{padding:4px 12px;border-radius:2px;font:600 10px/1 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.1em;background:rgba(232,197,71,0.1);border:1px solid rgba(232,197,71,0.25);color:var(--accent)}
+.pill-b{background:rgba(255,255,255,0.05);border-color:rgba(255,255,255,0.12);color:var(--text-secondary)}
+.hdr-meta{font:400 11px/1 'Montserrat',sans-serif;color:var(--text-muted);letter-spacing:.1em}
+
+.hero{display:grid;grid-template-columns:1fr auto;gap:32px;align-items:end;margin-bottom:24px}
+.hero-eyebrow{font:700 10px/1 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.22em;color:var(--accent);margin-bottom:10px}
+.hero-title{font:700 56px/.92 'Merriweather',serif;color:var(--text-primary);margin-bottom:12px}
+.hero-title em{font-style:italic;color:var(--accent)}
+.hero-sub{font:400 14px/1.7 'Merriweather',serif;color:var(--text-secondary);max-width:740px}
+.legend{display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+.leg-item{display:flex;align-items:center;gap:8px;font:500 11px/1 'Montserrat',sans-serif;color:var(--text-secondary)}
+.leg-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+
+/* QUADRANT */
+.quadrant-outer{position:relative;display:grid;grid-template-columns:44px 1fr;grid-template-rows:1fr 44px;gap:0}
+.y-label{grid-row:1;grid-column:1;display:flex;align-items:center;justify-content:center}
+.y-label-text{font:700 10px/1 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.16em;color:var(--text-muted);writing-mode:vertical-rl;transform:rotate(180deg)}
+.x-label{grid-row:2;grid-column:2;display:flex;align-items:center;justify-content:center;gap:0}
+.x-label-text{font:700 10px/1 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.16em;color:var(--text-muted)}
+.quadrant-grid{grid-row:1;grid-column:2;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:0;position:relative}
+
+/* axis lines */
+.quadrant-grid::before{content:'';position:absolute;left:50%;top:0;bottom:0;width:1px;background:var(--border);z-index:2}
+.quadrant-grid::after{content:'';position:absolute;top:50%;left:0;right:0;height:1px;background:var(--border);z-index:2}
+
+.quad{position:relative;padding:20px;border:1px solid var(--border);overflow:hidden}
+.quad-label{position:absolute;top:14px;font:700 10px/1 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.14em;opacity:.5}
+.quad-tl .quad-label{left:14px;color:var(--q-tl)}
+.quad-tr .quad-label{right:14px;color:var(--q-tr)}
+.quad-bl .quad-label{left:14px;color:var(--q-bl)}
+.quad-br .quad-label{right:14px;color:var(--q-br)}
+.quad-tl{border-color:rgba(129,140,248,0.15);background:rgba(129,140,248,0.02)}
+.quad-tr{border-color:rgba(52,211,153,0.15);background:rgba(52,211,153,0.02)}
+.quad-bl{border-color:rgba(249,115,22,0.15);background:rgba(249,115,22,0.02)}
+.quad-br{border-color:rgba(239,68,68,0.15);background:rgba(239,68,68,0.02)}
+
+/* Model bubbles */
+.model{position:absolute;transform:translate(-50%,-50%)}
+.model-bubble{border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:default;border:2px solid;position:relative}
+.model-name{position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:6px;font:600 10px/1 'Montserrat',sans-serif;white-space:nowrap;text-align:center;color:var(--text-primary)}
+.model-detail{font:400 9px/1 'Montserrat',sans-serif;color:var(--text-secondary);margin-top:2px;white-space:nowrap;text-align:center}
+.model-init{font:700 14px/1 'Montserrat',sans-serif}
+
+/* axis extremes */
+.ax-lo{position:absolute;font:600 9px/1 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted)}
+
+.footer{display:flex;justify-content:space-between;align-items:center;padding-top:12px;border-top:1px solid var(--border);margin-top:12px}
+.ftr{font:400 10px/1 'Montserrat',sans-serif;color:var(--text-muted);letter-spacing:.08em}
+</style>
+</head>
+<body>
+<div class="canvas">
+
+<div class="hdr">
+  <div class="hdr-brand"><span>AIZFOGRAPHICS</span> · AI Analysis</div>
+  <div class="hdr-tags"><div class="pill">Quadrant</div><div class="pill pill-b">Editorial</div></div>
+  <div class="hdr-meta">MODEL LANDSCAPE · Q2 2025</div>
+</div>
+
+<div class="hero">
+  <div>
+    <div class="hero-eyebrow">Strategic Analysis</div>
+    <div class="hero-title">AI Models: <em>Capability</em><br>vs. Cost Matrix</div>
+    <div class="hero-sub">Mapping the 2025 frontier model landscape by raw capability and cost-per-token. Bubble size reflects approximate context window. The ideal zone is top-left — high capability, low cost — a space that compresses every year as efficiency improves.</div>
+  </div>
+  <div class="legend">
+    <div class="leg-item"><div class="leg-dot" style="background:var(--q-tl)"></div>High cap, High cost</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--q-tr)"></div>High cap, Low cost</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--q-bl)"></div>Low cap, High cost</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--q-br)"></div>Low cap, Low cost</div>
+    <div class="leg-item" style="border-left:1px solid var(--border);padding-left:20px">Bubble size = context window</div>
+  </div>
+</div>
+
+<div class="quadrant-outer">
+  <div class="y-label">
+    <div class="y-label-text">Capability (benchmark score) &uarr; higher</div>
+  </div>
+
+  <div class="quadrant-grid">
+    <!-- Axis extremes -->
+    <div class="ax-lo" style="top:8px;left:50%;transform:translateX(-50%)">HIGH CAPABILITY</div>
+    <div class="ax-lo" style="bottom:8px;left:50%;transform:translateX(-50%)">LOWER CAPABILITY</div>
+
+    <!-- TL: High capability, High cost -->
+    <div class="quad quad-tl">
+      <div class="quad-label">HIGH COST</div>
+
+      <!-- Claude 4 Opus -->
+      <div class="model" style="left:45%;top:35%">
+        <div class="model-bubble" style="width:72px;height:72px;background:rgba(129,140,248,0.12);border-color:#818CF8">
+          <div class="model-init" style="color:#818CF8">Op4</div>
+        </div>
+        <div class="model-name">Claude 4 Opus</div>
+        <div class="model-detail">$15/Mtok · 200K ctx</div>
+      </div>
+
+      <!-- GPT-4o -->
+      <div class="model" style="left:72%;top:55%">
+        <div class="model-bubble" style="width:60px;height:60px;background:rgba(129,140,248,0.08);border-color:rgba(129,140,248,0.5)">
+          <div class="model-init" style="color:#818CF8;font-size:12px">4o</div>
+        </div>
+        <div class="model-name">GPT-4o</div>
+        <div class="model-detail">$5/Mtok · 128K ctx</div>
+      </div>
+
+      <!-- o3 -->
+      <div class="model" style="left:25%;top:20%">
+        <div class="model-bubble" style="width:64px;height:64px;background:rgba(129,140,248,0.1);border-color:rgba(129,140,248,0.6)">
+          <div class="model-init" style="color:#818CF8;font-size:12px">o3</div>
+        </div>
+        <div class="model-name">OpenAI o3</div>
+        <div class="model-detail">$60/Mtok · 200K ctx</div>
+      </div>
+
+    </div>
+
+    <!-- TR: High capability, Low cost — the "sweet spot" -->
+    <div class="quad quad-tr">
+      <div class="quad-label">LOW COST</div>
+
+      <!-- Gemini 2.5 Pro -->
+      <div class="model" style="left:30%;top:30%">
+        <div class="model-bubble" style="width:78px;height:78px;background:rgba(52,211,153,0.12);border-color:#34D399">
+          <div class="model-init" style="color:#34D399;font-size:11px">G2P</div>
+        </div>
+        <div class="model-name">Gemini 2.5 Pro</div>
+        <div class="model-detail">$7/Mtok · 1M ctx</div>
+      </div>
+
+      <!-- Claude Sonnet 4.6 -->
+      <div class="model" style="left:60%;top:45%">
+        <div class="model-bubble" style="width:62px;height:62px;background:rgba(52,211,153,0.10);border-color:rgba(52,211,153,0.6)">
+          <div class="model-init" style="color:#34D399;font-size:11px">S4</div>
+        </div>
+        <div class="model-name">Claude Sonnet 4.6</div>
+        <div class="model-detail">$3/Mtok · 200K ctx</div>
+      </div>
+
+      <!-- Grok 3 -->
+      <div class="model" style="left:80%;top:28%">
+        <div class="model-bubble" style="width:56px;height:56px;background:rgba(52,211,153,0.08);border-color:rgba(52,211,153,0.4)">
+          <div class="model-init" style="color:#34D399;font-size:11px">G3</div>
+        </div>
+        <div class="model-name">Grok 3</div>
+        <div class="model-detail">$5/Mtok · 131K ctx</div>
+      </div>
+
+      <!-- SWEET SPOT label -->
+      <div style="position:absolute;right:16px;bottom:16px;background:rgba(52,211,153,0.1);border:1px solid rgba(52,211,153,0.25);padding:6px 12px;border-radius:4px">
+        <div style="font:700 10px/1 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.1em;color:#34D399">Sweet Spot</div>
+        <div style="font:400 10px/1 'Montserrat',sans-serif;color:var(--text-secondary);margin-top:3px">High cap, low cost</div>
+      </div>
+    </div>
+
+    <!-- BL: Low capability, High cost -->
+    <div class="quad quad-bl">
+      <div class="quad-label">HIGH COST</div>
+
+      <!-- Specialized/domain models -->
+      <div class="model" style="left:40%;top:45%">
+        <div class="model-bubble" style="width:52px;height:52px;background:rgba(249,115,22,0.1);border-color:#F97316">
+          <div class="model-init" style="color:#F97316;font-size:11px">Spc</div>
+        </div>
+        <div class="model-name">Domain-Specific</div>
+        <div class="model-detail">Med/Legal fine-tunes</div>
+      </div>
+
+      <div class="model" style="left:70%;top:65%">
+        <div class="model-bubble" style="width:44px;height:44px;background:rgba(249,115,22,0.08);border-color:rgba(249,115,22,0.5)">
+          <div class="model-init" style="color:#F97316;font-size:10px">Cp2</div>
+        </div>
+        <div class="model-name">Cohere Cmd R+</div>
+        <div class="model-detail">$3/Mtok · RAG opt.</div>
+      </div>
+
+    </div>
+
+    <!-- BR: Low capability, Low cost — efficient workhorses -->
+    <div class="quad quad-br">
+      <div class="quad-label">LOW COST</div>
+
+      <!-- Haiku -->
+      <div class="model" style="left:25%;top:30%">
+        <div class="model-bubble" style="width:56px;height:56px;background:rgba(239,68,68,0.1);border-color:#EF4444">
+          <div class="model-init" style="color:#EF4444;font-size:11px">H4</div>
+        </div>
+        <div class="model-name">Claude Haiku 4.5</div>
+        <div class="model-detail">$0.80/Mtok · fast</div>
+      </div>
+
+      <!-- GPT-4o mini -->
+      <div class="model" style="left:55%;top:50%">
+        <div class="model-bubble" style="width:50px;height:50px;background:rgba(239,68,68,0.08);border-color:rgba(239,68,68,0.5)">
+          <div class="model-init" style="color:#EF4444;font-size:10px">4m</div>
+        </div>
+        <div class="model-name">GPT-4o mini</div>
+        <div class="model-detail">$0.15/Mtok · fast</div>
+      </div>
+
+      <!-- Llama 70B -->
+      <div class="model" style="left:78%;top:35%">
+        <div class="model-bubble" style="width:48px;height:48px;background:rgba(239,68,68,0.08);border-color:rgba(239,68,68,0.4)">
+          <div class="model-init" style="color:#EF4444;font-size:10px">L3</div>
+        </div>
+        <div class="model-name">Llama 3.3 70B</div>
+        <div class="model-detail">Open weight · free</div>
+      </div>
+
+      <!-- Mistral Small -->
+      <div class="model" style="left:40%;top:72%">
+        <div class="model-bubble" style="width:44px;height:44px;background:rgba(239,68,68,0.07);border-color:rgba(239,68,68,0.35)">
+          <div class="model-init" style="color:#EF4444;font-size:10px">Ms</div>
+        </div>
+        <div class="model-name">Mistral Small</div>
+        <div class="model-detail">$0.20/Mtok · fast</div>
+      </div>
+
+    </div>
+
+    <!-- Center labels -->
+    <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:3;width:80px;height:80px;background:var(--canvas);border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center">
+      <div style="font:600 8px/1.3 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);text-align:center">Cost<br>vs<br>Power</div>
+    </div>
+  </div>
+
+  <div class="x-label">
+    <div style="display:flex;width:100%;justify-content:space-between;padding:0 20px;align-items:center">
+      <div class="x-label-text" style="opacity:.5">EXPENSIVE &larr;</div>
+      <div class="x-label-text">Cost per 1M Tokens</div>
+      <div class="x-label-text" style="opacity:.5">&rarr; CHEAP</div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <div class="ftr">AIZFOGRAPHICS · AI MODEL QUADRANT · EDITORIAL EDITION Q2 2025</div>
+  <div class="ftr">Capability based on MMLU, HumanEval, MATH benchmarks. Pricing from public API docs. Positions approximate.</div>
+</div>
+
+</div>
+</body>
+</html>

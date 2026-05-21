@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>The AI Iceberg — What You Don't See</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* BLUEPRINT */
+:root {
+  --canvas:#0A1628;--panel:rgba(96,165,250,0.06);--elevated:rgba(96,165,250,0.1);
+  --border:rgba(96,165,250,0.15);--border-strong:rgba(96,165,250,0.35);
+  --text-primary:#E0EEFF;--text-secondary:#7B9CC8;--text-muted:#3A5070;
+  --a1:#60A5FA;--a2:#38BDF8;--a3:#34D399;--a4:#F59E0B;--a5:#F472B6;
+  --grid:rgba(96,165,250,0.06);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#060F1E;font-family:'Montserrat',sans-serif;color:var(--text-primary)}
+.canvas{width:1920px;height:1080px;background:var(--canvas);padding:36px 56px 32px;position:relative;overflow:hidden;display:flex;flex-direction:column}
+.canvas::before{content:'';position:absolute;inset:0;background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:48px 48px;pointer-events:none}
+
+.hdr{display:flex;align-items:center;justify-content:space-between;padding-bottom:14px;border-bottom:1px solid var(--border-strong);margin-bottom:20px;flex-shrink:0}
+.hdr-brand{font:700 11px/1 'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.15em;color:var(--text-muted)}.hdr-brand span{color:var(--a1)}
+.hdr-tags{display:flex;gap:8px}
+.pill{padding:4px 12px;border:1px solid var(--a1);border-radius:3px;font:600 10px/1 'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.1em;color:var(--a1)}
+.pill-b{border-color:var(--a2);color:var(--a2)}
+.hdr-meta{font:400 11px/1 'JetBrains Mono',monospace;color:var(--text-muted);letter-spacing:.08em}
+
+.hero{display:grid;grid-template-columns:1fr auto;gap:32px;align-items:center;margin-bottom:18px;flex-shrink:0}
+.hero-label{font:700 11px/1 'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.15em;color:var(--a1);margin-bottom:10px}
+.hero-title{font:400 62px/.9 'Bebas Neue',sans-serif;letter-spacing:.04em;color:var(--text-primary);margin-bottom:10px}
+.hero-sub{font:400 13px/1.65 'Montserrat',sans-serif;color:var(--text-secondary);max-width:860px}
+.hero-kpis{display:flex;gap:10px}
+.hkpi{background:var(--panel);border:1px solid var(--border);border-radius:3px;padding:14px 20px;text-align:center}
+.hkpi-val{font:400 28px/1 'Bebas Neue',sans-serif;letter-spacing:.04em;color:var(--a1);margin-bottom:4px}
+.hkpi-lbl{font:600 9px/1 'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted)}
+
+/* ICEBERG */
+.iceberg-wrap{flex:1;display:grid;grid-template-columns:580px 1fr;gap:40px;min-height:0}
+
+/* Left: iceberg visual */
+.iceberg-visual{position:relative;display:flex;flex-direction:column}
+
+.waterline{height:3px;background:linear-gradient(90deg,transparent,var(--a2),var(--a1),var(--a2),transparent);position:relative;flex-shrink:0;margin:0 10px}
+.waterline::before{content:'SURFACE';position:absolute;right:-8px;top:-8px;font:600 9px/1 'JetBrains Mono',monospace;color:var(--a2);letter-spacing:.1em}
+.waterline-ripple{height:16px;background:linear-gradient(180deg,rgba(56,189,248,0.12),transparent);flex-shrink:0;margin:0 10px}
+
+.tip-zone{flex-shrink:0;padding:12px 0}
+.tip-label{font:600 10px/1 'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.1em;color:var(--a2);margin-bottom:8px;padding-left:10px}
+.visible-items{display:flex;flex-wrap:wrap;gap:6px;padding:0 10px 12px}
+.vi{background:rgba(56,189,248,0.1);border:1px solid rgba(56,189,248,0.35);border-radius:3px;padding:5px 10px;font:600 10px/1 'JetBrains Mono',monospace;color:var(--a2)}
+
+.submerged-zone{flex:1;position:relative;padding-top:10px}
+.sub-label{font:600 10px/1 'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);margin-bottom:8px;padding:0 10px}
+
+.depth-band{margin:0 10px 8px;padding:8px 12px;border-radius:3px;border-left:3px solid;position:relative}
+.db1{background:rgba(96,165,250,0.07);border-color:#60A5FA;depth:1}
+.db2{background:rgba(99,102,241,0.07);border-color:#818CF8}
+.db3{background:rgba(168,85,247,0.07);border-color:#A855F7}
+.db4{background:rgba(236,72,153,0.07);border-color:#EC4899}
+.db5{background:rgba(239,68,68,0.08);border-color:#EF4444}
+
+.db-depth{position:absolute;right:10px;top:50%;transform:translateY(-50%);font:600 9px/1 'JetBrains Mono',monospace;color:var(--text-muted)}
+.db-title{font:700 11px/1 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.06em;color:var(--text-primary);margin-bottom:3px}
+.db-items{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px}
+.db-item{font:400 10px/1 'JetBrains Mono',monospace;color:var(--text-secondary);padding:2px 6px;background:rgba(255,255,255,0.04);border-radius:2px}
+
+/* iceberg SVG shape */
+.ice-shape-wrap{position:relative;margin:0 10px}
+
+/* Right: detail panels */
+.iceberg-right{display:flex;flex-direction:column;gap:10px;justify-content:center}
+.detail-group{background:var(--panel);border:1px solid var(--border);border-radius:4px;padding:16px 18px}
+.dg-header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.dg-icon{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.dg-title{font:700 11px/1 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.1em;color:var(--text-primary)}
+.dg-stat{font:400 18px/1 'Bebas Neue',sans-serif;letter-spacing:.06em;margin-left:auto}
+.dg-rows{display:flex;flex-direction:column;gap:6px}
+.dg-row{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+.dg-row-label{font:700 10px/1.3 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.06em;color:var(--text-secondary);flex:1}
+.dg-row-val{font:400 10px/1.3 'Montserrat',sans-serif;color:var(--text-secondary);flex:2;text-align:right}
+
+.callout{background:rgba(96,165,250,0.06);border:1px solid var(--border-strong);border-radius:4px;padding:14px 18px;display:flex;gap:14px;align-items:flex-start}
+.callout-num{font:400 42px/1 'Bebas Neue',sans-serif;letter-spacing:.04em;color:var(--a1);flex-shrink:0}
+.callout-body{font:400 12px/1.55 'Montserrat',sans-serif;color:var(--text-secondary)}
+.callout-body strong{color:var(--text-primary);font-weight:700}
+
+.footer{display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px solid var(--border-strong);margin-top:8px;flex-shrink:0}
+.ftr{font:400 10px/1 'JetBrains Mono',monospace;color:var(--text-muted);letter-spacing:.08em}
+</style>
+</head>
+<body>
+<div class="canvas">
+
+<div class="hdr">
+  <div class="hdr-brand"><span>AIZFOGRAPHICS</span> · AI Systems</div>
+  <div class="hdr-tags"><div class="pill">Iceberg</div><div class="pill pill-b">Blueprint</div></div>
+  <div class="hdr-meta">AI SYSTEMS ARCHITECTURE · HIDDEN COMPLEXITY EDITION</div>
+</div>
+
+<div class="hero">
+  <div>
+    <div class="hero-label">AI Infrastructure</div>
+    <div class="hero-title">THE AI ICEBERG:<br>WHAT YOU DON'T SEE</div>
+    <div class="hero-sub">Every AI chat interface hides an enormous stack beneath the surface. What looks like a chatbox rests on petabytes of training data, thousands of GPUs, millions of human labels, alignment research, safety systems, and infrastructure decisions made years before you typed your first message.</div>
+  </div>
+  <div class="hero-kpis">
+    <div class="hkpi"><div class="hkpi-val" style="color:var(--a2)">~5%</div><div class="hkpi-lbl">Visible surface</div></div>
+    <div class="hkpi"><div class="hkpi-val" style="color:var(--a1)">$1B+</div><div class="hkpi-lbl">Hidden infra cost</div></div>
+    <div class="hkpi"><div class="hkpi-val" style="color:var(--a3)">5+ yrs</div><div class="hkpi-lbl">Build timeline</div></div>
+  </div>
+</div>
+
+<div class="iceberg-wrap">
+
+  <!-- Left: Iceberg Visual -->
+  <div class="iceberg-visual">
+
+    <!-- Visible surface -->
+    <div class="tip-zone">
+      <div class="tip-label">// visible — what users see</div>
+      <div class="visible-items">
+        <div class="vi">Chat Interface</div>
+        <div class="vi">API Endpoints</div>
+        <div class="vi">Image Generation</div>
+        <div class="vi">Code Completion</div>
+        <div class="vi">Voice Assistants</div>
+        <div class="vi">Pricing / Rate Limits</div>
+        <div class="vi">System Prompt</div>
+      </div>
+    </div>
+
+    <!-- Waterline -->
+    <div class="waterline"></div>
+    <div class="waterline-ripple"></div>
+
+    <!-- Submerged layers -->
+    <div class="submerged-zone">
+      <div class="sub-label">// submerged — the hidden 95%</div>
+
+      <div class="depth-band db1">
+        <div class="db-title">Safety + Output Filters</div>
+        <div class="db-items">
+          <div class="db-item">Content classifiers</div>
+          <div class="db-item">Jailbreak detection</div>
+          <div class="db-item">Toxic output blockers</div>
+          <div class="db-item">PII scrubbers</div>
+        </div>
+        <div class="db-depth">Depth 1</div>
+      </div>
+
+      <div class="depth-band db2">
+        <div class="db-title">Instruction Fine-tuning + RLHF</div>
+        <div class="db-items">
+          <div class="db-item">500K+ labeled examples</div>
+          <div class="db-item">Reward model training</div>
+          <div class="db-item">Preference datasets</div>
+          <div class="db-item">Human rater workforce</div>
+        </div>
+        <div class="db-depth">Depth 2</div>
+      </div>
+
+      <div class="depth-band db3">
+        <div class="db-title">Constitutional AI + Alignment Research</div>
+        <div class="db-items">
+          <div class="db-item">Harmlessness principles</div>
+          <div class="db-item">Helpfulness vs. safety tradeoffs</div>
+          <div class="db-item">Red team evaluations</div>
+          <div class="db-item">Interpretability research</div>
+        </div>
+        <div class="db-depth">Depth 3</div>
+      </div>
+
+      <div class="depth-band db4">
+        <div class="db-title">Pre-Training Infrastructure</div>
+        <div class="db-items">
+          <div class="db-item">10T+ token corpus</div>
+          <div class="db-item">Data curation pipelines</div>
+          <div class="db-item">Dedup + quality filters</div>
+          <div class="db-item">Distributed training clusters</div>
+          <div class="db-item">10,000+ A100/H100 GPUs</div>
+        </div>
+        <div class="db-depth">Depth 4</div>
+      </div>
+
+      <div class="depth-band db5">
+        <div class="db-title">Physical + Organizational Substrate</div>
+        <div class="db-items">
+          <div class="db-item">Data centers (GW scale)</div>
+          <div class="db-item">Custom ASIC chips</div>
+          <div class="db-item">500MW+ power draw</div>
+          <div class="db-item">Semiconductor supply chain</div>
+          <div class="db-item">100M+ kg CO₂ equivalent</div>
+        </div>
+        <div class="db-depth">Depth 5</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Right: Detail panels -->
+  <div class="iceberg-right">
+
+    <div class="callout">
+      <div class="callout-num" style="color:var(--a2)">95%</div>
+      <div class="callout-body">Of the cost, compute, and engineering effort behind an LLM is invisible to end users. A single GPT-4 class model required <strong>~$100M in compute</strong> to train, produced by <strong>thousands of contractors</strong> labeling data, and sits atop <strong>decades of academic research</strong> in deep learning, transformers, and scaling theory.</div>
+    </div>
+
+    <div class="detail-group" style="--dc-color:#60A5FA">
+      <div class="dg-header"><div class="dg-icon" style="background:#60A5FA"></div><div class="dg-title">Training Compute Breakdown</div><div class="dg-stat" style="color:#60A5FA">$100–500M</div></div>
+      <div class="dg-rows">
+        <div class="dg-row"><div class="dg-row-label">Pre-training (base model)</div><div class="dg-row-val">~70% of total compute budget</div></div>
+        <div class="dg-row"><div class="dg-row-label">SFT + RLHF + alignment</div><div class="dg-row-val">~15–20% — far cheaper but critical</div></div>
+        <div class="dg-row"><div class="dg-row-label">Evaluation + red teaming</div><div class="dg-row-val">~5–10% — often underbudgeted</div></div>
+        <div class="dg-row"><div class="dg-row-label">Inference (serving, ongoing)</div><div class="dg-row-val">Can exceed training cost at scale</div></div>
+      </div>
+    </div>
+
+    <div class="detail-group">
+      <div class="dg-header"><div class="dg-icon" style="background:#818CF8"></div><div class="dg-title">Human Labor in the Stack</div><div class="dg-stat" style="color:#818CF8">Millions</div></div>
+      <div class="dg-rows">
+        <div class="dg-row"><div class="dg-row-label">Data labelers / annotators</div><div class="dg-row-val">100K–500K people globally (Scale AI, Surge AI, Remotasks)</div></div>
+        <div class="dg-row"><div class="dg-row-label">RLHF preference raters</div><div class="dg-row-val">Thousands per model — rank outputs for quality</div></div>
+        <div class="dg-row"><div class="dg-row-label">Red team evaluators</div><div class="dg-row-val">Internal + external — find failure modes pre-release</div></div>
+        <div class="dg-row"><div class="dg-row-label">Content trauma reviewers</div><div class="dg-row-val">Filter training data — significant mental health cost</div></div>
+      </div>
+    </div>
+
+    <div class="detail-group">
+      <div class="dg-header"><div class="dg-icon" style="background:#34D399"></div><div class="dg-title">Environmental Footprint</div><div class="dg-stat" style="color:#34D399">Growing Fast</div></div>
+      <div class="dg-rows">
+        <div class="dg-row"><div class="dg-row-label">GPT-3 training run</div><div class="dg-row-val">~552 tonnes CO₂ — equivalent to 120 cars/year</div></div>
+        <div class="dg-row"><div class="dg-row-label">Inference at scale (daily)</div><div class="dg-row-val">ChatGPT ≈ 1 GWh/day — a small city's consumption</div></div>
+        <div class="dg-row"><div class="dg-row-label">Water cooling (per query)</div><div class="dg-row-val">~500ml per 10–50 prompt-answer pairs (est.)</div></div>
+        <div class="dg-row"><div class="dg-row-label">Industry growth trend</div><div class="dg-row-val">AI energy use could triple by 2030 (IEA forecast)</div></div>
+      </div>
+    </div>
+
+    <div class="detail-group">
+      <div class="dg-header"><div class="dg-icon" style="background:#F59E0B"></div><div class="dg-title">What Makes Frontier Different</div><div class="dg-stat" style="color:#F59E0B">Scale</div></div>
+      <div class="dg-rows">
+        <div class="dg-row"><div class="dg-row-label">Parameters</div><div class="dg-row-val">100B–1T+ — emergent capabilities appear non-linearly</div></div>
+        <div class="dg-row"><div class="dg-row-label">Scaling laws</div><div class="dg-row-val">Chinchilla: compute-optimal token/param ratio matters most</div></div>
+        <div class="dg-row"><div class="dg-row-label">Training stability</div><div class="dg-row-val">Loss spikes, gradient clipping, LR schedules are black arts</div></div>
+        <div class="dg-row"><div class="dg-row-label">The secret sauce</div><div class="dg-row-val">Data quality + curation often beats raw scale in practice</div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="footer">
+  <div class="ftr">AIZFOGRAPHICS · THE AI ICEBERG · HIDDEN COMPLEXITY EDITION</div>
+  <div class="ftr">Sources: OpenAI, Anthropic, DeepMind technical reports; IEA AI Energy Outlook 2024; Strubell et al. 2019; TIME investigation on data labeling.</div>
+</div>
+
+</div>
+</body>
+</html>

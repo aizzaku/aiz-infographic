@@ -5,6 +5,16 @@ A Claude Code skill that turns data and text into polished, self-contained HTML 
 <br>
 
 <p align="center">
+  <img src="examples/skill-banner.png" width="100%" alt="aiz-infographic — Claude Code skill banner">
+</p>
+
+<br>
+
+---
+
+## Examples
+
+<p align="center">
   <img src="examples/ai-agents-2025.png" width="49%" alt="State of AI Agents 2025 — aizfographics style">
   <img src="examples/humanoid-robots-race.png" width="49%" alt="Humanoid Robots Race — blueprint style">
 </p>
@@ -17,6 +27,21 @@ A Claude Code skill that turns data and text into polished, self-contained HTML 
 <p align="center">
   <img src="examples/longevity-science-map.png" width="49%" alt="Longevity Science Map — glassmorphism style">
   <img src="examples/industrial-robotics-rise.png" width="49%" alt="Rise of Industrial Robotics — cyberpunk style">
+</p>
+
+<p align="center">
+  <img src="examples/llm-training-pipeline.png" width="49%" alt="LLM Training Pipeline — flow diagram — aizfographics style">
+  <img src="examples/drug-discovery-funnel.png" width="49%" alt="Drug Discovery Funnel — pharma pipeline — clean minimal style">
+</p>
+
+<p align="center">
+  <img src="examples/ai-model-quadrant.png" width="49%" alt="AI Models Quadrant — capability vs cost — editorial dark style">
+  <img src="examples/ai-roadmap-2030.png" width="49%" alt="AI Development Roadmap 2025–2030 — forge style">
+</p>
+
+<p align="center">
+  <img src="examples/alphafold-circular-flow.png" width="49%" alt="How AlphaFold Works — circular flow — glassmorphism style">
+  <img src="examples/ai-iceberg-model.png" width="49%" alt="The AI Iceberg — hidden complexity — blueprint style">
 </p>
 
 <br>
@@ -104,6 +129,7 @@ When you're happy with the result, say `done`, `export`, `looks good`, or `ship 
 | `game-overview` | Game mechanics, economy, faction comparisons |
 | `game-mechanics` | Loop diagrams, reward structures, progression trees |
 | `collection-showcase` | Item galleries with rarity and trait breakdowns |
+| `compact-growth-hacking` | Compact single-page growth playbooks |
 
 Unmapped content types still work — the skill picks the best canvas and section patterns for what you provide.
 
@@ -115,13 +141,14 @@ Unmapped content types still work — the skill picks the best canvas and sectio
 
 | Style | Look | Used in example above |
 |---|---|---|
-| `aizfographics-style` | Dark, bold, gradient glow. The default. | AI Agents |
-| `blueprint` | Engineering schematic, grid lines, technical | Humanoid Robots |
-| `clean-minimal` | Light background, generous whitespace | CRISPR explainer |
+| `aizfographics-style` | Dark, bold, gradient glow. The default. | AI Agents · LLM Pipeline |
+| `blueprint` | Engineering schematic, grid lines, technical | Humanoid Robots · AI Iceberg |
+| `clean-minimal` | Light background, generous whitespace | CRISPR explainer · Drug Discovery |
 | `terminal` | Monospace, green-on-black, scanlines | AI Funding |
-| `glassmorphism` | Frosted glass panels on dark gradient | Longevity Science |
+| `glassmorphism` | Frosted glass panels on dark gradient | Longevity Science · AlphaFold |
 | `cyberpunk` | Neon cyan + pink on deep black | Industrial Robotics |
-| `editorial` | Magazine layout, large type, long-form | — |
+| `editorial` | Magazine layout, large type, long-form | AI Model Quadrant |
+| `forge` | Dark metallic, industrial orange/amber | AI Roadmap 2030 |
 | `scrapbook` | Physical evidence aesthetic, warm tones | — |
 | `ash` | Monochrome editorial, clean | — |
 | `obsidian-ledger` | Antique accounting, serif | — |
@@ -140,7 +167,7 @@ The skill uses a 5-layer reference system to compose infographics. You never nee
 | Layer | Role |
 |---|---|
 | **Canvas** | Page architecture — header, hero, footer, grid slots. Options: `bento-box`, `editorial`, `dashboard`, `poster` |
-| **Snippet** | Section pattern plugged into a canvas slot — timeline, process-flow, comparison, network-graph, sankey, kpi-strip, and 21 more |
+| **Snippet** | Section pattern plugged into a canvas slot — timeline, process-flow, comparison, network-graph, sankey, funnel, quadrant, roadmap, circular-flow, iceberg, and 17 more |
 | **Style** | Visual identity — colors, fonts, spacing tokens. 26 available |
 | **Element** | Atomic UI primitives — charts, icons, connectors, badges, sparklines. 14 element files |
 | **Template** | Preset combining canvas + style + snippet picks for a content type. 12 templates |

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AI Development Roadmap 2025–2030</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;500;600;700&display=swap">
+<style>
+/* FORGE STYLE */
+:root {
+  --canvas:#0D0B08;--panel:rgba(255,255,255,0.04);--elevated:rgba(255,255,255,0.07);
+  --border:rgba(249,115,22,0.18);--border-strong:rgba(249,115,22,0.32);
+  --text-primary:#E8E0D0;--text-secondary:#A89880;--text-muted:#665544;
+  --a1:#F97316;--a2:#FBBF24;--a3:#EF4444;--a4:#34D399;--a5:#818CF8;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#1A1208;font-family:'Montserrat',sans-serif;color:var(--text-primary)}
+.canvas{width:1920px;height:1080px;background:var(--canvas);padding:36px 56px 32px;position:relative;overflow:hidden;display:flex;flex-direction:column}
+.canvas::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 50% at 50% 100%,rgba(249,115,22,0.06) 0%,transparent 70%);pointer-events:none}
+
+.hdr{display:flex;align-items:center;justify-content:space-between;padding-bottom:14px;border-bottom:1px solid var(--border-strong);margin-bottom:20px;flex-shrink:0}
+.hdr-brand{font:700 11px/1 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.2em;color:var(--text-muted)}.hdr-brand span{color:var(--a1)}
+.hdr-tags{display:flex;gap:8px}
+.pill{padding:4px 12px;border-radius:3px;font:600 10px/1 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.1em;background:var(--a1);color:#000}
+.pill-b{background:transparent;color:var(--a2);border:1px solid var(--a2)}
+.hdr-meta{font:400 11px/1 'Montserrat',sans-serif;color:var(--text-muted);letter-spacing:.08em}
+
+.hero{display:grid;grid-template-columns:1fr auto;gap:32px;align-items:center;margin-bottom:24px;flex-shrink:0}
+.hero-label{font:700 11px/1 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.18em;color:var(--a1);margin-bottom:10px}
+.hero-title{font:400 64px/.9 'Bebas Neue',sans-serif;letter-spacing:.04em;color:var(--text-primary);margin-bottom:10px}
+.hero-title span{color:var(--a2)}
+.hero-sub{font:400 13px/1.65 'Montserrat',sans-serif;color:var(--text-secondary);max-width:860px}
+.hero-kpis{display:flex;gap:10px}
+.hkpi{background:var(--panel);border:1px solid var(--border);border-radius:4px;padding:14px 20px;text-align:center;min-width:120px}
+.hkpi-val{font:400 30px/1 'Bebas Neue',sans-serif;letter-spacing:.04em;color:var(--a1);margin-bottom:4px}
+.hkpi-lbl{font:600 9px/1 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted)}
+
+/* ROADMAP */
+.roadmap-wrap{flex:1;display:flex;flex-direction:column;justify-content:center;gap:0;min-height:0}
+
+.timeline-row{position:relative;display:flex;align-items:center;margin-bottom:0}
+.timeline-bar{flex:1;height:6px;background:linear-gradient(90deg,#F97316,#FBBF24,#EF4444);border-radius:3px;position:relative}
+.timeline-bar::before{content:'';position:absolute;inset:0;background:inherit;filter:blur(8px);opacity:0.5;border-radius:3px}
+
+.phases-top{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-bottom:20px}
+.phases-bot{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-top:20px}
+
+.phase-card{background:var(--panel);border:1px solid var(--border);border-radius:4px;padding:18px 20px;position:relative}
+.phase-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;border-radius:4px 4px 0 0}
+.phase-card.p1::before{background:#F97316}
+.phase-card.p2::before{background:#FB923C}
+.phase-card.p3::before{background:#FBBF24}
+.phase-card.p4::before{background:#F59E0B}
+.phase-card.p5::before{background:#EF4444}
+
+.phase-year{font:400 36px/1 'Bebas Neue',sans-serif;letter-spacing:.06em;margin-bottom:4px}
+.p1 .phase-year{color:#F97316}
+.p2 .phase-year{color:#FB923C}
+.p3 .phase-year{color:#FBBF24}
+.p4 .phase-year{color:#F59E0B}
+.p5 .phase-year{color:#EF4444}
+
+.phase-name{font:700 11px/1 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.1em;color:var(--text-primary);margin-bottom:10px}
+.phase-items{display:flex;flex-direction:column;gap:5px}
+.phase-item{font:400 11px/1.4 'Montserrat',sans-serif;color:var(--text-secondary);padding-left:12px;position:relative}
+.phase-item::before{content:'›';position:absolute;left:0;color:var(--a1);font-weight:700}
+
+.phase-dot{width:14px;height:14px;border-radius:50%;position:absolute;top:50%;transform:translateY(-50%);border:2px solid var(--canvas);z-index:2}
+.phases-top .phase-card{align-self:end}
+
+.dot-row{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;position:relative;z-index:2}
+.dot-cell{display:flex;justify-content:center;position:relative}
+.dot-cell::after{content:'';width:14px;height:14px;border-radius:50%;display:block;border:3px solid var(--canvas);box-shadow:0 0 12px currentColor}
+.dot-cell.p1::after{background:#F97316;color:#F97316}
+.dot-cell.p2::after{background:#FB923C;color:#FB923C}
+.dot-cell.p3::after{background:#FBBF24;color:#FBBF24}
+.dot-cell.p4::after{background:#F59E0B;color:#F59E0B}
+.dot-cell.p5::after{background:#EF4444;color:#EF4444}
+.dot-cell-line{position:absolute;left:50%;top:-20px;width:2px;height:20px;background:var(--border-strong)}
+.dot-cell-line-bot{position:absolute;left:50%;top:14px;width:2px;height:20px;background:var(--border-strong)}
+
+.status-badge{display:inline-block;padding:2px 8px;border-radius:2px;font:700 9px/1 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+.status-now{background:rgba(249,115,22,0.2);color:#F97316;border:1px solid rgba(249,115,22,0.4)}
+.status-near{background:rgba(251,191,36,0.15);color:#FBBF24;border:1px solid rgba(251,191,36,0.3)}
+.status-future{background:rgba(239,68,68,0.12);color:#EF4444;border:1px solid rgba(239,68,68,0.25)}
+
+.footer{display:flex;justify-content:space-between;align-items:center;padding-top:12px;border-top:1px solid var(--border-strong);margin-top:16px;flex-shrink:0}
+.ftr{font:400 10px/1 'Montserrat',sans-serif;color:var(--text-muted);letter-spacing:.08em}
+</style>
+</head>
+<body>
+<div class="canvas">
+
+<div class="hdr">
+  <div class="hdr-brand"><span>AIZFOGRAPHICS</span> · AI Intelligence</div>
+  <div class="hdr-tags"><div class="pill">Roadmap</div><div class="pill pill-b">Forge</div></div>
+  <div class="hdr-meta">ARTIFICIAL INTELLIGENCE · 2025–2030 OUTLOOK</div>
+</div>
+
+<div class="hero">
+  <div>
+    <div class="hero-label">Strategic Foresight</div>
+    <div class="hero-title">AI DEVELOPMENT<br>ROADMAP <span>2025–2030</span></div>
+    <div class="hero-sub">From today's frontier models to potential AGI threshold events — five phases mapping how AI capabilities, deployment patterns, and societal integration are expected to evolve over the next five years. Based on public research trajectories, lab disclosures, and benchmark progression rates.</div>
+  </div>
+  <div class="hero-kpis">
+    <div class="hkpi"><div class="hkpi-val" style="color:var(--a1)">5</div><div class="hkpi-lbl">Dev Phases</div></div>
+    <div class="hkpi"><div class="hkpi-val" style="color:var(--a2)">~$1T</div><div class="hkpi-lbl">Capex 2025-30</div></div>
+    <div class="hkpi"><div class="hkpi-val" style="color:var(--a3)">2030</div><div class="hkpi-lbl">AGI Horizon</div></div>
+  </div>
+</div>
+
+<div class="roadmap-wrap">
+
+  <!-- Cards above timeline -->
+  <div class="phases-top">
+    <div class="phase-card p1">
+      <div class="status-badge status-now">Now</div>
+      <div class="phase-year">2025</div>
+      <div class="phase-name">Frontier Convergence</div>
+      <div class="phase-items">
+        <div class="phase-item">Multimodal reasoning at human expert level</div>
+        <div class="phase-item">Agentic systems executing multi-step tasks</div>
+        <div class="phase-item">Claude 4 / GPT-5 / Gemini 2.x era begins</div>
+        <div class="phase-item">Computer use + web agents enter production</div>
+        <div class="phase-item">Model costs drop 10× from 2023 baseline</div>
+      </div>
+    </div>
+    <div class="phase-card p2">
+      <div class="status-badge status-near">Near-term</div>
+      <div class="phase-year">2026</div>
+      <div class="phase-name">Agent Networks</div>
+      <div class="phase-items">
+        <div class="phase-item">Multi-agent orchestration at enterprise scale</div>
+        <div class="phase-item">Persistent memory across sessions standard</div>
+        <div class="phase-item">Long-horizon tasks: weeks of autonomous work</div>
+        <div class="phase-item">AI software engineers ship production code</div>
+        <div class="phase-item">Regulatory frameworks deployed across EU/US</div>
+      </div>
+    </div>
+    <div class="phase-card p3">
+      <div class="status-badge status-near">Mid-term</div>
+      <div class="phase-year">2027</div>
+      <div class="phase-name">Embodied Intelligence</div>
+      <div class="phase-items">
+        <div class="phase-item">Humanoid robots in mass factory deployment</div>
+        <div class="phase-item">AI + robotics unified world model architectures</div>
+        <div class="phase-item">Real-world task completion: lab, warehouse, home</div>
+        <div class="phase-item">Simulation-to-real gap effectively closed</div>
+        <div class="phase-item">10M+ AI-native jobs created globally</div>
+      </div>
+    </div>
+    <div class="phase-card p4" style="background:var(--elevated)">
+      <div class="status-badge status-future">Emerging</div>
+      <div class="phase-year">2028</div>
+      <div class="phase-name">Cognitive Architectures</div>
+      <div class="phase-items">
+        <div class="phase-item">Self-improving systems with safe guardrails</div>
+        <div class="phase-item">AI conducts peer-reviewed scientific research</div>
+        <div class="phase-item">Universal reasoning: maths, code, science, law</div>
+        <div class="phase-item">Cross-modal memory and identity continuity</div>
+        <div class="phase-item">Brain-computer interfaces reach clinical use</div>
+      </div>
+    </div>
+    <div class="phase-card p5" style="background:rgba(239,68,68,0.05);border-color:rgba(239,68,68,0.25)">
+      <div class="status-badge status-future">Speculative</div>
+      <div class="phase-year">2030</div>
+      <div class="phase-name">AGI Threshold</div>
+      <div class="phase-items">
+        <div class="phase-item">Human-parity on all standardized cognitive tasks</div>
+        <div class="phase-item">Autonomous scientific discovery at scale</div>
+        <div class="phase-item">AI participates in its own governance design</div>
+        <div class="phase-item">Economic output comparable to G7 nation</div>
+        <div class="phase-item">Alignment and control remain open problems</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dot + line connectors -->
+  <div style="position:relative;height:6px">
+    <div style="position:absolute;top:0;left:0;right:0;height:6px;background:linear-gradient(90deg,#F97316,#FB923C,#FBBF24,#F59E0B,#EF4444);border-radius:3px"></div>
+    <div style="position:absolute;top:0;left:0;right:0;height:6px;background:inherit;filter:blur(10px);opacity:0.6"></div>
+    <!-- Dots positioned at 10%, 30%, 50%, 70%, 90% -->
+    <div style="position:absolute;top:50%;left:10%;transform:translate(-50%,-50%);width:18px;height:18px;border-radius:50%;background:#F97316;border:3px solid var(--canvas);box-shadow:0 0 14px #F97316;z-index:3"></div>
+    <div style="position:absolute;top:50%;left:30%;transform:translate(-50%,-50%);width:18px;height:18px;border-radius:50%;background:#FB923C;border:3px solid var(--canvas);box-shadow:0 0 14px #FB923C;z-index:3"></div>
+    <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:18px;height:18px;border-radius:50%;background:#FBBF24;border:3px solid var(--canvas);box-shadow:0 0 14px #FBBF24;z-index:3"></div>
+    <div style="position:absolute;top:50%;left:70%;transform:translate(-50%,-50%);width:18px;height:18px;border-radius:50%;background:#F59E0B;border:3px solid var(--canvas);box-shadow:0 0 14px #F59E0B;z-index:3"></div>
+    <div style="position:absolute;top:50%;left:90%;transform:translate(-50%,-50%);width:18px;height:18px;border-radius:50%;background:#EF4444;border:3px solid var(--canvas);box-shadow:0 0 14px #EF4444;z-index:3"></div>
+  </div>
+
+  <!-- Capability & risk strip below -->
+  <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-top:16px">
+    <div style="background:rgba(249,115,22,0.08);border:1px solid rgba(249,115,22,0.2);border-radius:4px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center">
+      <div style="font:600 10px/1 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.08em;color:#F97316">Capability Index</div>
+      <div style="font:400 22px/1 'Bebas Neue',sans-serif;color:#F97316">62 / 100</div>
+    </div>
+    <div style="background:rgba(251,146,60,0.08);border:1px solid rgba(251,146,60,0.2);border-radius:4px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center">
+      <div style="font:600 10px/1 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.08em;color:#FB923C">Capability Index</div>
+      <div style="font:400 22px/1 'Bebas Neue',sans-serif;color:#FB923C">71 / 100</div>
+    </div>
+    <div style="background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.2);border-radius:4px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center">
+      <div style="font:600 10px/1 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.08em;color:#FBBF24">Capability Index</div>
+      <div style="font:400 22px/1 'Bebas Neue',sans-serif;color:#FBBF24">80 / 100</div>
+    </div>
+    <div style="background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.2);border-radius:4px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center">
+      <div style="font:600 10px/1 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.08em;color:#F59E0B">Capability Index</div>
+      <div style="font:400 22px/1 'Bebas Neue',sans-serif;color:#F59E0B">89 / 100</div>
+    </div>
+    <div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);border-radius:4px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center">
+      <div style="font:600 10px/1 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.08em;color:#EF4444">Capability Index</div>
+      <div style="font:400 22px/1 'Bebas Neue',sans-serif;color:#EF4444">97 / 100</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <div class="ftr">AIZFOGRAPHICS · AI DEVELOPMENT ROADMAP · 2025–2030 EDITION</div>
+  <div class="ftr">Sources: Lab roadmaps, research publications, benchmark trajectories. Speculative projections beyond 2027.</div>
+</div>
+
+</div>
+</body>
+</html>
