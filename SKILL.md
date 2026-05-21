@@ -67,7 +67,37 @@ If the request is one of the above, route to the appropriate skill or ask for th
 
 ---
 
-## 1.5 Canvas Pick (when no template matched)
+## 1.5 Compact Mode (user override)
+
+When user requests compact/max 3 insights/one-row output, switch to compact mode. This overrides ALL template conventions, section counts, and standard density rules.
+
+### Compact mode rules:
+- **ONE bento row max.** Hero headline + 2-3 cards. Source attribution small at bottom-right. Nothing else.
+- **Maximum 50 words total on canvas.** Every pixel must earn its place.
+- **Each card: max 12 words of copy.** Force brevity.
+- **No filler sections** — remove "about this infographic", decorative elements, any text that doesn't drive action
+- **Readability target: 5 seconds.** If the viewer can't grasp the point in 5 seconds, it's too dense.
+- **Actionable or dead.** Every element must tell the reader to DO something differently.
+- **No template loading required.** Skip the full canvas/snippet/element load sequence. Build custom single-row HTML directly using the template in `references/templates/compact-growth-hacking.md` and the glassmorphism style in `references/styles/glassmorphism.md`.
+- **Style: always glassmorphism for growth hacking content.** Use `references/styles/glassmorphism.md`, NOT `references/styles/growth-hacking.md` (which is a different gold-serif style the user did not choose).
+- **Selector: use `--selector ".canvas"`** for export. Custom compact HTML uses `.canvas` class, not `.infographic-canvas`.
+
+### Layout pattern:
+```
+┌─────────────────────────────────────────────────────┐
+│  HOOK (one line, surprising stat or question)       │
+├─────────────────────────────────────────────────────┤
+│  [Card 1]     [Card 2]     [Card 3]                │
+├─────────────────────────────────────────────────────┤  ← ONE ROW
+│  Source attribution (small, bottom-right)           │
+└─────────────────────────────────────────────────────┘
+```
+
+See `references/templates/compact-growth-hacking.md` for the full pipeline spec including HTML template, glassmorphism style, and sequential Discord delivery workflow.
+
+---
+
+## 1.6 Canvas Pick (when no template matched)
 
 After §4 Content Intake but before §5 Step 2, fire the canvas picker — but only when no template matched in §2 and the user hasn't named a canvas explicitly.
 
@@ -153,6 +183,7 @@ Brand auto-selection applies only when: (a) the infographic is **about** that br
 | Export mechanics | `references/export/<name>.md` |
 | Canvas visual gallery | `references/_gallery.html` (auto-opened in §1.5 only) |
 | Signal sheet extraction (§8.6) | `references/templates/_signals.md` (loaded only when §8.6 fires) |
+| Social media copy generation (§8.1) | `references/social-media-copy.md` (loaded only when §8.1 fires for marketing infographics) |
 | Standalone section extraction (§8.5) | `references/_standalone-extraction.md` (loaded only when §8.5 fires) |
 | Brand color extraction (§5 Step 4 option 2 or 3) | `references/brand-extraction.md` (loaded only when option 2 or 3 chosen) |
 | Pixel-locked sections (cross-cell connectors) | `references/elements/connectors.md` §Pixel-locked sections — already pulled in via the `connectors` element load when any snippet using arrows/leaders is selected |
@@ -187,12 +218,28 @@ Eight to ten files total in Claude Code, six to eight in agent contexts. Do not 
 ### Available references
 
 - **Canvases (4):** `bento-box` (default), `editorial`, `dashboard`, `poster`.
-- **Styles (24):** `aizfographics-style` (default), `clean-minimal`, `blueprint` (engineering schematic), `editorial`, `corporate`, `cyberpunk`, `chalkboard`, `hand-drawn`, `retro`, `terminal` (shell output, monospace), `glasspaper` (frosted opacity panels), `scrapbook` (physical evidence, warm), `signal` (ops monitoring, alert feed), `forge` (industrial batch, dense), `ash` (monochrome editorial), `obsidian-ledger` (antique accounting), `openclaw` (blue-black, hot-red accent, OpenClaw brand), `hermes` (green-black, gold+sage gradient borders, Hermes/Nous brand), `openai-dark` (neutral near-black, weight-300 numerals, OpenAI brand), `grok-dark` (true black, weight-900 ALL CAPS, zero radius, xAI/Grok brand), `vercel-dark` (pure black, square markers, slug copy, Vercel brand), `claude-light` (warm cream, terracotta, Lora serif body, Anthropic/Claude brand), `_custom-template` (scaffold).
+- **Styles (26):** `aizfographics-style` (default), `clean-minimal`, `blueprint` (engineering schematic), `editorial`, `corporate`, `cyberpunk`, `chalkboard`, `hand-drawn`, `retro`, `terminal` (shell output, monospace), `glasspaper` (frosted opacity panels), `scrapbook` (physical evidence, warm), `signal` (ops monitoring, alert feed), `forge` (industrial batch, dense), `ash` (monochrome editorial), `obsidian-ledger` (antique accounting), `openclaw` (blue-black, hot-red accent, OpenClaw brand), `hermes` (green-black, gold+sage gradient borders, Hermes/Nous brand), `openai-dark` (neutral near-black, weight-300 numerals, OpenAI brand), `grok-dark` (true black, weight-900 ALL CAPS, zero radius, xAI/Grok brand), `vercel-dark` (pure black, square markers, slug copy, Vercel brand), `claude-light` (warm cream, terracotta, Lora serif body, Anthropic/Claude brand), `glassmorphism` (growth hacking social default), `growth-hacking` (gold serif, NOT glassmorphism), `_custom-template` (scaffold).
 - **Snippets (27):** `statistical`, `grid-cards`, `process-flow`, `timeline`, `comparison`, `hierarchical`, `list`, `roadmap`, `funnel`, `flowchart`, `dashboard`, `mind-map`, `journey-path`, `pyramid`, `circular-flow`, `iceberg`, `fishbone`, `venn`, `anatomical`, `geographic`, `quadrant`, `swimlane`, `sankey-flow`, `network-graph`, `callout-grid` (icon+headline+body grid), `stat-spotlight` (single hero metric + sparkline + delta), `step-connector` (numbered linear sequence with connector emphasis). Each declares its slot fit and density cap. Bento-box is canvas-only — no `bento-box` snippet.
-- **Templates (10):** `allocation-breakdown`, `ecosystem-overview`, `cheatsheet`, `concept-explainer`, `game-overview`, `distribution-guide`, `collection-showcase`, `how-it-works`, `report`, `game-mechanics`.
-- **Elements (13):** `charts`, `text`, `layout`, `connectors`, `icons`, `data-widgets`, `decorative`, `maps`, `comparison`, `annotation`, `badges` (status pills and state tags), `progress-bars` (flat fills for forge/terminal, no Chart.js), `sparklines` (inline SVG KPI sparklines, no Chart.js).
-
+- **Templates (12):** `allocation-breakdown`, `ecosystem-overview`, `cheatsheet`, `game-mechanics`, `how-it-works`, `report`, `case-study`, `concept-explainer` (renamed from `crypto-explainer`), `distribution-guide` (renamed from `airdrop-guide`), `collection-showcase` (renamed from `nft-showcase`), `new-templates-design-brief`.
+- **Elements (14):** `charts`, `text`, `layout`, `connectors`, `icons`, `data-widgets`, `decorative`, `maps`, `comparison`, `annotation`, `badges` (status pills and state tags), `progress-bars` (flat fills for forge/terminal, no Chart.js), `sparklines` (inline SVG KPI sparklines, no Chart.js).
 Unmapped content type → §1.5 canvas pick + snippets that match the content shape. Unlisted style → copy `_custom-template.md`, fill, note the substitution.
+
+## 2.5 Case-Study Content Quality Standard
+
+When generating a `case-study` template infographic, the content must contain **four required layers** — omitting any one reduces signal quality below acceptable threshold:
+
+1. **Outcome** — specific, quantifiable result with named subject + timeframe
+2. **Mechanism** — the specific tactics/methods used (2–3 items minimum)
+3. **Application** — "How to Apply" with 4–5 numbered, concrete, executable steps for the reader to reproduce a similar result
+4. **Discovery** — search keywords, resource names, or exact phrases so the reader can dig deeper on their own
+
+If the source material lacks explicit Application steps, **derive them conservatively** by asking: "Given the mechanism described, what is the closest reproducible sequence for a founder with similar resources?" Do NOT skip this section to preserve visual density.
+
+The case-study template layout enforces this via snippet selection: `statistical` (outcome KPIs), `grid-cards` or `comparison` (mechanism breakdown), `process-flow` or `numbered-list` (application steps), and a final `comparison` (discovery table).
+
+See `references/templates/case-study.md` for the full four-layer specification with section ordering, copy constraints, and card count rules.
+
+**Pitfall:** Outcome-only infographics ("what happened") are 50% signal. Aiz will request regeneration if Mechanism and Application are missing.
 
 ---
 
@@ -267,6 +314,10 @@ Accept natural-language edits; regenerate; ask "What else?"
 ### Step 8 — Export
 
 On completion signal (`done`, `export`, `looks good`, `ship it`, `give me the PNG`), run the export chain in §8.
+
+### Step 8.1 — Social Media Copy (conditional)
+
+After successful PNG export, offer social media copy generation for marketing-focused infographics. Load `references/social-media-copy.md` and follow the platform templates. Skip if the infographic is purely technical, internal, or the user's completion signal included `no copy`, `just the visual`, or similar.
 
 ### AskUserQuestion pattern
 
@@ -371,13 +422,20 @@ When the user signals completion (`done`, `export`, `looks good`, `ship it`, `gi
 ```
 Output/
 ├── <name>.html   (always produced)
-└── <name>.png    (via Playwright, 2x DPR)
+├── <name>.png    (via Playwright, 2x DPR)
+└── <name>-posts.md (social media copy, conditional)
 ```
 
 Run the export script using the **full absolute path** to the script in this skill's directory (the base dir is always shown at the top of your context as `Base directory for this skill:`):
 
+**Standard output** (root element has `.infographic-canvas` class):
 ```bash
-python "<skill-base-dir>/scripts/export.py" --png output/<name>.html
+python "C:\Users\Aiz\.claude\skills\aiz-infographic\scripts\export.py" --png output/my-infographic.html
+```
+
+**Compact/custom output** (root element has `.canvas` or other class, not `.infographic-canvas`):
+```bash
+python "C:\Users\Aiz\.claude\skills\aiz-infographic\scripts\export.py" --png --selector ".canvas" output/my-infographic.html
 ```
 
 Concrete example: `python "C:\Users\Aiz\.claude\skills\aiz-infographic\scripts\export.py" --png output/my-infographic.html`
@@ -413,7 +471,7 @@ The non-negotiable rule from that file, repeated here so it isn't lost: **each s
 
 A *signal* is a hidden derived insight a viewer would miss by reading the presented data alone — derived math, comparative weight, or second-order consequence. The signal sheet is a sibling infographic that surfaces these insights with citations and shown calculations.
 
-Fire **after** §8.5 (or its skip), **before** §13. Full extraction logic (two-pass draft/verify, confidence tiering, lens caps) lives in `references/templates/_signals.md` — load it when this section fires.
+Fire **after** §8 export recap (and §8.1 social media copy if generated), **before** §8.5 standalone extraction. Full extraction logic (two-pass draft/verify, confidence tiering, lens caps) lives in `references/templates/_signals.md` — load it when this section fires.
 
 ### Sub-flow
 
@@ -491,14 +549,19 @@ Both reference files are loaded per §3 in Claude Code context. The full impleme
 
 ### Agent context (OpenClaw, Hermes)
 
+**MANDATORY CHECKLIST** (all items required):
+
 - Default to one-shot mode
 - **Skip §1.5 Canvas Pick** — default to `bento-box` canvas, do not open the gallery, do not fire the canvas `AskUserQuestion`. If the agent caller named a different canvas in the prompt, honor it.
+- **Generate main infographic** → HTML + export PNG
 - **§8.5 Standalone Section Extraction** — offer only if the agent host supports follow-up turns; otherwise skip silently
 - **§8.6 Signal Sheet** — auto-generate by default (no opt-in possible). Skip the comparative-sourcing question entirely (no user prompt, no web-search latency in agent contexts). Never offer merge — always ship the twin (`<name>.html` + `<name>-signals.html` + PNGs). Thin-data fallback: skip silently.
-- The §13 Closing Tip still prints at the end of the final message
-- If content is incomplete, ask via the agent's chat channel
+- **§13 Closing Tip** — MUST print the closing tip verbatim at end of final message
 - Export scripts run automatically after generation
 - Output file to the configured workspace directory
+- If content is incomplete, ask via the agent's chat channel
+
+**Common miss**: Forgetting signal sheet auto-gen and closing tip. Both are required in agent contexts.
 
 ---
 
@@ -525,3 +588,38 @@ Rules:
 - Print both even in agent contexts.
 - Each is a single line. No bullet, no heading, no emoji, no extra prose around either line.
 - Always TIP first, then a blank line, then NOTE.
+
+---
+
+## 14. Web-Based Infographics (Browser Screenshot)
+
+*Full content in `references/infographic-web-based.md`.*
+
+### Quick trigger
+
+Use this path when the user wants a shareable visual infographic rendered in the browser rather than via Playwright. Best for simple HTML/CSS cards, grids, and layout-based infographics that fit within a browser viewport.
+
+### Pipeline
+
+1. **Gather content** — `web_extract` or `browser_navigate` for URLs; user input for concepts
+2. **Create HTML** — self-contained single `.html` file
+3. **Render** — `browser_navigate` to `file:///tmp/<name>-infographic.html`, then `browser_vision` for screenshot
+4. **Copy** — `cp` the screenshot to `/tmp/<name>-infographic.png`
+5. **Deliver** — include `MEDIA:/absolute/path.png`
+
+### Design defaults
+
+| Property | Value |
+|----------|-------|
+| Dimensions | 1080px wide (fits Telegram/Discord/email), flexible height |
+| Font | Inter (Google Fonts) + JetBrains Mono for code |
+| Theme | Dark: `#0a0a0f` bg, `#e8e8f0` text |
+| Depth | 2-3 `filter: blur(80px)` glow orbs (purple/cyan/pink) |
+| Grid | CSS grid overlay, `rgba(120,80,255,0.03)` lines at 40px |
+| Accent | Colored top-border gradients (cyan, magenta, orange, green) |
+| Titles | Uppercase, purple `#7850ff`, centered, letter-spacing 2px |
+| Dividers | Thin gradient `linear-gradient(90deg, transparent, rgba(120,80,255,0.3), transparent)` |
+
+See `references/infographic-web-based.md` for layout pattern CSS, pitfall notes, and the full template structure.
+
+---

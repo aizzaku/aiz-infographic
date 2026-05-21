@@ -45,6 +45,8 @@ Override DPR with `--scale 1` (for preview) or `--scale 3` (print quality).
 
 | Symptom | Cause | Fix |
 |---------|-------|-----|
+| Canvas element not found | Custom/compact HTML uses `.canvas` not `.infographic-canvas` | Pass `--selector ".canvas"` to export script |
+| Canvas element not found | Wrong class name in custom HTML | Check your root element class, pass `--selector ".class-name"` |
 | Fonts render as fallback | CDN blocked / timeout | Re-run; script retries once. If persistent, pre-download fonts into `output/` and reference locally. |
 | Background is transparent | Canvas `.infographic-canvas` has no bg set | Every canvas MUST set `background: var(--canvas)`. Check the style. |
 | Truncated content at bottom | Canvas height exceeds viewport after layout | The script auto-measures; if still truncated, the canvas has `overflow: hidden` with content outside. Remove it or reduce content. |
