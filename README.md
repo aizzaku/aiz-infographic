@@ -11,7 +11,7 @@ An infographic skill for AI agents — works inside Claude Code, Codex, Hermes, 
 <br>
 
 <p align="center">
-  <img src="examples/showcase/styles-showcase.png" width="100%" alt="10 styles, 1 skill">
+  <img src="examples/showcase/styles-showcase.png" width="100%" alt="24 styles, 1 skill">
 </p>
 
 <br>
@@ -119,7 +119,7 @@ Section patterns — the content shape with no page chrome. Ordered by category:
 24 visual identities, from dark editorial to brand-specific to playful. Pick by aesthetic — every style works across every canvas and snippet.
 
 <p align="center">
-  <img src="examples/showcase/styles-showcase.png" width="100%" alt="10 styles, 1 skill">
+  <img src="examples/showcase/styles-showcase.png" width="100%" alt="24 styles, 1 skill">
 </p>
 
 **Default:** `aizfographics-style` — dark, Bebas Neue + Montserrat, amber accent pair.
