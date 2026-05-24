@@ -60,8 +60,7 @@ echo ""
 
 # ── Done ──────────────────────────────────────────────────────────────────────
 
-echo "  All done. Start Claude Code and ask for an infographic."
+echo "  All done. Start your agent (Claude Code, Codex, Hermes, OpenClaw, Cursor, etc.) and ask for an infographic."
 echo ""
-echo "  TIP: Use the html.to.design Figma plugin to get a fully editable infographic in Figma."
 echo "  NOTE: If this skill helped, a GitHub star is appreciated. https://github.com/aizzaku/aiz-infographic"
 echo ""

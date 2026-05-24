@@ -1,63 +1,20 @@
 # aiz-infographic
 
-A Claude Code skill that turns data and text into polished, self-contained HTML infographics — with reliable PNG export.
+An infographic skill for AI agents — works inside Claude Code, Codex, Hermes, OpenClaw, Cursor, and any agent host that loads skills. Turns data and text into polished, self-contained HTML infographics with reliable PNG export.
 
 <br>
 
 <p align="center">
-  <img src="examples/skill-banner.png" width="100%" alt="aiz-infographic — Claude Code skill banner">
+  <img src="examples/showcase/readme-banner.png" width="100%" alt="aiz-infographic — skill banner">
 </p>
 
 <br>
 
----
-
-## Examples
-
 <p align="center">
-  <img src="examples/ai-agents-2025.png" width="49%" alt="State of AI Agents 2025 — aizfographics style">
-  <img src="examples/humanoid-robots-race.png" width="49%" alt="Humanoid Robots Race — blueprint style">
-</p>
-
-<p align="center">
-  <img src="examples/how-crispr-works.png" width="49%" alt="How CRISPR-Cas9 Works — clean minimal style">
-  <img src="examples/ai-funding-2025.png" width="49%" alt="AI Funding Landscape 2025 — terminal style">
-</p>
-
-<p align="center">
-  <img src="examples/longevity-science-map.png" width="49%" alt="Longevity Science Map — glassmorphism style">
-  <img src="examples/industrial-robotics-rise.png" width="49%" alt="Rise of Industrial Robotics — cyberpunk style">
-</p>
-
-<p align="center">
-  <img src="examples/llm-training-pipeline.png" width="49%" alt="LLM Training Pipeline — flow diagram — aizfographics style">
-  <img src="examples/drug-discovery-funnel.png" width="49%" alt="Drug Discovery Funnel — pharma pipeline — clean minimal style">
-</p>
-
-<p align="center">
-  <img src="examples/ai-model-quadrant.png" width="49%" alt="AI Models Quadrant — capability vs cost — editorial dark style">
-  <img src="examples/ai-roadmap-2030.png" width="49%" alt="AI Development Roadmap 2025–2030 — forge style">
-</p>
-
-<p align="center">
-  <img src="examples/alphafold-circular-flow.png" width="49%" alt="How AlphaFold Works — circular flow — glassmorphism style">
-  <img src="examples/ai-iceberg-model.png" width="49%" alt="The AI Iceberg — hidden complexity — blueprint style">
+  <img src="examples/showcase/styles-showcase.png" width="100%" alt="10 styles, 1 skill">
 </p>
 
 <br>
-
----
-
-## What you get
-
-Paste in your data or describe what you want. The skill designs, codes, and exports a production-quality infographic in one conversation.
-
-- **HTML output** — fully self-contained, opens in any browser
-- **PNG export** — 2x DPR via Playwright, ready to share or publish
-- **In-browser editing** — click any text to edit it, adjust accent colors, undo/redo — no code required
-- **Signal sheet** — optional companion that surfaces derived insights and second-order implications from the same data
-- **Social copy** — optional X/LinkedIn/Instagram post copy generated alongside the visual
-- **Figma round-trip** — run the HTML through [html.to.design](https://www.figma.com/community/plugin/842128343887514257) for a fully editable vector file
 
 ---
 
@@ -85,9 +42,95 @@ pip install "playwright>=1.40.0" && playwright install chromium
 
 ---
 
+## What you get
+
+Paste in your data or describe what you want. The skill designs, codes, and exports a production-quality infographic in one conversation.
+
+- **HTML output** — fully self-contained, opens in any browser
+- **PNG export** — 2x DPR via Playwright, ready to share or publish
+- **In-browser editing** — click any text to edit it, adjust accent colors, undo/redo — no code required
+- **Signal sheet** — optional companion that surfaces derived insights and second-order implications from the same data
+- **Social copy** — optional X/LinkedIn/Instagram post copy generated alongside the visual
+- **Agent-portable** — runs inside Claude Code, Codex, Hermes, OpenClaw, Cursor, and other agent hosts
+
+---
+
+## How it works
+
+The skill uses a 5-layer reference system to compose infographics. You never need to understand this to use it — but here's the model.
+
+<p align="center">
+  <img src="examples/showcase/mental-model.png" width="100%" alt="The 5-layer system: Canvas → Snippet → Style → Element → Template">
+</p>
+
+| Layer | Role | Count |
+|---|---|---|
+| **Canvas** | Where things go — page architecture | 4 |
+| **Snippet** | What section — embeddable content pattern | 27 |
+| **Style** | How it looks — visual identity | 24 |
+| **Element** | Building blocks — atomic UI primitives | 15 |
+| **Template** | The full preset — content-type bundle | 11 |
+
+**TEMPLATE = CANVAS + SNIPPETS + STYLE + ELEMENTS**
+
+---
+
+## Canvases
+
+A canvas is the page architecture. It declares the slots that snippets plug into. Pick one based on the shape of the read, not the content type.
+
+<p align="center">
+  <img src="examples/showcase/canvases-showcase.png" width="100%" alt="The 4 canvases — bento-box, editorial, dashboard, poster">
+</p>
+
+- **bento-box** — default. Mixed-span card grid for most content.
+- **editorial** — long-form read with body column + sidebar.
+- **dashboard** — KPI row + mixed-width panels for metric snapshots.
+- **poster** — one big diagram with compact supports around it.
+
+---
+
+## Elements
+
+Atomic UI primitives — the building blocks every snippet is assembled from. Pick a snippet; the elements it needs get loaded automatically.
+
+<p align="center">
+  <img src="examples/showcase/elements-showcase.png" width="100%" alt="15 elements — text, layout, charts, data-widgets, icons, connectors, decorative, maps, comparison, annotation, badges, progress-bars, sparklines, callout-card, tagged-header">
+</p>
+
+15 elements cover text, layout, charts, icons, connectors, badges, sparklines, callouts, and more. You compose snippets out of these; you rarely touch them directly.
+
+---
+
+## Snippets
+
+Section patterns — the content shape with no page chrome. Ordered by category: linear → grid → tree → matrix → flow → cycle → diagnostic → spatial → stats.
+
+<p align="center">
+  <img src="examples/showcase/snippets-showcase.png" width="100%" alt="All 27 snippets at a glance">
+</p>
+
+27 snippets, each with declared slot fit and density cap. The data shape picks the snippets; you pick the canvas. Templates pick both for known content types.
+
+---
+
+## Styles
+
+24 visual identities, from dark editorial to brand-specific to playful. Pick by aesthetic — every style works across every canvas and snippet.
+
+<p align="center">
+  <img src="examples/showcase/styles-showcase.png" width="100%" alt="10 styles, 1 skill">
+</p>
+
+**Default:** `aizfographics-style` — dark, Bebas Neue + Montserrat, amber accent pair.
+
+**Brand styles** (`openclaw`, `hermes`, `openai-dark`, `grok-dark`, `vercel-dark`, `claude-light`) activate automatically when the subject matches the brand. **Themed styles** (`forge`, `terminal`, `signal`, `cyberpunk`, `retro`, `glassmorphism`, `obsidian-ledger`, and more) match the vibe of the content.
+
+---
+
 ## Usage
 
-Once installed, trigger it in Claude Code with any natural language request:
+Once installed, trigger it in your agent host (Claude Code, Codex, Hermes, OpenClaw, Cursor, etc.) with any natural language request:
 
 ```
 state of AI agents infographic
@@ -105,7 +148,7 @@ The skill auto-detects which mode fits:
 - **One-shot** — if you provide the data and the type is clear, it generates immediately
 - **Guided** — if the request is open-ended, it walks you through canvas, sections, style, and color with tappable menus
 
-Force one-shot: `just make it`, `here's everything`, `quick`  
+Force one-shot: `just make it`, `here's everything`, `quick`
 Force guided: `help me choose`, `walk me through`, `what layout`
 
 ### Finishing and exporting
@@ -129,48 +172,8 @@ When you're happy with the result, say `done`, `export`, `looks good`, or `ship 
 | `game-overview` | Game mechanics, economy, faction comparisons |
 | `game-mechanics` | Loop diagrams, reward structures, progression trees |
 | `collection-showcase` | Item galleries with rarity and trait breakdowns |
-| `compact-growth-hacking` | Compact single-page growth playbooks |
 
 Unmapped content types still work — the skill picks the best canvas and section patterns for what you provide.
-
----
-
-## Styles
-
-26 visual identities built in. Each example above uses a different style to show the range.
-
-| Style | Look | Used in example above |
-|---|---|---|
-| `aizfographics-style` | Dark, bold, gradient glow. The default. | AI Agents · LLM Pipeline |
-| `blueprint` | Engineering schematic, grid lines, technical | Humanoid Robots · AI Iceberg |
-| `clean-minimal` | Light background, generous whitespace | CRISPR explainer · Drug Discovery |
-| `terminal` | Monospace, green-on-black, scanlines | AI Funding |
-| `glassmorphism` | Frosted glass panels on dark gradient | Longevity Science · AlphaFold |
-| `cyberpunk` | Neon cyan + pink on deep black | Industrial Robotics |
-| `editorial` | Magazine layout, large type, long-form | AI Model Quadrant |
-| `forge` | Dark metallic, industrial orange/amber | AI Roadmap 2030 |
-| `scrapbook` | Physical evidence aesthetic, warm tones | — |
-| `ash` | Monochrome editorial, clean | — |
-| `obsidian-ledger` | Antique accounting, serif | — |
-| `openclaw` | Blue-black, hot-red — OpenClaw brand | — |
-| `claude-light` | Warm cream + terracotta — Anthropic brand | — |
-| `grok-dark` | True black, weight-900 ALL CAPS — xAI brand | — |
-
-Brand styles (`openclaw`, `hermes`, `openai-dark`, `grok-dark`, `vercel-dark`, `claude-light`) activate automatically when the infographic subject matches the brand.
-
----
-
-## How it works
-
-The skill uses a 5-layer reference system to compose infographics. You never need to understand this to use it.
-
-| Layer | Role |
-|---|---|
-| **Canvas** | Page architecture — header, hero, footer, grid slots. Options: `bento-box`, `editorial`, `dashboard`, `poster` |
-| **Snippet** | Section pattern plugged into a canvas slot — timeline, process-flow, comparison, network-graph, sankey, funnel, quadrant, roadmap, circular-flow, iceberg, and 17 more |
-| **Style** | Visual identity — colors, fonts, spacing tokens. 26 available |
-| **Element** | Atomic UI primitives — charts, icons, connectors, badges, sparklines. 14 element files |
-| **Template** | Preset combining canvas + style + snippet picks for a content type. 12 templates |
 
 ---
 
@@ -195,7 +198,5 @@ The HTML is always the canonical file. The PNG is a snapshot of it. The signal s
 - Distributed via [skills.sh](https://skills.sh)
 
 ---
-
-TIP: Use the html.to.design Figma plugin to get a fully editable infographic in Figma.
 
 NOTE: If you liked this skill and it helped, I would appreciate a star on aiz-infographic Github. Thank you.
