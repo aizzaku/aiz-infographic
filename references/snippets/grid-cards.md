@@ -21,7 +21,7 @@ Equal-weight items in a tiled grid. The workhorse for ecosystems, cheatsheets, f
 
 ## Required elements
 
-`text.md`, `layout.md`, `decorative.md`, `icons.md`. Optional `data-widgets.md` for per-card metrics.
+`text.md`, `layout.md`, `decorative.md`, `icons.md`. Optional `data-widgets.md` for per-card metrics, `callout-card.md` (folded-corner emphasis treatment for 1-2 hero cards in the grid).
 
 ## Column count by item count
 

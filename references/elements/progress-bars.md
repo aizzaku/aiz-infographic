@@ -2,6 +2,8 @@
 
 Flat fill bars for data-dense and industrial themes. No Chart.js dependency — pure HTML/CSS.
 
+> **Loading:** Theme-loaded, not snippet-required. Pulled in by the `forge`, `terminal`, and `signal` themes (see SKILL.md §"New element conditional loads") as the stylistic substitute for Chart.js bar charts. Default themes use `charts.md` instead. No snippet declares this element as required because the choice between Chart.js bars and flat-fill bars is an aesthetic decision, not a structural one.
+
 ## Variant 1: flat-bar (forge / terminal default)
 
 Zero border-radius. Hard rectangle fill. No gradients on the fill track.

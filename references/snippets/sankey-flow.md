@@ -12,6 +12,12 @@
 
 ---
 
+## Required elements
+
+`text.md`, `layout.md`, `decorative.md`. Optional `data-widgets.md` (per-link value chips), `icons.md` (node-lane category markers), `annotation.md` (leader lines to the largest flow). Also requires D3 v7 + d3-sankey CDN scripts — see below.
+
+---
+
 ## CDN requirement
 
 ```html

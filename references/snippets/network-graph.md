@@ -12,6 +12,12 @@
 
 ---
 
+## Required elements
+
+`text.md`, `layout.md`, `decorative.md`. Optional `icons.md` (legend markers for node groups), `data-widgets.md` (per-node metric chips), `annotation.md` (focal-node callout). Also requires the D3 v7 CDN script — see below.
+
+---
+
 ## CDN requirement
 
 ```html

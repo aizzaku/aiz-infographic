@@ -2,6 +2,8 @@
 
 A narrow strip with a flag-cut right edge that sits at the top of a card, callout, or section. Functions as a labeled banner — like a paper tab clipped onto a folder.
 
+> **Loading:** Theme/template-loaded, not snippet-required. Pulled in by templates that use category-labeled callouts (e.g., `cheatsheet`, `report`) and by themes that lean editorial. No snippet declares this element as required because it's a decorative labeling treatment, not a content-shape dependency — any snippet card *can* use it, but none *needs* it.
+
 ## When to use
 
 - Top of a `callout-card` to label its category ("NOTE", "WARNING", "INSIGHT", "Q3 RESULTS").

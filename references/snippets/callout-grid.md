@@ -31,7 +31,7 @@ Do NOT use when items need hierarchy (use `hierarchical`), comparison (use `comp
 
 ## Required elements
 
-`icons.md`, `text.md`, `layout.md`
+`icons.md`, `text.md`, `layout.md`. Optional `callout-card.md` (folded-corner emphasis variant for 1-2 standout cards in the grid), `decorative.md`.
 
 ## HTML pattern
 

@@ -22,7 +22,7 @@ Do NOT use for 3+ metrics side-by-side — use `statistical` instead.
 
 ## Required elements
 
-`data-widgets.md`, `sparklines.md`, `text.md`
+`data-widgets.md`, `sparklines.md`, `text.md`. Optional `callout-card.md` (folded-corner emphasis frame for the spotlighted metric).
 
 ## HTML pattern
 
