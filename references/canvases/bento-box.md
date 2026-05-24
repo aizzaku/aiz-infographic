@@ -7,8 +7,8 @@ Mixed-span grid. One full-width hero strip, then 2-4 rows of cards with varying 
 | Slot | Purpose | Snippets that fit | Density cap |
 |---|---|---|---|
 | `hero` | Title + meta + 3-4 inline KPIs (full bleed) | hero-strip (built into canvas) | 1 |
-| `card-wide` | A column-spanning section, usually `1/3` or `2/4` | Any snippet: kpi-strip, comparison, list, statistical, grid-cards, chart, code-block, feature-roster | up to 5 wide cards |
-| `card-medium` | Single-column card (~25% width on 4-col base) | Compact snippets: kpi-card, big-number, single chart, short list | up to 6 medium cards |
+| `card-wide` | A column-spanning section, usually `1/3` or `2/4` | Any snippet: `statistical`, `comparison`, `list`, `grid-cards`, `kpi-panel-grid`, `process-flow`, `timeline`, etc. Plus chart variants from `charts.md` and code-block / feature-roster from `data-widgets.md`. | up to 5 wide cards |
+| `card-medium` | Single-column card (~25% width on 4-col base) | Compact snippets: `stat-spotlight`, `list`. Plus single chart from `charts.md`. | up to 6 medium cards |
 | `card-tall` | Vertical sidebar spanning two rows on the right edge | Lookup tables, top-N lists, ranked items, vertical timeline, mini-roadmap | up to 2 tall cards |
 | `footer` | Optional full-bleed close | Source / version / CTA strip | 1 |
 

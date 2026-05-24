@@ -12,7 +12,9 @@ User mentions: how does X work, walkthrough, breakdown of X, explain the mechani
 
 ## Snippets
 
-`process-flow` (centerpiece, the mechanism), `statistical` (header KPIs), `callout-block` (footer "what's next" CTA).
+**Snippets:** `process-flow` (centerpiece, the mechanism), `statistical` (header KPIs).
+
+**Element patterns:** `callout-card` from `references/elements/callout-card.md` (footer "what's next" CTA — was previously called `callout-block`).
 
 ## Default style
 

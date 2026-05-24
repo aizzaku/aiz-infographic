@@ -55,6 +55,8 @@ Casual, sketched, slightly imperfect. Cream paper, muted colors, Kalam/Caveat ty
 | Body | Architects Daughter | 400 | Sentence | 15–17px |
 | Caption | Architects Daughter | 400 | Sentence | 12–13px |
 
+> **Case-rule override.** Title Case + Sentence case, NOT UPPERCASE. Deviates from the SKILL.md "uppercase headers" default — the handmade aesthetic is broken by all-caps geometry.
+
 Slight rotation on some elements adds handmade feel:
 ```css
 .badge { transform: rotate(-1.5deg); }

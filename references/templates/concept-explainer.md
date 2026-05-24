@@ -12,7 +12,7 @@ User mentions: explain X, how does X work, what is X, walk me through X, explain
 
 ## Snippets
 
-`process-flow` (centerpiece, the mechanism), `statistical` (header KPIs), `list` (definitions / glossary in supports).
+**Snippets:** `process-flow` (centerpiece, the mechanism), `statistical` (header KPIs), `list` (definitions / glossary in supports).
 
 ## Default style
 

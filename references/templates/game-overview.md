@@ -12,7 +12,7 @@ User mentions: game overview, whitepaper visual, game infographic, introduce gam
 
 ## Snippets
 
-`statistical` (hero KPIs), `grid-cards` (features), `circular-flow` (core loop), `process-flow` (start steps / progression), `list` (highlights).
+**Snippets:** `statistical` (hero KPIs), `grid-cards` (features), `circular-flow` (core loop), `process-flow` (start steps / progression), `list` (highlights).
 
 **Canvas fallback:** if the user wants a traditional one-column read-through, use `editorial` canvas instead with the same snippet list interleaved with prose.
 

@@ -126,7 +126,7 @@ THREATS:
 **What it is:** Data-first narrative with big statistics as the hero. Heavier on numbers and charts than `report`. Reads like a "by the numbers" feature piece.
 
 **Canvas:** `editorial`
-**Snippets:** `statistical`, `dashboard`, `timeline`
+**Snippets:** `statistical`, `kpi-panel-grid`, `timeline`
 **Accent:** pair #1 (amber → orange) — data/finance energy
 
 **Mock data:**

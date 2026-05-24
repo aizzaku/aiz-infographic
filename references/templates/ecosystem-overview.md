@@ -12,7 +12,7 @@ User mentions any of: ecosystem, integrations, partners, partnerships, deploymen
 
 ## Snippets
 
-`grid-cards` (logo grids inside each category card), `statistical` (hero KPI strip).
+**Snippets:** `grid-cards` (logo grids inside each category card), `statistical` (hero KPI strip).
 
 **Canvas fallback:** for very flat ecosystems with no category weighting, switch to `bento-box` with one large `grid-cards` snippet filling the body instead of per-category cards.
 

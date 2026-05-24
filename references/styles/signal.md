@@ -2,6 +2,8 @@
 
 Concept: Ops monitoring / broadcast alert. Everything is a status readout. Built to surface one thing: is it on, is it alerting, when did it happen.
 
+> **Font-rule override.** This style uses 1 font (JetBrains Mono only), overriding the SKILL.md "2 fonts default." Ops dashboards and alert feeds use monospace top-to-bottom — values line up by column, timestamps prefix every entry, and there are no decorative headings to need a second face.
+
 ## When to use
 
 - Live ops status boards

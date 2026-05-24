@@ -12,7 +12,9 @@ User mentions: weekly report, monthly report, recap, season recap, state of X, q
 
 ## Snippets
 
-`statistical` (hero KPIs), `chart` (metric details, mini line/bar/area), `list` (highlights), `timeline` (period trend, optional), `callout-block` ("up next").
+**Snippets:** `statistical` (hero KPIs), `list` (highlights), `timeline` (period trend, optional).
+
+**Element patterns:** chart variants from `references/elements/charts.md` (metric details — mini line/bar/area), `callout-card` from `references/elements/callout-card.md` ("up next" CTA — was previously called `callout-block`).
 
 **Canvas fallback:** for pure metrics-focused reports without narrative, use `dashboard` canvas instead with the same snippets.
 

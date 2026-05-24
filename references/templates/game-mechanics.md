@@ -12,7 +12,9 @@ User mentions: game mechanic, mechanic breakdown, damage formula, staking mechan
 
 ## Snippets
 
-`statistical` (hero KPI strip), `process-flow` (interaction sequence), `comparison` (values lookup table), `formula-block` (when a damage/yield formula is involved).
+**Snippets:** `statistical` (hero KPI strip), `process-flow` (interaction sequence), `comparison` (values lookup table).
+
+**Element patterns:** `formula-block` (template-local inline HTML pattern — not a reusable element, see template body below — used when a damage/yield formula is involved).
 
 ## Default style
 

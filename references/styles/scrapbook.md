@@ -69,6 +69,8 @@ Mixed intentionally: serif for body, cursive/handwritten for annotations.
 | Body | Lora | 400 | Sentence | 14-15px |
 | Caption | Caveat | 400 | Sentence | 12-13px |
 
+> **Case-rule override.** Title Case + Sentence case, NOT UPPERCASE. Deviates from the SKILL.md "uppercase headers" default — physical scrapbook entries are written, not typeset, and reading them as all-caps breaks the journal feel.
+
 Font sizes may vary per card by ±2px. Imprecision is intentional.
 
 **No monospace unless simulating a typewriter label:**

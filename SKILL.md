@@ -218,10 +218,10 @@ Eight to ten files total in Claude Code, six to eight in agent contexts. Do not 
 ### Available references
 
 - **Canvases (4):** `bento-box` (default), `editorial`, `dashboard`, `poster`.
-- **Styles (26):** `aizfographics-style` (default), `clean-minimal`, `blueprint` (engineering schematic), `editorial`, `corporate`, `cyberpunk`, `chalkboard`, `hand-drawn`, `retro`, `terminal` (shell output, monospace), `glasspaper` (frosted opacity panels), `scrapbook` (physical evidence, warm), `signal` (ops monitoring, alert feed), `forge` (industrial batch, dense), `ash` (monochrome editorial), `obsidian-ledger` (antique accounting), `openclaw` (blue-black, hot-red accent, OpenClaw brand), `hermes` (green-black, gold+sage gradient borders, Hermes/Nous brand), `openai-dark` (neutral near-black, weight-300 numerals, OpenAI brand), `grok-dark` (true black, weight-900 ALL CAPS, zero radius, xAI/Grok brand), `vercel-dark` (pure black, square markers, slug copy, Vercel brand), `claude-light` (warm cream, terracotta, Lora serif body, Anthropic/Claude brand), `glassmorphism` (growth hacking social default), `growth-hacking` (gold serif, NOT glassmorphism), `_custom-template` (scaffold).
-- **Snippets (27):** `statistical`, `grid-cards`, `process-flow`, `timeline`, `comparison`, `hierarchical`, `list`, `roadmap`, `funnel`, `flowchart`, `dashboard`, `mind-map`, `journey-path`, `pyramid`, `circular-flow`, `iceberg`, `fishbone`, `venn`, `anatomical`, `geographic`, `quadrant`, `swimlane`, `sankey-flow`, `network-graph`, `callout-grid` (icon+headline+body grid), `stat-spotlight` (single hero metric + sparkline + delta), `step-connector` (numbered linear sequence with connector emphasis). Each declares its slot fit and density cap. Bento-box is canvas-only — no `bento-box` snippet.
-- **Templates (12):** `allocation-breakdown`, `ecosystem-overview`, `cheatsheet`, `game-mechanics`, `how-it-works`, `report`, `case-study`, `concept-explainer` (renamed from `crypto-explainer`), `distribution-guide` (renamed from `airdrop-guide`), `collection-showcase` (renamed from `nft-showcase`), `new-templates-design-brief`.
-- **Elements (16):** `charts`, `text`, `layout`, `connectors`, `icons`, `data-widgets`, `decorative`, `maps`, `comparison`, `annotation`, `badges` (status pills, state tags, numbered-step badges), `progress-bars` (flat fills for forge/terminal, no Chart.js), `sparklines` (inline SVG KPI sparklines, no Chart.js), `callout-card` (folded-corner emphasis card), `tagged-header` (banner-tab category strip).
+- **Styles (24 live + 1 scaffold):** `aizfographics-style` (default), `clean-minimal`, `blueprint` (engineering schematic), `editorial`, `corporate`, `cyberpunk`, `chalkboard`, `hand-drawn`, `retro`, `terminal` (shell output, monospace), `glasspaper` (frosted opacity panels), `scrapbook` (physical evidence, warm), `signal` (ops monitoring, alert feed), `forge` (industrial batch, dense), `ash` (monochrome editorial), `obsidian-ledger` (antique accounting), `openclaw` (blue-black, hot-red accent, OpenClaw brand), `hermes` (green-black, gold+sage gradient borders, Hermes/Nous brand), `openai-dark` (neutral near-black, weight-300 numerals, OpenAI brand), `grok-dark` (true black, weight-900 ALL CAPS, zero radius, xAI/Grok brand), `vercel-dark` (pure black, square markers, slug copy, Vercel brand), `claude-light` (warm cream, terracotta, Lora serif body, Anthropic/Claude brand), `glassmorphism` (growth hacking social default), `growth-hacking` (gold serif, NOT glassmorphism). Plus `_custom-template` scaffold for new styles.
+- **Snippets (27):** `statistical`, `grid-cards`, `process-flow`, `timeline`, `comparison`, `hierarchical`, `list`, `roadmap`, `funnel`, `flowchart`, `kpi-panel-grid` (renamed from `dashboard` for disambiguation with the dashboard *canvas*), `mind-map`, `journey-path`, `pyramid`, `circular-flow`, `iceberg`, `fishbone`, `venn`, `anatomical`, `geographic`, `quadrant`, `swimlane`, `sankey-flow`, `network-graph`, `callout-grid` (icon+headline+body grid), `stat-spotlight` (single hero metric + sparkline + delta), `step-connector` (numbered linear sequence with connector emphasis). Each declares its slot fit and density cap. Bento-box is canvas-only — no `bento-box` snippet.
+- **Templates (11):** `allocation-breakdown`, `ecosystem-overview`, `cheatsheet`, `game-mechanics`, `game-overview`, `how-it-works`, `report`, `case-study`, `concept-explainer` (renamed from `crypto-explainer`), `distribution-guide` (renamed from `airdrop-guide`), `collection-showcase` (renamed from `nft-showcase`). Proposed-but-not-live templates live in `references/_design-docs/new-templates-design-brief.md`.
+- **Elements (15):** `charts`, `text`, `layout`, `connectors`, `icons`, `data-widgets`, `decorative`, `maps`, `comparison`, `annotation`, `badges` (status pills, state tags, numbered-step badges), `progress-bars` (flat fills for forge/terminal, no Chart.js), `sparklines` (inline SVG KPI sparklines, no Chart.js), `callout-card` (folded-corner emphasis card), `tagged-header` (banner-tab category strip).
 Unmapped content type → §1.5 canvas pick + snippets that match the content shape. Unlisted style → copy `_custom-template.md`, fill, note the substitution.
 
 ## 2.5 Case-Study Content Quality Standard
@@ -235,7 +235,7 @@ When generating a `case-study` template infographic, the content must contain **
 
 If the source material lacks explicit Application steps, **derive them conservatively** by asking: "Given the mechanism described, what is the closest reproducible sequence for a founder with similar resources?" Do NOT skip this section to preserve visual density.
 
-The case-study template layout enforces this via snippet selection: `statistical` (outcome KPIs), `grid-cards` or `comparison` (mechanism breakdown), `process-flow` or `numbered-list` (application steps), and a final `comparison` (discovery table).
+The case-study template layout enforces this via snippet selection: `statistical` (outcome KPIs), `grid-cards` or `comparison` (mechanism breakdown), `process-flow` or `list` (numbered variant, for application steps), and a final `comparison` (discovery table).
 
 See `references/templates/case-study.md` for the full four-layer specification with section ordering, copy constraints, and card count rules.
 
@@ -286,6 +286,35 @@ Fire `AskUserQuestion`:
 ### Step 3 — Style
 
 Fire `AskUserQuestion`. Question = "Keep aizfographics-style or switch?" — options = `["aizfographics-style (default)", "Clean minimal", "Blueprint", "Custom (I'll describe)"]`. For most personal work this is a one-tap confirmation; skip only if the user already named a style in their request.
+
+#### Content-type → recommended styles routing
+
+When the user names a content type (or one is inferred from their request), surface the matching style options in this order — default first, then aesthetic alternatives:
+
+| Content type | Default | Aesthetic alternatives |
+|---|---|---|
+| Tokenomics / allocation | `aizfographics-style` | `clean-minimal`, `corporate` |
+| Ecosystem / partner map | `aizfographics-style` | `ash`, `editorial` |
+| Cheatsheet / reference | `aizfographics-style` | `clean-minimal`, `chalkboard`, `hand-drawn` |
+| Case study | `aizfographics-style` | `glassmorphism` (growth angle), `editorial` |
+| Concept explainer | `aizfographics-style` | `blueprint` (technical), `chalkboard` (casual) |
+| Distribution / airdrop guide | `aizfographics-style` | `signal`, `glassmorphism` |
+| Game mechanics / overview | `aizfographics-style` | `retro` (pixel-art), `cyberpunk` |
+| How-it-works / mechanism | `aizfographics-style` | `blueprint`, `forge` |
+| Report / metrics | `aizfographics-style` | `corporate`, `ash`, `vercel-dark` |
+| Collection / NFT showcase | `aizfographics-style` | `scrapbook`, `obsidian-ledger` |
+| Growth hacking / social | `glassmorphism` (mandatory) | — |
+| Ops / monitoring / status | `signal` | `terminal`, `forge` |
+| Ledger / accounting / archive | `obsidian-ledger` | `ash`, `editorial` |
+| TUI / dev tools / CLI | `terminal` | `signal`, `forge` |
+| Brand: OpenAI | `openai-dark` | — |
+| Brand: xAI / Grok | `grok-dark` | — |
+| Brand: Vercel | `vercel-dark` | — |
+| Brand: Anthropic / Claude | `claude-light` | — |
+| Brand: OpenClaw | `openclaw` | — |
+| Brand: Hermes / Nous | `hermes` | — |
+
+If no row fits, default to `aizfographics-style` and offer 2-3 aesthetic alternates the user can browse.
 
 ### Step 4 — Color
 
@@ -387,7 +416,7 @@ The following overrides are permitted only when the named theme is active:
 
 ### Rules that live in reference files (loaded per §3)
 
-- **Style rules** — uppercase headers, exactly two fonts, gradient text titles only, one accent pair, dark mode default → `references/styles/<picked>.md`.
+- **Style rules** (defaults — individual style files may override) — uppercase headers, two fonts, gradient text titles only, one accent pair, dark mode default → `references/styles/<picked>.md`. Each style file declares its own overrides where the aesthetic demands them (e.g. mono-only fonts in terminal/blueprint/forge/signal, title-case headers in editorial/chalkboard/scrapbook/hand-drawn/clean-minimal).
 - **Density caps** (cards/steps/nodes/items per snippet, accent emphasis caps per canvas) → each `references/snippets/<name>.md` and `references/canvases/<name>.md` declares its own ceiling. Past the cap, split into a second infographic.
 - **Bento fluid-grid rule + no cross-card connectors** → `references/canvases/bento-box.md`.
 - **Pixel-locked sections (cross-cell connectors)** → `references/elements/connectors.md` §Pixel-locked sections (covers `flowchart`, `fishbone`, `swimlane`, `anatomical`, `quadrant`, plus annotation leaders into grids).

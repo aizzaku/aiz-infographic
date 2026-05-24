@@ -12,7 +12,9 @@ User mentions any of: tokenomics, token economics, token distribution, vesting, 
 
 ## Snippets
 
-`statistical` (KPI strip), `donut-chart` or `pie-chart` (allocation), `vesting-bar` (vesting schedule), `comparison` (utility breakdown).
+**Snippets:** `statistical` (KPI strip), `comparison` (utility breakdown).
+
+**Element patterns:** donut or pie chart from `references/elements/charts.md` (allocation), `vesting-bar` widget from `references/elements/data-widgets.md` (vesting schedule).
 
 ## Default style
 

@@ -9,8 +9,8 @@ Long-form columnar reading. Big headline, optional drop cap, body text in 1-2 co
 | `masthead` | Eyebrow / category / date strip above the headline | (built into canvas) | 1 |
 | `headline` | Massive display-font title + subdeck | (built into canvas) | 1 |
 | `lede` | Opening paragraph with optional drop cap | (built into canvas) | 1 |
-| `body-column` | Main reading column. Sequential prose paragraphs interleaved with snippets. | Any narrative-fitting snippet: kpi-strip, big-number, comparison, list, mini-chart, timeline, fishbone, callout-block, image-figure | unlimited (governed by reading time) |
-| `sidebar` | Optional right-rail for asides, definitions, related-links, mini-stats | Compact snippets: kpi-card, definition-list, related-links, fact-box | up to 4 sidebar items |
+| `body-column` | Main reading column. Sequential prose paragraphs interleaved with snippets. | Narrative-fitting snippets: `statistical`, `stat-spotlight`, `comparison`, `list`, `timeline`, `fishbone`. Plus element patterns from `charts.md` (mini chart), `callout-card.md`, `decorative.md` (image figure). | unlimited (governed by reading time) |
+| `sidebar` | Optional right-rail for asides, definitions, related-links, mini-stats | Compact snippets: `stat-spotlight`, `list` (definition variant). Plus element patterns: `callout-card.md`, related-links/fact-box from `data-widgets.md`. | up to 4 sidebar items |
 | `pull-quote` | Inset large-text quote pulled from the body | (built into canvas) | up to 3 across the piece |
 | `byline-footer` | Author / date / source attribution at the close | (built into canvas) | 1 |
 

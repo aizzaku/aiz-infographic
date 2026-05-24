@@ -7,10 +7,10 @@ KPI strip on top, panel grid below. Static snapshot shaped like an interactive d
 | Slot | Purpose | Snippets that fit | Density cap |
 |---|---|---|---|
 | `header-strip` | Period + title + last-updated meta | (built into canvas) | 1 |
-| `kpi-row` | Top headline KPIs (3-6 big numbers across) | kpi-card snippets | 3-6 |
-| `panel-large` | A wide chart panel (8/12 width) | chart snippets, comparison, top-N list | up to 4 across the body |
-| `panel-medium` | Half-width panel (6/12) | chart, breakdown, donut + legend, ranked list | up to 6 |
-| `panel-small` | Quarter-width panel (3/12) | single chart, mini-bar, big-number with sparkline | up to 8 |
+| `kpi-row` | Top headline KPIs (3-6 big numbers across) | `stat-spotlight` snippets or `statistical` KPI strip | 3-6 |
+| `panel-large` | A wide chart panel (8/12 width) | `kpi-panel-grid`, `comparison`, `list` (top-N variant). Plus chart variants from `charts.md`. | up to 4 across the body |
+| `panel-medium` | Half-width panel (6/12) | `kpi-panel-grid`, `comparison`, `list`. Plus chart variants (donut + legend, ranked list) from `charts.md`. | up to 6 |
+| `panel-small` | Quarter-width panel (3/12) | `stat-spotlight` (with sparkline). Plus single chart or mini-bar from `charts.md`. | up to 8 |
 | `footer` | Source / period note / data freshness | (built into canvas) | 1 |
 
 Total widget cap by canvas size:

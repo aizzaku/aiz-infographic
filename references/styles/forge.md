@@ -2,6 +2,8 @@
 
 Concept: Industrial smelting floor. Data is a batch report from a furnace. Dense, compressed, zero waste.
 
+> **Font-rule override.** This style uses 1 font (JetBrains Mono only), overriding the SKILL.md "2 fonts default." Industrial batch reports are monospace top-to-bottom — units, values, timestamps all share the same face. Adding a body font softens the dense-data identity.
+
 ## When to use
 
 - Industrial data, manufacturing metrics

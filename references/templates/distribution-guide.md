@@ -12,7 +12,7 @@ User mentions: airdrop, claim guide, eligibility infographic, airdrop eligibilit
 
 ## Snippets
 
-`statistical` (allocation KPI strip), `list` (eligibility criteria), `process-flow` (claim steps), `timeline` (deadlines).
+**Snippets:** `statistical` (allocation KPI strip), `list` (eligibility criteria), `process-flow` (claim steps), `timeline` (deadlines).
 
 ## Default style
 

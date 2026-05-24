@@ -4,6 +4,8 @@ Concept: Shell output. Data is program output. The user is reading a process.
 
 100% monospace, left-aligned, GitHub-dark palette. Box-drawing for structure. No circles, no rounded shapes, no icons.
 
+> **Font-rule override.** This style uses 1 font (JetBrains Mono only), overriding the SKILL.md "2 fonts default." The whole point is the shell-output identity — every character is monospace. Mixing fonts breaks the illusion.
+
 ## When to use
 
 - Technical data, process output, protocol specs

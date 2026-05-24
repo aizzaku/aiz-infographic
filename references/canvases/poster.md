@@ -9,8 +9,8 @@ Best for single-subject deep-dives, "anatomy of X" pieces, framework explainers,
 | Slot | Purpose | Snippets that fit | Density cap |
 |---|---|---|---|
 | `header-strip` | Eyebrow + title + tagline (full bleed top) | (built into canvas) | 1 |
-| `centerpiece` | The hero diagram. Owns 60-70% of vertical space. | Any complex snippet: flowchart, fishbone, swimlane, mind-map, anatomical, quadrant, venn, iceberg, journey-path, circular-flow, geographic, hierarchical-tree, pyramid, funnel | 1 |
-| `support-card` | Small contextual panel around the centerpiece. | Compact snippets: kpi-strip, legend-strip, big-number, definition-list, comparison-mini, list, callout-block | up to 4 |
+| `centerpiece` | The hero diagram. Owns 60-70% of vertical space. | Any complex snippet: `flowchart`, `fishbone`, `swimlane`, `mind-map`, `anatomical`, `quadrant`, `venn`, `iceberg`, `journey-path`, `circular-flow`, `geographic`, `hierarchical`, `pyramid`, `funnel`, `network-graph`, `sankey-flow`. | 1 |
+| `support-card` | Small contextual panel around the centerpiece. | Compact snippets: `statistical`, `stat-spotlight`, `list` (definition variant), `comparison` (mini variant). Plus element patterns: `callout-card.md`, legend-strip from `decorative.md`. | up to 4 |
 | `legend-strip` | Horizontal legend explaining centerpiece colors / roles | (built into canvas) | 1 |
 | `footer` | Source + takeaway + attribution | (built into canvas) | 1 |
 

@@ -12,7 +12,9 @@ User mentions any of: cheatsheet, quick reference, pocket guide, tips, how to X,
 
 ## Snippets
 
-`tip-card` (per tip), `comparison` (reference table at bottom), optional `numbered-list` (when tips are ordered).
+**Snippets:** `comparison` (reference table at bottom), optional `list` (numbered variant, when tips are ordered).
+
+**Element patterns:** `callout-card` from `references/elements/callout-card.md` (per tip — was previously called `tip-card`; the `.tip-card` CSS class below is the local skin for this template).
 
 **Canvas fallback:** if the user explicitly asks for the old uniform-grid look, swap to `bento-box` with `grid-cards` snippet replacing the mixed-span pattern.
 
@@ -35,7 +37,7 @@ The bento canvas arranges these as a hero row plus 2–4 content rows of mixed-s
 
 1. **Hero card (full-bleed: `1 / -1`)** — "[TOPIC] CHEATSHEET" title + owner badge + 3–4 quick-stat KPIs inline
 2. **Core rules row** — one wide card (`1 / 3`) with the headline rule list + 2 small tip cards (`3`, `4`)
-3. **Themed tip rows** — 2–3 rows mixing wide tip-grid cards and numbered-list cards based on content density
+3. **Themed tip rows** — 2–3 rows mixing wide tip-grid cards (callout-card variant) and list cards (numbered variant) based on content density
 4. **Reference table card** — full-bleed (`1 / -1`) lookup/feature-table near the bottom
 5. **Footer card** (optional, full-bleed) — source + version + attribution
 

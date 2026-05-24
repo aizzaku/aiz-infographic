@@ -3,6 +3,8 @@
 Source: `hermes-v2026-4-30-highlights.html` (canonical release infographic, Nous Research)
 Concept: Dark forest terminal. Data is a CLI agent release. Two-accent gold+sage system, gradient borders on every card, three-font stack.
 
+> **Font-rule override.** This style intentionally uses 3 fonts (Bebas Neue + Montserrat + JetBrains Mono), overriding the SKILL.md "2 fonts default." Bebas for hero, Montserrat for body, JetBrains Mono for terminal/code/timestamps — the third font carries the "CLI release" identity and removing it collapses the aesthetic.
+
 ```
 canvas-fit: [bento-box, dashboard, poster]
 ```

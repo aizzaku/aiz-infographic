@@ -20,7 +20,7 @@ Use when you have:
 - `statistical` — headline outcome card(s)
 - `comparison` — before vs after (if available)
 - `grid-cards` — mechanism breakdown (2–3 key tactics)
-- `process-flow` OR `numbered-list` — How to Apply (4–5 step action framework)
+- `process-flow` OR `list` (numbered variant) — How to Apply (4–5 step action framework)
 - `comparison` — Search Keywords (compact reference table)
 
 ## Default style

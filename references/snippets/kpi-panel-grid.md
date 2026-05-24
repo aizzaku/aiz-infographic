@@ -1,6 +1,8 @@
-# Dashboard Panels Snippet
+# KPI Panel Grid Snippet
 
-Mixed-width widget grid on a 12-column base. Use when a section needs to host multiple parallel panels (KPIs, mini charts, breakdowns) with rhythmic size variation. Distinct from the `dashboard` *canvas* — this snippet is the panels grid, embeddable inside any canvas slot.
+> **Renamed from `dashboard` snippet** for disambiguation — the dashboard *canvas* still exists. This snippet is the section-level panels grid that plugs into any canvas slot.
+
+Mixed-width widget grid on a 12-column base. Use when a section needs to host multiple parallel panels (KPIs, mini charts, breakdowns) with rhythmic size variation.
 
 ## When to use
 

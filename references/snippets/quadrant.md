@@ -111,5 +111,5 @@ Two-axis matrix with 4 labeled cells. The "consultant special" — positioning, 
 
 - Color-coding all four cells differently — use roles, not a 4-color palette.
 - Tilting / isometric projection — flat, rectangular, clean.
-- Tiny charts inside cells (limit: 1 KPI + descriptor; more → use `dashboard`).
+- Tiny charts inside cells (limit: 1 KPI + descriptor; more → use `kpi-panel-grid`).
 - Quadrant when axes have no natural high/low gradient — that's `comparison`.

@@ -2,6 +2,8 @@
 
 Concept: Engineering schematic. Every element is a technical drawing. Data lives in annotation marks and dimensions.
 
+> **Font-rule override.** This style uses 1 font (JetBrains Mono only), overriding the SKILL.md "2 fonts default." Schematic drawings use a single monospace face for every label, callout, and dimension — adding a body font would break the technical-drawing identity.
+
 ## When to use
 
 - Technical architecture diagrams

@@ -12,7 +12,9 @@ User mentions: NFT collection, mint, traits, rarity chart, floor stats, NFT show
 
 ## Snippets
 
-`statistical` (collection KPI strip), `grid-cards` (item gallery), `chart` (trait rarity breakdown, optional).
+**Snippets:** `statistical` (collection KPI strip), `grid-cards` (item gallery).
+
+**Element patterns:** chart variants from `references/elements/charts.md` (trait rarity breakdown, optional).
 
 ## Default style
 

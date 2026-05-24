@@ -1,6 +1,6 @@
 # Actionable Framework Examples
 
-Use these as templates for the "Application" card or `numbered-list` snippet in `case-study` infographics. Each framework distills a case study into a reproducible 4–5 step procedure.
+Use these as templates for the "Application" card or `list` snippet (numbered variant) in `case-study` infographics. Each framework distills a case study into a reproducible 4–5 step procedure.
 
 ---
 
@@ -145,7 +145,7 @@ Use these as templates for the "Application" card or `numbered-list` snippet in 
 
 ## Usage Notes
 
-- Each framework runs 4–5 steps; use `numbered-list` snippet or `process-flow` depending on card orientation preference
+- Each framework runs 4–5 steps; use `list` snippet (numbered variant) or `process-flow` depending on card orientation preference
 - Fit mechanism tactics in 2–3 `grid-cards` before the Application section
 - Search keywords table goes last as narrow 2-column `comparison` snippet
 - Derive from source material conservatively; don't invent metrics, but extrapolate steps from documented mechanisms
