@@ -42,6 +42,27 @@ pip install "playwright>=1.40.0" && playwright install chromium
 
 ---
 
+## Updating
+
+There is no auto-update. Re-run whichever command you originally used:
+
+```bash
+# Full installer — overwrites the skill with the latest from main
+curl -fsSL https://raw.githubusercontent.com/aizzaku/aiz-infographic/main/install.sh | bash
+
+# Skill only
+npx skills add https://github.com/aizzaku/aiz-infographic
+
+# If you cloned the repo
+cd path/to/aiz-infographic && git pull origin main
+```
+
+Already-generated infographics (HTML and PNG) are self-contained and unaffected by updates — only future generations use the new logic.
+
+See [Releases](https://github.com/aizzaku/aiz-infographic/releases) for what changed in each version.
+
+---
+
 ## What you get
 
 Paste in your data or describe what you want. The skill designs, codes, and exports a production-quality infographic in one conversation.
