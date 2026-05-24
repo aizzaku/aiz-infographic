@@ -14,9 +14,9 @@ Dark background, bold typography, one accent pair per infographic, gradient bord
   --elevated:      #1C2028;
 
   /* text */
-  --text-primary:   #E6E6E6;
-  --text-secondary: #A0A0A8;
-  --text-muted:     #606068;
+  --text-primary:   #F2F2F2;
+  --text-secondary: #C8C8D0;
+  --text-muted:     #8A8A92;
   --on-accent:      #0F1115;
 
   /* accent pair — chosen per infographic, defaulting to pair #1 */
@@ -52,7 +52,7 @@ Light mode (apply when user explicitly requests):
   --elevated:      color-mix(in srgb, var(--accent-1) 14%, #FFFFFF);
   --text-primary:   #1A1A1A;
   --text-secondary: #4A4A4A;
-  --text-muted:     #808080;
+  --text-muted:     #5A5A5A;
   --on-accent:      #F5F5F5;
   /* accents darken slightly for contrast; apply per pair */
 }
@@ -76,12 +76,12 @@ One display font + one body font. Never three. Never one.
 
 | Role | Font | Weight | Case | Size | Letter-spacing |
 |------|------|--------|------|------|----------------|
-| Hero title | Bebas Neue | 400 | UPPERCASE | 72–96px | 0.04–0.08em |
-| Section title | Montserrat | 700 | UPPERCASE | 20–28px | 0.05–0.08em |
-| Card title / item label | Montserrat | 700 | UPPERCASE | 16–20px | 0.04–0.06em |
-| Badge / tag | Montserrat | 700 | UPPERCASE | 10–12px | 0.05em |
-| Body | Montserrat | 400 | Sentence | 14–16px | normal |
-| Caption / footnote | Montserrat | 400 | Sentence | 11–13px | normal |
+| Hero title | Bebas Neue | 400 | UPPERCASE | 88–120px | 0.04–0.08em |
+| Section title | Montserrat | 700 | UPPERCASE | 28–36px | 0.05–0.08em |
+| Card title / item label | Montserrat | 700 | UPPERCASE | 20–26px | 0.04–0.06em |
+| Badge / tag | Montserrat | 700 | UPPERCASE | 12–14px | 0.05em |
+| Body | Montserrat | 400 | Sentence | 17–20px | normal |
+| Caption / footnote | Montserrat | 400 | Sentence | 13–15px | normal |
 
 Body `line-height: 1.5`. Hero `line-height: 1`.
 
@@ -146,10 +146,11 @@ Claude picks based on content when user has no preference. For branded work, mat
 
 ### Chart series
 
-When a chart needs ≥3 distinct colors, pull primaries from the six pairs in order:
-`#F3A950, #00FF90, #FF0048, #FFBB00, #67B39F, #B2FF00`.
+**Parts-of-a-whole charts (pie, donut, segmented bar, treemap, waffle): mono-accent only.** All segments are shades of `--accent-1` mixed with `--canvas` per the ladder in `references/elements/charts.md` §Mono-accent shade ladder. Never `--accent-2`, never any other hex.
 
-For 2–3 segments, use the selected pair's primary + secondary + one analogous neighbor.
+**Multi-series charts (radar, bubble, multi-line, grouped bar): two-accent only.** Pull from `--accent-1` then `--accent-2`, then shades of each (`accent-1 @ 60%`, `accent-2 @ 60%`). Cap at 4 series — past that, split the chart.
+
+Semantic colors (`--positive`, `--negative`) are reserved for status/delta indicators, not chart fills.
 
 ### Node / card roles (semantic token layer)
 

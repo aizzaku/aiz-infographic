@@ -221,7 +221,7 @@ Eight to ten files total in Claude Code, six to eight in agent contexts. Do not 
 - **Styles (26):** `aizfographics-style` (default), `clean-minimal`, `blueprint` (engineering schematic), `editorial`, `corporate`, `cyberpunk`, `chalkboard`, `hand-drawn`, `retro`, `terminal` (shell output, monospace), `glasspaper` (frosted opacity panels), `scrapbook` (physical evidence, warm), `signal` (ops monitoring, alert feed), `forge` (industrial batch, dense), `ash` (monochrome editorial), `obsidian-ledger` (antique accounting), `openclaw` (blue-black, hot-red accent, OpenClaw brand), `hermes` (green-black, gold+sage gradient borders, Hermes/Nous brand), `openai-dark` (neutral near-black, weight-300 numerals, OpenAI brand), `grok-dark` (true black, weight-900 ALL CAPS, zero radius, xAI/Grok brand), `vercel-dark` (pure black, square markers, slug copy, Vercel brand), `claude-light` (warm cream, terracotta, Lora serif body, Anthropic/Claude brand), `glassmorphism` (growth hacking social default), `growth-hacking` (gold serif, NOT glassmorphism), `_custom-template` (scaffold).
 - **Snippets (27):** `statistical`, `grid-cards`, `process-flow`, `timeline`, `comparison`, `hierarchical`, `list`, `roadmap`, `funnel`, `flowchart`, `dashboard`, `mind-map`, `journey-path`, `pyramid`, `circular-flow`, `iceberg`, `fishbone`, `venn`, `anatomical`, `geographic`, `quadrant`, `swimlane`, `sankey-flow`, `network-graph`, `callout-grid` (icon+headline+body grid), `stat-spotlight` (single hero metric + sparkline + delta), `step-connector` (numbered linear sequence with connector emphasis). Each declares its slot fit and density cap. Bento-box is canvas-only — no `bento-box` snippet.
 - **Templates (12):** `allocation-breakdown`, `ecosystem-overview`, `cheatsheet`, `game-mechanics`, `how-it-works`, `report`, `case-study`, `concept-explainer` (renamed from `crypto-explainer`), `distribution-guide` (renamed from `airdrop-guide`), `collection-showcase` (renamed from `nft-showcase`), `new-templates-design-brief`.
-- **Elements (14):** `charts`, `text`, `layout`, `connectors`, `icons`, `data-widgets`, `decorative`, `maps`, `comparison`, `annotation`, `badges` (status pills and state tags), `progress-bars` (flat fills for forge/terminal, no Chart.js), `sparklines` (inline SVG KPI sparklines, no Chart.js).
+- **Elements (16):** `charts`, `text`, `layout`, `connectors`, `icons`, `data-widgets`, `decorative`, `maps`, `comparison`, `annotation`, `badges` (status pills, state tags, numbered-step badges), `progress-bars` (flat fills for forge/terminal, no Chart.js), `sparklines` (inline SVG KPI sparklines, no Chart.js), `callout-card` (folded-corner emphasis card), `tagged-header` (banner-tab category strip).
 Unmapped content type → §1.5 canvas pick + snippets that match the content shape. Unlisted style → copy `_custom-template.md`, fill, note the substitution.
 
 ## 2.5 Case-Study Content Quality Standard
@@ -375,6 +375,7 @@ These apply to every infographic regardless of style or canvas. They are NOT dup
 - **Never single-sided thick borders.** No `border-top: 3px solid accent`, no accent bar on one edge. Always full-perimeter or none. Use gradient borders for emphasis.
 - **Responsive scaling.** The canvas scales to the viewport width; height always follows content. No fixed aspect ratio, no trailing blank.
 - **Image assets.** When the user provides logo URLs or image URLs, embed them via `<img>` with appropriate `alt` text. When not provided, leave a styled placeholder (dashed border, centered label) — never invent image URLs.
+- **Default to sparse copy.** See §6.5 — caps are binding, not aspirational.
 
 ### Theme-specific exceptions to universal rules
 
@@ -394,6 +395,30 @@ The following overrides are permitted only when the named theme is active:
 - **Callout / annotation limits** (max 2 per infographic, leader rules) → `references/elements/annotation.md`.
 
 When a relevant reference file is loaded per §3, treat its rules as binding — they are not optional.
+
+---
+
+## 6.5 Copy density (default)
+
+Infographics are visual. Copy is captions on imagery, not paragraphs. These caps apply to EVERY output unless the user explicitly asks for more detail.
+
+Per-atom word caps:
+- Hero title: ≤ 8 words
+- Section title: ≤ 6 words
+- Card title: ≤ 5 words
+- Card body: ≤ 14 words (one sentence or 1–2 bullets)
+- Bullet item: ≤ 10 words
+- Caption / footnote: ≤ 12 words
+- Badge / tag: ≤ 3 words
+
+Rules:
+- Bullets over sentences. Strip articles ("the", "a") and hedges ("typically", "generally") from labels.
+- One fact per card. If a card has two ideas, split it or drop the weaker one.
+- No restating the section title in the body.
+- No closing summary sections, no "About this infographic" blocks unless requested.
+- Numbers and proper nouns earn space; adjectives and adverbs do not.
+- If a card body exceeds 14 words, REWRITE before generating — do not ship it.
+- The user can always ask "add detail to X" after seeing the result. Bias toward sparse first draft.
 
 ---
 

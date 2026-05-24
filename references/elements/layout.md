@@ -248,6 +248,70 @@ A horizontal row of colored/dashed swatches + labels that explains a color encod
 - **Swatch shape**: 16 × 12 rectangle with 2px radius. Never circles (circles read as status dots, not swatches) and never full-width pills.
 - **Order**: most-important → least-important, matching reading order of the visualization above.
 
+## Right-rail named-entity list
+
+Vertical list of named entities (planets, partners, products, people) where each row is: large name → horizontal rule → body copy → thumbnail/icon on the right. Typically lives in the right column of a wide canvas.
+
+```html
+<div class="rail-list">
+  <div class="rail-list__row">
+    <div class="rail-list__copy">
+      <div class="rail-list__name">Mercury</div>
+      <div class="rail-list__rule"></div>
+      <p class="caption">Smallest planet. Closest to the sun. 88-day orbit.</p>
+    </div>
+    <div class="rail-list__thumb">
+      <i class="ph-bold ph-globe-hemisphere-east"></i>
+    </div>
+  </div>
+  <!-- … repeat per entity … -->
+</div>
+
+<style>
+.rail-list { display: flex; flex-direction: column; gap: 24px; }
+.rail-list__row {
+  display: grid;
+  grid-template-columns: 1fr 72px;
+  gap: 16px;
+  align-items: center;
+}
+.rail-list__copy { display: flex; flex-direction: column; gap: 6px; }
+.rail-list__name {
+  font: 400 32px/1 'Bebas Neue', sans-serif;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+}
+.rail-list__rule {
+  height: 1px;
+  width: 60%;
+  background: linear-gradient(90deg, var(--accent-1), transparent);
+}
+.rail-list__thumb {
+  width: 72px; height: 72px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--elevated);
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--accent-1) 30%, transparent);
+}
+.rail-list__thumb i { font-size: 36px; color: var(--accent-1); }
+.rail-list__thumb img { width: 56px; height: 56px; border-radius: 50%; }
+</style>
+```
+
+**When to use:**
+- 4-10 named entities that share the same content shape (name + short blurb).
+- Wide canvas where the right column has spare vertical room.
+- Companion to a main visual on the left (orbital diagram, map, dashboard).
+
+**Thumbnail options:** Phosphor icon, brand logo `<img>`, or placeholder circle. Always circular thumb, always same size across the list.
+
+**Rules:**
+- Name caps at 1 word (or 2 short). Names longer than ~10 chars break the rail aesthetic — use a regular card grid instead.
+- Body copy ≤ 12 words per row (§6.5).
+- Horizontal rule fades to transparent — don't make it solid edge-to-edge.
+- All rows identical height. No "featured" rows.
+
 ## Rules
 
 - Never use absolute positioning for core layout. Use grid/flex.

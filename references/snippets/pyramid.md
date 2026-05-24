@@ -26,21 +26,21 @@ Stacked tiers with implied scale hierarchy. Wider at base, narrower at top (or i
 
 ```html
 <div class="pyramid">
-  <div class="ptier" style="--width: 40;">
+  <div class="ptier" style="--width: 40; --shade: 100%;">
     <div class="ptier-bar"></div>
     <div class="ptier-meta">
       <div class="ptier-title">Governors</div>
       <div class="ptier-count">~250</div>
     </div>
   </div>
-  <div class="ptier" style="--width: 65;">
+  <div class="ptier" style="--width: 65; --shade: 65%;">
     <div class="ptier-bar"></div>
     <div class="ptier-meta">
       <div class="ptier-title">Stakers</div>
       <div class="ptier-count">~4,200</div>
     </div>
   </div>
-  <div class="ptier" style="--width: 100;">
+  <div class="ptier" style="--width: 100; --shade: 35%;">
     <div class="ptier-bar"></div>
     <div class="ptier-meta">
       <div class="ptier-title">Holders</div>
@@ -60,12 +60,13 @@ Stacked tiers with implied scale hierarchy. Wider at base, narrower at top (or i
   height: 64px;
   width: calc(var(--width) * 1%);
   margin: 0 auto;
-  background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+  /* mono-accent shade ladder per parts-of-a-whole rule (see charts.md) */
+  background: color-mix(in srgb, var(--accent-1) var(--shade), var(--canvas));
   clip-path: polygon(10% 0, 90% 0, 100% 100%, 0 100%);
-  box-shadow: 0 0 24px color-mix(in srgb, var(--accent-1) 12%, transparent);
 }
 .ptier:first-child .ptier-bar {
   clip-path: polygon(25% 0, 75% 0, 100% 100%, 0 100%);
+  box-shadow: 0 0 24px color-mix(in srgb, var(--accent-1) 25%, transparent);
 }
 .ptier-title {
   font: 700 16px/1 'Montserrat', sans-serif;

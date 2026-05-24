@@ -230,6 +230,87 @@ To fit the infographic inside smaller viewports, wrap the whole canvas (or just 
 
 Snippets that trigger pixel-lock: `flowchart`, `fishbone`, `swimlane`, `anatomical`, `quadrant`, plus `annotation` leaders pointing into a pixel-locked grid. Bento-box is **not** pixel-locked (fluid grid by design — see `canvases/bento-box.md`); poster canvases host pixel-locked centerpieces inside otherwise-fluid wrapping.
 
+## Fan connector (title → many)
+
+A single source title on one side splays out to N row-targets on the other side via short orthogonal stubs (vertical spine + horizontal arms). Pattern from a "category → sub-items" decomposition.
+
+```html
+<div class="fan">
+  <div class="fan__source">
+    <div class="card-title">Mechanism</div>
+  </div>
+  <div class="fan__spine"></div>
+  <div class="fan__rows">
+    <div class="fan__row">
+      <div class="fan__arm"></div>
+      <div class="fan__target">Acquisition</div>
+      <span class="badge-num">01</span>
+    </div>
+    <div class="fan__row">
+      <div class="fan__arm"></div>
+      <div class="fan__target">Activation</div>
+      <span class="badge-num">02</span>
+    </div>
+    <div class="fan__row">
+      <div class="fan__arm"></div>
+      <div class="fan__target">Retention</div>
+      <span class="badge-num">03</span>
+    </div>
+    <div class="fan__row">
+      <div class="fan__arm"></div>
+      <div class="fan__target">Referral</div>
+      <span class="badge-num">04</span>
+    </div>
+  </div>
+</div>
+
+<style>
+.fan { display: grid; grid-template-columns: 160px 24px 1fr; gap: 0; align-items: stretch; }
+.fan__source {
+  display: flex; align-items: center; justify-content: flex-end;
+  padding-right: 12px;
+}
+.fan__spine {
+  background: linear-gradient(180deg,
+    color-mix(in srgb, var(--accent-1) 60%, transparent),
+    var(--accent-1));
+  width: 2px;
+  justify-self: center;
+}
+.fan__rows { display: flex; flex-direction: column; gap: 12px; }
+.fan__row {
+  display: grid; grid-template-columns: 32px 1fr auto; gap: 12px;
+  align-items: center;
+  height: 48px;
+}
+.fan__arm {
+  height: 2px;
+  background: color-mix(in srgb, var(--accent-1) 60%, transparent);
+}
+.fan__target {
+  padding: 0 16px;
+  height: 100%;
+  display: flex; align-items: center;
+  background: var(--elevated);
+  border: 1px solid color-mix(in srgb, var(--accent-1) 25%, transparent);
+  border-radius: 4px;
+  font: 700 14px/1 'Montserrat', sans-serif;
+  text-transform: uppercase; letter-spacing: 0.05em;
+}
+</style>
+```
+
+**Variants:**
+- Spine on the **left** (default, title on left → targets on right).
+- Spine on the **right** (title on right → targets on left). Mirror the grid columns.
+- With or without numbered badges. Use badges when sequence matters.
+
+**Rules:**
+- 3-7 target rows. Below 3 = not a fan, just use arrows. Above 7 = use a grid instead.
+- Spine length spans only the rows it connects to — don't extend it past the first or last row.
+- Arm length: 24-32px. Consistent across all rows.
+- Source title is one phrase, max 3 words.
+
 ## Rules
 
 - Connector color is 60% opacity accent OR `var(--text-secondary)`. Never full-opacity accent — it competes with content.

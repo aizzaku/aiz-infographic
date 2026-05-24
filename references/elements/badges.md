@@ -177,8 +177,59 @@ When used as step-number badges in `step-connector` snippet, override to circle 
 }
 ```
 
+## Variant 4: numbered-step badge
+
+Small numbered chip used in card corners or step-flow nodes. Pure number, no label.
+
+```html
+<span class="badge-num">01</span>
+<span class="badge-num badge-num--filled">02</span>
+
+<style>
+.badge-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 28px;
+  padding: 0 8px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--accent-1) 45%, transparent);
+  background: transparent;
+  color: var(--accent-1);
+  font: 700 14px/1 'Bebas Neue', 'Montserrat', sans-serif;
+  letter-spacing: 0.05em;
+  font-variant-numeric: tabular-nums;
+}
+.badge-num--filled {
+  background: var(--accent-1);
+  color: var(--on-accent);
+  border-color: var(--accent-1);
+}
+
+/* Corner-mounted on a card: */
+.card { position: relative; }
+.card .badge-num--corner {
+  position: absolute;
+  top: -14px;
+  right: 14px;
+}
+</style>
+```
+
+Use cases:
+- Top-right corner of cards in a numbered grid (1, 2, 3, 4).
+- Inline at the start of step-connector nodes.
+- Paired with `tagged-header` for "01 — DISCOVERY" style labels.
+
+Rules:
+- Always tabular numerals (`font-variant-numeric: tabular-nums`) so 01/10 stay the same width.
+- Use 2-digit zero-padded format (`01`, `02` … `09`) for ≤ 9 steps. Drop the zero only when count exceeds 9.
+- Mix filled + outlined only when there's a "current step" — filled = current/active, outlined = upcoming. Otherwise pick one variant per infographic.
+
 ## Rules
 
 - Never add a container div or circular bg behind a Phosphor icon — that is a separate icon rule from `icons.md`. Badge backgrounds here are for text-based status labels only.
 - Use exactly one badge variant per infographic — do not mix pill + dot-label.
+- Numbered-step badges may co-exist with one other badge variant since they serve different semantics (sequence vs status).
 - In Ash theme: no color. Use only the 4 defined gray stops.

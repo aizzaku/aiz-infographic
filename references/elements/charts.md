@@ -6,7 +6,7 @@ Static charts use pure SVG and CSS (no library). Canvas charts (radar, bubble, t
 
 | Data shape | Chart | Renderer |
 |-----------|-------|----------|
-| Parts of a whole, 3–8 segments | donut or pie | SVG |
+| Parts of a whole, 3–8 segments | **pie** (default) — donut only on explicit request | SVG |
 | Parts of a whole, 2–5 segments, horizontal space | horizontal segmented bar | CSS |
 | Comparing ≤10 discrete values | horizontal bar | CSS |
 | Progress toward a goal | progress ring or progress bar | SVG / CSS |
@@ -14,6 +14,11 @@ Static charts use pure SVG and CSS (no library). Canvas charts (radar, bubble, t
 | 3-variable scatter (x, y, bubble size) | **bubble** | Chart.js (canvas) |
 | Hierarchical parts of a whole, 6+ segments | **treemap** | D3 (SVG) |
 | Holder / allocation distribution at a glance | **waffle** | raw canvas |
+| Hierarchical levels by magnitude, 3–6 tiers | **pyramid** | SVG |
+| Ranked horizontal bar with emphasis flag on value | **arrow-flag bar** | CSS |
+| Cyclical / oscillating values over time with peak callouts | **wave (multi-line sine)** | SVG |
+| Multi-category radial spread, 3–7 categories | **rainbow arc** | SVG |
+| Target vs actual / goal vs progress per category | **bullet bar** | CSS |
 
 Heuristic: if any pie segment exceeds 75%, switch to a horizontal segmented bar. If allocation has 6+ categories with similar sizes, use treemap over donut.
 
@@ -53,37 +58,80 @@ const tm = resolveColor(root.getPropertyValue('--text-muted').trim());
 
 All canvas charts must set `data-canvas-ready="true"` on the element after drawing completes. Chart.js: add it after `new Chart(...)`. D3: add it after layout computation. Raw canvas: add it at the end of the draw function. No `async`/`await` — draw synchronously on `DOMContentLoaded`.
 
-## Donut chart
+## Pie chart (default)
+
+Solid pie. No center hole. Segments are filled with **shades of `--accent-1` only** — never `--accent-2`, never any other accent, never any other hex. The shade ladder is fixed (below). Apply darkest → lightest, biggest → smallest segment, so the eye reads weight before label.
 
 ```html
-<svg class="donut" viewBox="0 0 200 200" width="200" height="200">
-  <circle cx="100" cy="100" r="80" fill="none"
-          stroke="color-mix(in srgb, var(--text-primary) 8%, transparent)"
-          stroke-width="28"/>
-  <!-- one <circle> per segment; stroke-dasharray = [segment, remaining] of circumference -->
-  <!-- circumference = 2 * π * 80 ≈ 502.65 -->
-  <circle cx="100" cy="100" r="80" fill="none" stroke="var(--accent-1)"
-          stroke-width="28"
-          stroke-dasharray="201.06 502.65"
+<!-- Pie via stroked circle: r=50, stroke-width=100 fills center → edge.
+     Circumference = 2 * π * 50 ≈ 314.159. -->
+<svg class="pie" viewBox="0 0 200 200" width="200" height="200">
+  <!-- background disc (negative space, very faint) -->
+  <circle cx="100" cy="100" r="50" fill="none"
+          stroke="color-mix(in srgb, var(--text-primary) 6%, transparent)"
+          stroke-width="100"/>
+  <!-- Segment 1 — 40% — shade 100 (pure accent-1) -->
+  <circle cx="100" cy="100" r="50" fill="none"
+          stroke="var(--accent-1)"
+          stroke-width="100"
+          stroke-dasharray="125.66 314.16"
           stroke-dashoffset="0"
           transform="rotate(-90 100 100)"/>
-  <circle cx="100" cy="100" r="80" fill="none" stroke="var(--accent-2)"
-          stroke-width="28"
-          stroke-dasharray="125.66 502.65"
-          stroke-dashoffset="-201.06"
+  <!-- Segment 2 — 25% — shade 75 -->
+  <circle cx="100" cy="100" r="50" fill="none"
+          stroke="color-mix(in srgb, var(--accent-1) 75%, var(--canvas))"
+          stroke-width="100"
+          stroke-dasharray="78.54 314.16"
+          stroke-dashoffset="-125.66"
+          transform="rotate(-90 100 100)"/>
+  <!-- Segment 3 — 20% — shade 55 -->
+  <circle cx="100" cy="100" r="50" fill="none"
+          stroke="color-mix(in srgb, var(--accent-1) 55%, var(--canvas))"
+          stroke-width="100"
+          stroke-dasharray="62.83 314.16"
+          stroke-dashoffset="-204.20"
+          transform="rotate(-90 100 100)"/>
+  <!-- Segment 4 — 15% — shade 35 -->
+  <circle cx="100" cy="100" r="50" fill="none"
+          stroke="color-mix(in srgb, var(--accent-1) 35%, var(--canvas))"
+          stroke-width="100"
+          stroke-dasharray="47.12 314.16"
+          stroke-dashoffset="-267.03"
           transform="rotate(-90 100 100)"/>
   <!-- … additional segments … -->
-  <text x="100" y="96" text-anchor="middle"
-        font-family="Bebas Neue" font-size="36" fill="var(--text-primary)"
-        letter-spacing="0.05em">1B</text>
-  <text x="100" y="118" text-anchor="middle"
-        font-family="Montserrat" font-weight="400" font-size="12"
-        fill="var(--text-muted)" letter-spacing="0.1em"
-        style="text-transform: uppercase;">Total supply</text>
+  <!-- Hairline divider ring on top for segment edges (optional, recommended) -->
+  <circle cx="100" cy="100" r="100" fill="none"
+          stroke="color-mix(in srgb, var(--canvas) 100%, transparent)"
+          stroke-width="0"/>
 </svg>
 ```
 
-**Formula:** `stroke-dasharray = [percent * circumference, circumference]`. `stroke-dashoffset = -cumulative_percent * circumference`. Each segment rotates -90° so 0% starts at 12 o'clock.
+**Formula:** `stroke-dasharray = [percent × 314.16, 314.16]`. `stroke-dashoffset = -cumulative_percent × 314.16`. Each segment rotates -90° so 0% starts at 12 o'clock. Labels go OUTSIDE the pie (legend strip or leader lines), never inside — solid fills leave no room for centered text.
+
+### Mono-accent shade ladder (binding for all parts-of-a-whole charts)
+
+Pies, segmented bars, treemaps, waffles, and any other parts-of-a-whole chart use **only these shades of `--accent-1`** — in this order, largest → smallest segment:
+
+| Order | Shade | CSS |
+|---|---|---|
+| 1 | 100 | `var(--accent-1)` |
+| 2 | 75  | `color-mix(in srgb, var(--accent-1) 75%, var(--canvas))` |
+| 3 | 55  | `color-mix(in srgb, var(--accent-1) 55%, var(--canvas))` |
+| 4 | 35  | `color-mix(in srgb, var(--accent-1) 35%, var(--canvas))` |
+| 5 | 22  | `color-mix(in srgb, var(--accent-1) 22%, var(--canvas))` |
+| 6 | 14  | `color-mix(in srgb, var(--accent-1) 14%, var(--canvas))` |
+| 7 | 8   | `color-mix(in srgb, var(--accent-1) 8%,  var(--canvas))` |
+| 8 | 5   | `color-mix(in srgb, var(--accent-1) 5%,  var(--canvas))` |
+
+Rules:
+- Never use `--accent-2`, `--positive`, `--negative`, or any other hex in a parts-of-a-whole chart. Hue stays constant; only luminosity varies.
+- If a chart needs more than 8 segments, you've exceeded the cap — split into two charts or switch to treemap.
+- Legend dots use the exact same shade mix as the corresponding segment.
+- Semantic colors (`--positive` for gains, `--negative` for losses) are still allowed in non-chart contexts (status pills, deltas, KPI trend arrows) — the mono-accent rule applies to part-of-whole geometry only.
+
+### Donut variant (only on explicit user request)
+
+If the user explicitly asks for a donut, switch to `r=80, stroke-width=28` (circumference 502.65) and keep the same mono-accent shade ladder. Otherwise, default to pie.
 
 ## Horizontal segmented bar (tokenomics-friendly)
 
@@ -93,15 +141,15 @@ All canvas charts must set `data-canvas-ready="true"` on the element after drawi
     <span class="hseg-label">Community</span>
     <span class="hseg-value">40%</span>
   </div>
-  <div class="hseg" style="--pct: 25; background: var(--accent-2);">
+  <div class="hseg" style="--pct: 25; background: color-mix(in srgb, var(--accent-1) 75%, var(--canvas));">
     <span class="hseg-label">Ecosystem</span>
     <span class="hseg-value">25%</span>
   </div>
-  <div class="hseg" style="--pct: 20; background: color-mix(in srgb, var(--accent-1) 60%, transparent);">
+  <div class="hseg" style="--pct: 20; background: color-mix(in srgb, var(--accent-1) 55%, var(--canvas));">
     <span class="hseg-label">Team</span>
     <span class="hseg-value">20%</span>
   </div>
-  <div class="hseg" style="--pct: 15; background: color-mix(in srgb, var(--accent-2) 60%, transparent);">
+  <div class="hseg" style="--pct: 15; background: color-mix(in srgb, var(--accent-1) 35%, var(--canvas));">
     <span class="hseg-label">Investors</span>
     <span class="hseg-value">15%</span>
   </div>
@@ -205,7 +253,7 @@ All canvas charts must set `data-canvas-ready="true"` on the element after drawi
 ```html
 <ul class="chart-legend">
   <li><span class="swatch" style="background: var(--accent-1);"></span>Community <strong>40%</strong></li>
-  <li><span class="swatch" style="background: var(--accent-2);"></span>Ecosystem <strong>25%</strong></li>
+  <li><span class="swatch" style="background: color-mix(in srgb, var(--accent-1) 75%, var(--canvas));"></span>Ecosystem <strong>25%</strong></li>
 </ul>
 
 <style>
@@ -474,7 +522,7 @@ document.addEventListener('DOMContentLoaded', function() {
   <canvas id="waffle-1" width="352" height="352"></canvas>
   <ul class="chart-legend">
     <li><span class="swatch" style="background: var(--accent-1);"></span>Community <strong>40%</strong></li>
-    <li><span class="swatch" style="background: var(--accent-2);"></span>Ecosystem <strong>25%</strong></li>
+    <li><span class="swatch" style="background: color-mix(in srgb, var(--accent-1) 75%, var(--canvas));"></span>Ecosystem <strong>25%</strong></li>
     <li><span class="swatch" style="background: color-mix(in srgb, var(--accent-1) 45%, transparent);"></span>Team <strong>20%</strong></li>
     <li><span class="swatch" style="background: color-mix(in srgb, var(--text-muted) 60%, transparent);"></span>Investors <strong>15%</strong></li>
   </ul>
@@ -531,3 +579,271 @@ document.addEventListener('DOMContentLoaded', function() {
 - Never animate proportions — chart values are static. (Number counters animate in `data-widgets.md`.)
 - Donut center text doubles as the primary metric. Use it.
 - Canvas charts: always `animation: false` (Chart.js) or synchronous layout (D3). Never rely on requestAnimationFrame for the initial render — Playwright screenshots immediately after page load.
+
+---
+
+## Pyramid chart
+
+Hierarchical levels by magnitude — apex = smallest/most-exclusive, base = largest/foundation. Use for hierarchies, funnels with named tiers, or layered concepts.
+
+**Always render labels OUTSIDE the bands** on a side rail. Inside-band labels get clipped by the slanted edges and become illegible — especially the apex (a true triangle has no usable inner width).
+
+```html
+<div class="pyramid-wrap">
+  <div class="pyramid">
+    <div class="pyramid-row" style="--w: 30%; --shade: 100%;"></div>
+    <div class="pyramid-row" style="--w: 50%; --shade: 75%;"></div>
+    <div class="pyramid-row" style="--w: 70%; --shade: 55%;"></div>
+    <div class="pyramid-row" style="--w: 90%; --shade: 35%;"></div>
+  </div>
+  <div class="pyramid-side">
+    <div class="pyramid-side-row" style="--shade: 100%;">
+      <span class="pyramid-side-name">Founders</span>
+      <span class="pyramid-pct">2%</span>
+    </div>
+    <div class="pyramid-side-row" style="--shade: 75%;">
+      <span class="pyramid-side-name">Core team</span>
+      <span class="pyramid-pct">8%</span>
+    </div>
+    <div class="pyramid-side-row" style="--shade: 55%;">
+      <span class="pyramid-side-name">Contributors</span>
+      <span class="pyramid-pct">20%</span>
+    </div>
+    <div class="pyramid-side-row" style="--shade: 35%;">
+      <span class="pyramid-side-name">Community</span>
+      <span class="pyramid-pct">70%</span>
+    </div>
+  </div>
+</div>
+
+<style>
+.pyramid-wrap { display: grid; grid-template-columns: 1.2fr 1fr; gap: 32px; align-items: center; }
+.pyramid { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.pyramid-row {
+  width: var(--w); height: 60px;
+  background: color-mix(in srgb, var(--accent-1) var(--shade), var(--canvas));
+  clip-path: polygon(12% 0, 88% 0, 100% 100%, 0 100%);
+}
+.pyramid-row:first-child { clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+.pyramid-side { display: flex; flex-direction: column; gap: 8px; }
+.pyramid-side-row {
+  display: grid; grid-template-columns: 14px 1fr auto; gap: 14px;
+  align-items: center; height: 60px;
+}
+.pyramid-side-row::before {
+  content: ""; width: 10px; height: 10px; border-radius: 50%;
+  background: color-mix(in srgb, var(--accent-1) var(--shade), var(--canvas));
+}
+.pyramid-side-name {
+  font: 700 16px/1 'Montserrat', sans-serif;
+  text-transform: uppercase; letter-spacing: 0.05em;
+  color: var(--text-primary);
+}
+.pyramid-pct { font: 400 28px/1 'Bebas Neue', sans-serif; color: var(--accent-1); }
+</style>
+```
+
+**Rules:**
+- 3-6 tiers. More than 6 reads as a bar chart.
+- Shades follow the mono-accent ladder (100 → 75 → 55 → 35 → 22 → 14), apex darkest.
+- Apex tier uses a true triangle clip-path; other tiers are trapezoids.
+- Side rail uses leader dots matching each band's shade. Aligns row-for-row with bands at equal height.
+- Do NOT place labels inside the bands. The clip-path will eat them.
+
+---
+
+## Arrow-flag horizontal bar
+
+Horizontal bar where the right edge terminates in a chevron / flag holding the value. Replaces a separate value column.
+
+Each row has a fixed label column on the left, then a track that **reserves padding-right room for the flag** so it never overflows the container at 100% values.
+
+```html
+<div class="aflag-list">
+  <div class="aflag-row">
+    <span class="aflag-label">Solana</span>
+    <div class="aflag-track">
+      <div class="aflag-bar" style="--pct: 90%;"><span class="aflag-flag">90%</span></div>
+    </div>
+  </div>
+  <div class="aflag-row">
+    <span class="aflag-label">BNB</span>
+    <div class="aflag-track">
+      <div class="aflag-bar" style="--pct: 72%; --shade: 75%;"><span class="aflag-flag">72%</span></div>
+    </div>
+  </div>
+</div>
+
+<style>
+.aflag-list { display: flex; flex-direction: column; gap: 12px; }
+.aflag-row { display: grid; grid-template-columns: 110px 1fr; gap: 14px; align-items: center; }
+.aflag-label {
+  font: 700 13px/1 'Montserrat', sans-serif;
+  letter-spacing: 0.05em; text-transform: uppercase;
+  color: var(--text-primary);
+}
+.aflag-track {
+  position: relative;
+  height: 22px;
+  background: var(--elevated);
+  border-radius: 4px;
+  padding-right: 64px; /* reserves room for the flag */
+}
+.aflag-bar {
+  position: relative;
+  height: 100%; width: var(--pct);
+  background: color-mix(in srgb, var(--accent-1) var(--shade, 100%), var(--canvas));
+  border-radius: 4px 0 0 4px;
+}
+.aflag-flag {
+  position: absolute; top: 50%; left: 100%;
+  transform: translate(0, -50%);
+  padding: 4px 14px 4px 10px;
+  background: var(--accent-1); color: var(--on-accent);
+  font: 700 12px/1 'Montserrat', sans-serif; letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 50%, calc(100% - 8px) 100%, 0 100%);
+}
+</style>
+```
+
+**Rules:**
+- Flag chevron is always darkest accent (100%); bar shade can vary per row.
+- Bar height: 18-24px. Flag height matches bar height.
+- One flag per row, anchored to the bar's right edge.
+- Track always has `padding-right` ≥ 56px to keep the flag inside the container at 100% bar values.
+
+---
+
+## Wave chart (cyclical multi-line)
+
+Multi-line sine-style chart with peak markers. For cyclical, seasonal, or oscillating data where the *shape* matters more than exact values.
+
+**Keep all peaks ABOVE the baseline** so peak markers and their labels stay inside the viewBox. Use a baseline at y ≈ 75% of viewBox height and route peaks upward.
+
+```html
+<!-- viewBox 800×240, baseline y=180, peaks reach y ≈ 50–100 -->
+<svg class="wave-chart" viewBox="0 0 800 240" width="100%" preserveAspectRatio="none">
+  <!-- back wave (shade 35) -->
+  <path d="M 0 180 Q 100 130, 200 180 Q 300 220, 400 180 Q 500 130, 600 180 Q 700 220, 800 180"
+        fill="none" stroke="color-mix(in srgb, var(--accent-1) 35%, var(--canvas))" stroke-width="2"/>
+  <!-- mid wave (shade 60) -->
+  <path d="M 0 180 Q 100 110, 200 180 Q 300 210, 400 180 Q 500 110, 600 180 Q 700 210, 800 180"
+        fill="none" stroke="color-mix(in srgb, var(--accent-1) 60%, var(--canvas))" stroke-width="2"/>
+  <!-- front wave (accent 100), peaks at x=100/300/500/700 -->
+  <path d="M 0 180 Q 100 60, 200 180 Q 300 100, 400 180 Q 500 80, 600 180 Q 700 50, 800 180"
+        fill="none" stroke="var(--accent-1)" stroke-width="2.5"/>
+
+  <!-- peak markers + leader lines + labels (all above baseline, inside viewBox) -->
+  <g>
+    <line x1="100" y1="60" x2="100" y2="38" stroke="var(--accent-1)" stroke-width="1"/>
+    <circle cx="100" cy="60" r="6" fill="var(--accent-1)"/>
+    <text x="100" y="30" text-anchor="middle"
+          font-family="Bebas Neue" font-size="20" fill="var(--text-primary)">30%</text>
+  </g>
+  <!-- … repeat per peak … -->
+</svg>
+```
+
+**Rules:**
+- 1-3 stacked waves. More than 3 = visual mush.
+- Each wave uses a different shade from the mono-accent ladder.
+- Peak markers: solid circles in `--accent-1`, leader line up to the value label.
+- Label every visible peak. Unlabeled peaks are wasted ink.
+- All peaks and labels stay within viewBox bounds — never let labels fall above y=0 or below the viewBox height. If your data has troughs to label, expand the viewBox vertically; do not let them clip.
+
+---
+
+## Rainbow arc chart
+
+Concentric half-arcs of varying length, each terminating in a labeled token. Multi-category radial spread.
+
+**Compute endpoints from sweep angle θ.** Each arc starts at the left horizontal (180°) and sweeps clockwise by its own angle. For an arc of radius `r` centered at `(cx, cy)` starting at `(cx − r, cy)`:
+
+```
+endX = cx − r · cos(θ)
+endY = cy − r · sin(θ)
+```
+
+With `cx=200, cy=240` and sweep angles `180°, 150°, 120°, 90°, 60°` at radii `160, 140, 120, 100, 80`, the endpoints are:
+
+| Arc | r | θ | end |
+|---|---|---|---|
+| A | 160 | 180° | (360, 240) |
+| B | 140 | 150° | (321, 170) |
+| C | 120 | 120° | (260, 136) |
+| D | 100 | 90°  | (200, 140) |
+| E | 80  | 60°  | (160, 171) |
+
+```html
+<svg class="rainbow-arc" viewBox="0 0 400 280" width="400" height="280">
+  <!-- A: r=160, θ=180° -->
+  <path d="M 40 240 A 160 160 0 0 1 360 240" fill="none"
+        stroke="var(--accent-1)" stroke-width="14"/>
+  <!-- B: r=140, θ=150° -->
+  <path d="M 60 240 A 140 140 0 0 1 321 170" fill="none"
+        stroke="color-mix(in srgb, var(--accent-1) 75%, var(--canvas))" stroke-width="14"/>
+  <!-- C: r=120, θ=120° -->
+  <path d="M 80 240 A 120 120 0 0 1 260 136" fill="none"
+        stroke="color-mix(in srgb, var(--accent-1) 55%, var(--canvas))" stroke-width="14"/>
+  <!-- D: r=100, θ=90° -->
+  <path d="M 100 240 A 100 100 0 0 1 200 140" fill="none"
+        stroke="color-mix(in srgb, var(--accent-1) 35%, var(--canvas))" stroke-width="14"/>
+  <!-- E: r=80, θ=60° -->
+  <path d="M 120 240 A 80 80 0 0 1 160 171" fill="none"
+        stroke="color-mix(in srgb, var(--accent-1) 22%, var(--canvas))" stroke-width="14"/>
+
+  <!-- terminal tokens at each endpoint, same shade as their arc -->
+  <g><circle cx="360" cy="240" r="14" fill="var(--accent-1)"/>
+     <text x="360" y="245" text-anchor="middle" font-family="Montserrat"
+           font-weight="700" font-size="13" fill="var(--on-accent)">A</text></g>
+  <!-- … one per arc, fill matches the arc's stroke shade … -->
+</svg>
+```
+
+**Rules:**
+- 3-7 arcs. Fewer than 3 isn't worth this chart; more than 7 collides.
+- Sort longest-to-shortest, outermost-to-innermost (or vice versa — pick one and stick to it).
+- Always pair with a legend mapping token letter → category name.
+- Mono-accent shade ladder per the parts-of-a-whole rule. Token fill matches its arc's stroke.
+- Sweep angles must be ≤ 180° (large-arc-flag stays 0). If you need > 180°, switch to a full ring chart.
+
+---
+
+## Bullet bar (target vs actual)
+
+Horizontal or vertical bar pair where a brighter "actual" fill sits inside a dim "target" track. Optional marker for goal threshold.
+
+```html
+<!-- Horizontal -->
+<div class="bullet-row">
+  <span class="bullet-label">Q1 Revenue</span>
+  <div class="bullet-track">
+    <div class="bullet-fill" style="width: 78%;"></div>
+    <div class="bullet-marker" style="left: 90%;"></div>
+  </div>
+  <span class="bullet-value">78%</span>
+</div>
+
+<style>
+.bullet-row { display: grid; grid-template-columns: 140px 1fr 60px; gap: 12px;
+              align-items: center; margin-bottom: 10px; }
+.bullet-label { font: 700 13px/1 'Montserrat', sans-serif; text-transform: uppercase;
+                letter-spacing: 0.05em; color: var(--text-primary); }
+.bullet-track { position: relative; height: 16px;
+                background: color-mix(in srgb, var(--accent-1) 14%, var(--canvas));
+                border-radius: 3px; overflow: hidden; }
+.bullet-fill { height: 100%; background: var(--accent-1); border-radius: 3px 0 0 3px; }
+.bullet-marker { position: absolute; top: -2px; bottom: -2px; width: 2px;
+                 background: var(--text-primary); }
+.bullet-value { font: 400 18px/1 'Bebas Neue', sans-serif; color: var(--accent-1);
+                font-variant-numeric: tabular-nums; text-align: right; }
+</style>
+```
+
+**Vertical variant:** swap `width` for `height` on `.bullet-fill`, rotate the grid into a column. Useful for dashboard panels with 4-8 KPIs in a row (like Image 3, BB).
+
+**Rules:**
+- Only two color stops: dim target track + bright actual fill. Never add a third.
+- Marker (white tick) is optional and only shows when there's a *specific* goal threshold distinct from "100%".
+- Cap at 8 bars per chart. More than 8 → use horizontal bar list.
